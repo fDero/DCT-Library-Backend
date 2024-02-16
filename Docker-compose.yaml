@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+
+  database: 
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: milleteschi
+      POSTGRES_DB: lsodct
+    ports:
+      - "5432:5432"
+    command: ["postgres", "-p", "5432"]
+    networks:
+      - my_network
+
+  backend: 
+    image: lso_backend:1
+    command: sh -c "make build_and_run"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: milleteschi
+      POSTGRES_DB: lsodct
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: database
+    volumes:
+      - './backend:/cfiles'
+    working_dir: "/cfiles"
+    depends_on:
+      - database
+    networks:
+      - my_network
+    
+networks:
+  my_network:
+    driver: bridge
