@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
 
-  database: 
+  database:
     image: postgres:13
     environment:
       POSTGRES_USER: postgres
@@ -14,7 +14,7 @@ services:
     networks:
       - my_network
 
-  backend: 
+  backend:
     image: lso_backend:1
     command: sh -c "make build_and_run"
     environment:
@@ -30,7 +30,7 @@ services:
       - database
     networks:
       - my_network
-    
+
 networks:
   my_network:
     driver: bridge
