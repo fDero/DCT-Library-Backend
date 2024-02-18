@@ -12,7 +12,7 @@ RETURNS trigger AS $$
 
 		INSERT INTO PastLoan VALUES (old.*);
 
-			RETURN new;
+			RETURN old;
 	END;
 $$ LANGUAGE plpgsql;
 
