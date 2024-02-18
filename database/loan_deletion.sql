@@ -16,7 +16,7 @@ RETURNS trigger AS $$
 	END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER loan_deletion_trigger
+CREATE TRIGGER loan_deletion_trigger
 BEFORE DELETE ON Loan
 FOR EACH ROW EXECUTE FUNCTION loan_deletion();
 

@@ -1,7 +1,6 @@
-version: '3.3'
+version: "3.3"
 
 services:
-
   database:
     image: postgres:13
     environment:
@@ -11,6 +10,8 @@ services:
     ports:
       - "5432:5432"
     command: ["postgres", "-p", "5432"]
+    volumes:
+      - ./postgres_volume:/var/lib/postgresql/data
     networks:
       - my_network
 
@@ -24,7 +25,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_HOST: database
     volumes:
-      - './backend:/cfiles'
+      - "./backend:/cfiles"
     working_dir: "/cfiles"
     depends_on:
       - database

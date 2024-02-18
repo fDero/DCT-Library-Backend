@@ -43,7 +43,7 @@ RETURNS trigger AS $$
 	END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER loan_creation_trigger
+CREATE TRIGGER loan_creation_trigger
 BEFORE INSERT OR UPDATE ON Loan
 FOR EACH ROW EXECUTE FUNCTION loan_creation();
 
