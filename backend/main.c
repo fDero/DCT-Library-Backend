@@ -24,5 +24,7 @@ int main(){
         	PQfinish(conn);
     		exit(EXIT_SUCCESS);
     	}
+			//PQexec(conn, "call set_global('max_num_of_loans_per_user', 1)");
+
 	printf("everything works!\n");
 }
