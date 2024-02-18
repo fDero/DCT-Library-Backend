@@ -1,27 +1,20 @@
-
-# Use the official Ubuntu as a parent image
 FROM ubuntu:latest
 
-# Set the working directory in the container
 WORKDIR /server
 
-# Copy the current directory contents into the container at /app
 COPY . /server
-
-# Install any needed dependencies specified in requirements.txt
-# For example, if you have a requirements.txt file for Python packages:
-# RUN pip install --no-cache-dir -r requirements.txt
-
-# Run commands within the container
-# For example, if you're building a Python application:
-# CMD ["python", "app.py"]
-
-# Or if you want to run a bash shell:
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Rome
+ENV DOCKERIZE_VERSION v0.7.0
 
 RUN apt-get update
+RUN apt-get install -y wget
+
+RUN wget https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
+    && rm dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz
+
 RUN apt-get install -y gcc
 RUN apt-get install -y git
 RUN apt-get install -y locate
