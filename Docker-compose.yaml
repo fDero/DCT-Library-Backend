@@ -14,7 +14,7 @@ services:
       - ./postgres_volume:/var/lib/postgresql/data
       - ./database:/docker-entrypoint-initdb.d:ro
     networks:
-      - my_network
+      - lso_network
 
   backend:
     image: lso_backend:1
@@ -31,8 +31,8 @@ services:
     depends_on:
       - database
     networks:
-      - my_network
+      - lso_network
 
 networks:
-  my_network:
+  lso_network:
     driver: bridge
