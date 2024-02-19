@@ -4,7 +4,7 @@ CREATE TABLE Account (
 	surname          VARCHAR(40) NOT NULL,
 	email            VARCHAR(50) NOT NULL,
 	borrowed_books   INT         NOT NULL DEFAULT 0,
-	id               SERIAL      PRIMARY KEY
+	account_id               SERIAL      PRIMARY KEY
 );
 
 CREATE TABLE Book (
@@ -14,7 +14,7 @@ CREATE TABLE Book (
 	release_date     TIMESTAMP    NOT NULL,
 	total_copies     INT          NOT NULL,
 	borrowed_copies  INT          NOT NULL DEFAULT 0,
-	id               SERIAL       PRIMARY KEY,
+	book_id          SERIAL       PRIMARY KEY,
 
 	CHECK(total_copies >= borrowed_copies)
 );
@@ -24,17 +24,27 @@ CREATE TABLE Loan (
 	ending_time   TIMESTAMP NOT NULL,
 	account_id    INT       NOT NULL,
 	book_id       INT       NOT NULL,
-	id            SERIAL    PRIMARY KEY,
+	loan_id            SERIAL    PRIMARY KEY,
 
 	FOREIGN KEY (account_id)
-    	REFERENCES Account(id),
+    	REFERENCES Account(account_id),
 
 	FOREIGN KEY (book_id)
-	REFERENCES Book(id)
+	REFERENCES Book(book_id)
 );
 
 
 CREATE TABLE PastLoan (
-	return_time TIMESTAMP NOT NULL
-	DEFAULT CURRENT_TIMESTAMP
-) INHERITS (Loan);
+	starting_time TIMESTAMP NOT NULL,
+	ending_time   TIMESTAMP NOT NULL,
+	account_id    INT       NOT NULL,
+	book_id       INT       NOT NULL,
+	loan_id            SERIAL    PRIMARY KEY,,
+	return_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	FOREIGN KEY (account_id)
+  REFERENCES Account(account_id),
+
+	FOREIGN KEY (book_id)
+	REFERENCES Book(book_id)
+);

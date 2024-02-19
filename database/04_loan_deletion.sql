@@ -4,20 +4,19 @@ RETURNS trigger AS $$
 	BEGIN
 		UPDATE Account
 		SET borrowed_books = borrowed_books - 1
-		WHERE id = old.account_id;
+		WHERE account_id = old.account_id;
 
 		UPDATE Book
 		SET borrowed_copies = borrowed_copies - 1
-		WHERE id = old.book_id;
+		WHERE book_id = old.book_id;
 
 		INSERT INTO PastLoan VALUES (old.*);
-
-			RETURN old;
+		RETURN NULL;
 	END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER loan_deletion_trigger
-BEFORE DELETE ON Loan
+AFTER DELETE ON Loan
 FOR EACH ROW EXECUTE FUNCTION loan_deletion();
 
 
