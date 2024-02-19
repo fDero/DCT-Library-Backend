@@ -156,6 +156,160 @@ CREATE OR REPLACE FUNCTION book_by_loan_id (id_in loan.loan_id%type)
 $$
 LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION book_by_title_and_author (title_in book.title%type, author_in book.author%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		title = title_in AND
+		author = author_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION book_by_title_and_publisher (title_in book.title%type, pub_in book.publisher%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		title = title_in AND
+		publisher = pub_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION book_by_title_and_release_date (title_in book.title%type, release_date_in book.release_date%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		title = title_in AND
+		release_date = release_date_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION books_by_author_and_publisher (author_in book.author%type, pub_in book.publisher%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		author = author_in AND
+		publisher = pub_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION books_by_author_and_release_date (author_in book.author%type, release_date book.release_date%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		author = author_in AND
+		release_date = release_date
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION books_by_publisher_and_release_date (pub_in book.publisher%type, release_date book.release_date%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		publisher = pub_in AND
+		release_date = release_date
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION book_by_title_and_author_and_publisher (title_in book.title%type, author_in book.author%type, pub_in book.publisher%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		title = title_in AND
+		author = author_in AND
+		publisher = pub_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION book_by_title_and_author_and_release_date (title_in book.title%type, author book.author%type, release_date book.release_date%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		title = title_in AND
+		author = author_in AND
+		release_date = release_date_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION book_by_title_and_publisher_and_release_date (title_in book.title%type, pub_in book.publisher%type, release_date book.release_date%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		title = title_in AND
+		publisher = pub_in AND
+		release_date = release_date_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION book_by_author_and_publisher_and_release_date (author_in book.author%type, pub_in book.publisher%type, release_date book.release_date%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		author = author_in AND
+		publisher = pub_in AND
+		release_date = release_date_in
+$$
+LANGUAGE SQL;
+
 CREATE OR REPLACE FUNCTION loan_by_id (id_in loan.loan_id%type)
 	RETURNS TABLE (
 		LIKE PastLoan
