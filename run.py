@@ -3,6 +3,16 @@ import platform
 import subprocess
 import sys
 
+def get_scripts(directory_path):
+    scripts = []
+    files = os.listdir(directory_path)
+    sh_files = [file for file in files if file.endswith('.sh')]
+    for sh_file in sh_files:
+        file_name_without_extension = os.path.splitext(sh_file)[0]
+        scripts.append(file_name_without_extension)
+
+    return scripts
+
 def run_script(script_path):
     try:
         subprocess.run(script_path, check=True, shell=True)
@@ -10,8 +20,9 @@ def run_script(script_path):
         print(f"Error running script: {e}")
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python run.py <script_name>")
+    scripts = get_scripts(os.path.join(os.path.dirname(__file__), "scripts/unix"))
+    if len(sys.argv) != 2 or sys.argv[1] not in scripts:
+        print("Usage: python run.py " + ' | '.join(scripts))
         sys.exit(1)
 
     script_name = sys.argv[1]
