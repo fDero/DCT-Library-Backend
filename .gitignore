@@ -1,5 +1,6 @@
 postgres_volume
 postgres_test_volume
 backend/server
+backend/server_test
 .vscode
 workspace_scripts

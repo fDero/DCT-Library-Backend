@@ -1,7 +1,9 @@
 
 #define _XOPEN_SOURCE
 #define __USE_XOPEN
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 #include "queries.h"
 
 void alloc_and_strcpy(string_t *destination, string_t source)
