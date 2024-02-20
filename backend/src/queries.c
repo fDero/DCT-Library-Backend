@@ -86,10 +86,10 @@ account_t get_account_by_email(const pg_conn_t connection, const string_t email)
     return perform_account_query(connection, buffer).array_storage[0];
 }
 
-// accounts_array_t get_accounts_by_book_id(const pg_conn_t connection, const int id)
-// {
-// 		char buffer[QUERY_STRING_MAX_SIZE];
-// 		sprintf(buffer, "SELECT * FROM accounts_by_book_id(%d)", id);
-//     return perform_account_query(connection, buffer);
-// }
+accounts_array_t get_accounts_by_book_id(const pg_conn_t connection, const int id)
+{
+		char buffer[QUERY_STRING_MAX_SIZE];
+		sprintf(buffer, "SELECT * FROM accounts_by_book_id(%d)", id);
+    return perform_account_query(connection, buffer);
+}
 

@@ -11,8 +11,9 @@ services:
       - '5432:5432'
     volumes:
       - ./postgres_test_volume:/var/lib/postgresql/data
-      - ./database/tests:/docker-entrypoint-initdb.d:ro
-    command: ['postgres', '-p', '5432']
+      - ./database:/docker-entrypoint-initdb.d:ro
+    command:
+      ['postgres', '-p', '5432']
       #- ./database/build:/docker-entrypoint-initdb.d_copy/01_build:ro
       #- ./database/tests:/docker-entrypoint-initdb.d_copy/02_tests:ro
     #command: "sh -c 'cp /docker-entrypoint-initdb.d_copy/01_build/* /docker-entrypoint-initdb.d && cp /docker-entrypoint-initdb.d_copy/02_tests/* /docker-entrypoint-initdb.d && su -c \"postgres -p 5432\" postgres'"
