@@ -1,8 +1,3 @@
-delete from account;
-delete from book;
-delete from loan;
-delete from pastloan;
-
 INSERT INTO Account(name,surname,email, account_id) VALUES
 	('John',    'Smith',    'john.smith@example.com'       , 1),
 	('Emma',    'Johnson',  'emma.johnson@example.com'     , 2),
