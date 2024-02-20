@@ -14,7 +14,7 @@ start:
 
 start-fresh:
 	$(RM) postgres_volume
-	docker-compose -f docker-compose-test.yaml up
+	docker-compose -f docker-compose-release.yaml up
 test:
 	$(RM) postgres_test_volume
-	docker-compose -f Docker-compose.test.yaml up
+	docker-compose -f docker-compose-test.yaml up
