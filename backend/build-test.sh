@@ -1,2 +1,1 @@
-g++ tests/queries.test.c -o server_test -lpq -lssl -lcrypto -pthread -lgtest -lgtest_main -I./include
-./server_test
+cd /cfiles && g++ tests/*.c src/*.c -o server_test -lpq -lssl -lcrypto -pthread -I./include && ./server_test

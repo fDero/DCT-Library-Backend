@@ -1,4 +1,1 @@
-
-gcc main.c src/*.c -o server -lpq -lssl -lcrypto -pthread -I./include
-./server
-
+cd /cfiles && gcc main.c src/*.c -o server -lpq -lssl -lcrypto -pthread -I./include && ./server
