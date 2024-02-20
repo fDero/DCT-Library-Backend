@@ -1,4 +1,4 @@
-version: "3.3"
+version: '3.3'
 
 services:
   database:
@@ -8,11 +8,11 @@ services:
       POSTGRES_PASSWORD: milleteschi
       POSTGRES_DB: lsodct
     ports:
-      - "5432:5432"
-    command: ["postgres", "-p", "5432"]
+      - '5432:5432'
+    command: ['postgres', '-p', '5432']
     volumes:
       - ./postgres_volume:/var/lib/postgresql/data
-      - ./database:/docker-entrypoint-initdb.d:ro
+      - ./database/build:/docker-entrypoint-initdb.d:ro
     networks:
       - lso_network
 
@@ -26,8 +26,8 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_HOST: database
     volumes:
-      - "./backend:/cfiles"
-    working_dir: "/cfiles"
+      - './backend:/cfiles'
+    working_dir: '/cfiles'
     depends_on:
       - database
     networks:

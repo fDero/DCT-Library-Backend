@@ -1,3 +1,4 @@
 postgres_volume
 backend/server
 .vscode
+workspace_scripts

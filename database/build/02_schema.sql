@@ -2,7 +2,7 @@
 CREATE TABLE Account (
 	name             VARCHAR(30) NOT NULL,
 	surname          VARCHAR(40) NOT NULL,
-	email            VARCHAR(50) NOT NULL,
+	email            VARCHAR(50) NOT NULL UNIQUE,
 	borrowed_books   INT         NOT NULL DEFAULT 0,
 	account_id               SERIAL      PRIMARY KEY
 );
@@ -39,7 +39,7 @@ CREATE TABLE PastLoan (
 	ending_time   TIMESTAMP NOT NULL,
 	account_id    INT       NOT NULL,
 	book_id       INT       NOT NULL,
-	loan_id            SERIAL    PRIMARY KEY,,
+	loan_id            SERIAL    PRIMARY KEY,
 	return_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
 	FOREIGN KEY (account_id)

@@ -70,6 +70,36 @@ CREATE OR REPLACE FUNCTION book_by_id (id_in loan.loan_id%type)
 $$
 LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION books_by_account_id (id_in account.account_id%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		B.*
+	FROM
+		book B
+	NATURAL JOIN loan L
+	WHERE
+		L.account_id = id_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION book_by_loan_id (id_in loan.loan_id%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		B.*
+	FROM
+		book B
+	NATURAL JOIN loan L
+	WHERE
+		L.loan_id = id_in
+$$
+LANGUAGE SQL;
+
 CREATE OR REPLACE FUNCTION books_by_title (title_in book.title%type)
 	RETURNS TABLE (
 		LIKE book
@@ -123,36 +153,6 @@ CREATE OR REPLACE FUNCTION books_by_release_date (release_date_in book.release_d
 		book
 	WHERE
 		release_date = release_date_in
-$$
-LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION books_by_account_id (id_in account.account_id%type)
-	RETURNS TABLE (
-		LIKE book
-	)
-	AS $$
-	SELECT
-		B.*
-	FROM
-		book B
-	NATURAL JOIN loan L
-	WHERE
-		L.account_id = id_in
-$$
-LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION book_by_loan_id (id_in loan.loan_id%type)
-	RETURNS TABLE (
-		LIKE book
-	)
-	AS $$
-	SELECT
-		B.*
-	FROM
-		book B
-	NATURAL JOIN loan L
-	WHERE
-		L.loan_id = id_in
 $$
 LANGUAGE SQL;
 
@@ -262,7 +262,7 @@ CREATE OR REPLACE FUNCTION book_by_title_and_author_and_publisher (title_in book
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION book_by_title_and_author_and_release_date (title_in book.title%type, author book.author%type, release_date book.release_date%type)
+CREATE OR REPLACE FUNCTION book_by_title_and_author_and_release_date (title_in book.title%type, author_in book.author%type, release_date_in book.release_date%type)
 	RETURNS TABLE (
 		LIKE book
 	)
@@ -278,7 +278,7 @@ CREATE OR REPLACE FUNCTION book_by_title_and_author_and_release_date (title_in b
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION book_by_title_and_publisher_and_release_date (title_in book.title%type, pub_in book.publisher%type, release_date book.release_date%type)
+CREATE OR REPLACE FUNCTION book_by_title_and_publisher_and_release_date (title_in book.title%type, pub_in book.publisher%type, release_date_in book.release_date%type)
 	RETURNS TABLE (
 		LIKE book
 	)
@@ -294,7 +294,7 @@ CREATE OR REPLACE FUNCTION book_by_title_and_publisher_and_release_date (title_i
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION book_by_author_and_publisher_and_release_date (author_in book.author%type, pub_in book.publisher%type, release_date book.release_date%type)
+CREATE OR REPLACE FUNCTION book_by_author_and_publisher_and_release_date (author_in book.author%type, pub_in book.publisher%type, release_date_in book.release_date%type)
 	RETURNS TABLE (
 		LIKE book
 	)
