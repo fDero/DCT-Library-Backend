@@ -9,18 +9,18 @@
 
 struct account
 {
-    string_t name;
-    string_t surname;
-    string_t email;
+    char* name;
+    char* surname;
+    char* email;
     int borrowed_books;
     int account_id;
 };
 
 struct book
 {
-    string_t title;
-    string_t author;
-    string_t publisher;
+    char* title;
+    char* author;
+    char* publisher;
     timestamp_t release_date;
     int total_copies;
     int borrowed_copies;

@@ -5,7 +5,7 @@
 #include <postgresql/libpq-fe.h>
 #include "utils.h"
 
-void get_connection_info(string_t conninfo);
-conn_t get_db_connection();
+void get_connection_info(char* conninfo);
+conn_t* get_db_connection();
 
 #endif

@@ -6,22 +6,22 @@
 #endif
 #include "queries.h"
 
-void alloc_and_strcpy(string_t *destination, string_t source)
+void alloc_and_strcpy(char* *destination, char* source)
 {
 	*destination = (char *)malloc(sizeof(char) * strlen(source));
 	strcpy(*destination, source);
 }
 
-resultset_t perform_query(const conn_t connection, const string_t query_string)
+resultset_t* perform_query(conn_t* connection, const char* query_string)
 {
-	resultset_t resultset = PQexec(connection, query_string);
+	resultset_t* resultset = PQexec(connection, query_string);
 	assert(PQresultStatus(resultset) == PGRES_TUPLES_OK);
 	return resultset;
 }
 
-accounts_array_t perform_account_query(const conn_t connection, const string_t query_string)
+accounts_array_t perform_account_query(conn_t* connection, const char* query_string)
 {
-	resultset_t resultset = perform_query(connection, query_string);
+	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
 	assert(col_count == 5);
@@ -40,10 +40,10 @@ accounts_array_t perform_account_query(const conn_t connection, const string_t q
 	return output_array;
 }
 
-books_array_t perform_book_query(const conn_t connection, const string_t query_string)
+books_array_t perform_book_query(conn_t* connection, const char* query_string)
 {
 	fflush(stdout);
-	resultset_t resultset = perform_query(connection, query_string);
+	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
 	assert(col_count == 7);
@@ -64,9 +64,9 @@ books_array_t perform_book_query(const conn_t connection, const string_t query_s
 	return output_array;
 }
 
-loans_array_t perform_loan_query(const conn_t connection, const string_t query_string)
+loans_array_t perform_loan_query(conn_t* connection, const char* query_string)
 {
-	resultset_t resultset = perform_query(connection, query_string);
+	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
 	assert(col_count == 5);
@@ -85,7 +85,7 @@ loans_array_t perform_loan_query(const conn_t connection, const string_t query_s
 	return output_array;
 }
 
-account_t get_account_by_id(const conn_t connection, const int id)
+account_t get_account_by_id(conn_t* connection, const int id)
 {
 	char buffer[QUERY_STRING_MAX_SIZE];
 	sprintf(buffer, "SELECT * FROM account_by_id(%d)", id);
@@ -95,7 +95,7 @@ account_t get_account_by_id(const conn_t connection, const int id)
 	return account;
 }
 
-account_t get_account_by_email(const conn_t connection, const string_t email)
+account_t get_account_by_email(conn_t* connection, const char* email)
 {
 	char buffer[QUERY_STRING_MAX_SIZE];
 	sprintf(buffer, "SELECT * FROM account_by_email('%s')", email);

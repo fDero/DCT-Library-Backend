@@ -12,7 +12,7 @@
 int main() {
     printf("hello world! %s\n", getenv("POSTGRES_PORT"));
 
-    conn_t conn = get_db_connection();
+    conn_t* conn = get_db_connection();
 
     books_array_t books_array = perform_book_query(conn, "SELECT * FROM Book");
     for (int i = 0; i < books_array.array_size; i++) {
