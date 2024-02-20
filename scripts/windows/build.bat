@@ -1,4 +1,3 @@
 cd %~dp0
 cd ../..
-rmdir /s /q postgres_volume
-docker-compose -f Docker-compose.yaml up
+docker build -t lso_backend:1 .
