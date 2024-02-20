@@ -12,9 +12,12 @@ build-docker-image-for-backend:
 start:
 	docker-compose -f docker-compose-release.yaml up
 
+test:
+	docker-compose -f docker-compose-test.yaml up
+
 start-fresh:
 	$(RM) postgres_volume
 	docker-compose -f docker-compose-release.yaml up
-test:
+test-fresh:
 	$(RM) postgres_test_volume
 	docker-compose -f docker-compose-test.yaml up
