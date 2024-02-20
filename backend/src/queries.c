@@ -12,14 +12,14 @@ void alloc_and_strcpy(string_t *destination, string_t source)
 	strcpy(*destination, source);
 }
 
-resultset_t perform_query(const pg_conn_t connection, const string_t query_string)
+resultset_t perform_query(const conn_t connection, const string_t query_string)
 {
 	resultset_t resultset = PQexec(connection, query_string);
 	assert(PQresultStatus(resultset) == PGRES_TUPLES_OK);
 	return resultset;
 }
 
-accounts_array_t perform_account_query(const pg_conn_t connection, const string_t query_string)
+accounts_array_t perform_account_query(const conn_t connection, const string_t query_string)
 {
 	resultset_t resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
@@ -36,10 +36,11 @@ accounts_array_t perform_account_query(const pg_conn_t connection, const string_
 		output_array.array_storage[row].borrowed_books = atoi(PQgetvalue(resultset, row, 3));
 		output_array.array_storage[row].account_id = atoi(PQgetvalue(resultset, row, 4));
 	}
+	free(resultset);
 	return output_array;
 }
 
-books_array_t perform_book_query(const pg_conn_t connection, const string_t query_string)
+books_array_t perform_book_query(const conn_t connection, const string_t query_string)
 {
 	fflush(stdout);
 	resultset_t resultset = perform_query(connection, query_string);
@@ -59,10 +60,11 @@ books_array_t perform_book_query(const pg_conn_t connection, const string_t quer
 		output_array.array_storage[row].borrowed_copies = atoi(PQgetvalue(resultset, row, 5));
 		output_array.array_storage[row].book_id = atoi(PQgetvalue(resultset, row, 6));
 	}
+	free(resultset);
 	return output_array;
 }
 
-loans_array_t perform_loan_query(const pg_conn_t connection, const string_t query_string)
+loans_array_t perform_loan_query(const conn_t connection, const string_t query_string)
 {
 	resultset_t resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
@@ -79,26 +81,27 @@ loans_array_t perform_loan_query(const pg_conn_t connection, const string_t quer
 		output_array.array_storage[row].book_id = atoi(PQgetvalue(resultset, row, 3));
 		output_array.array_storage[row].loan_id = atoi(PQgetvalue(resultset, row, 4));
 	}
+	free(resultset);
 	return output_array;
 }
 
-account_t get_account_by_id(const pg_conn_t connection, const int id)
+account_t get_account_by_id(const conn_t connection, const int id)
 {
 	char buffer[QUERY_STRING_MAX_SIZE];
 	sprintf(buffer, "SELECT * FROM account_by_id(%d)", id);
-	return perform_account_query(connection, buffer).array_storage[0];
+	accounts_array_t accounts = perform_account_query(connection, buffer);
+	account_t account = accounts.array_storage[0];
+	free(accounts.array_storage);
+	return account;
 }
 
-account_t get_account_by_email(const pg_conn_t connection, const string_t email)
+account_t get_account_by_email(const conn_t connection, const string_t email)
 {
 	char buffer[QUERY_STRING_MAX_SIZE];
 	sprintf(buffer, "SELECT * FROM account_by_email('%s')", email);
-	return perform_account_query(connection, buffer).array_storage[0];
+	accounts_array_t accounts = perform_account_query(connection, buffer);
+	account_t account = accounts.array_storage[0];
+	free(accounts.array_storage);
+	return account;
 }
 
-accounts_array_t get_accounts_by_book_id(const pg_conn_t connection, const int id)
-{
-	char buffer[QUERY_STRING_MAX_SIZE];
-	sprintf(buffer, "SELECT * FROM accounts_by_book_id(%d)", id);
-	return perform_account_query(connection, buffer);
-}
