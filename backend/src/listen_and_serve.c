@@ -53,7 +53,7 @@ void* client_handler(void* client_socket_ptr){
 void listen_and_serve(){
     printf("a\n");
     fflush(stdout);
-    
+
     server_port = atoi(getenv("SERVER_PORT"));
     server_max_connections = atoi(getenv("SERVER_MAX_CONNECTION"));
     assert (server_port > 0);
@@ -81,7 +81,7 @@ void listen_and_serve(){
         
         printf("g\n");
         fflush(stdout);
-        *((int*)client_socket_ptr) = accept_connection(server_socket, socket_address);
+        *((int*)client_socket_ptr) = accept_connection();
         
         printf("h\n");
         fflush(stdout);
