@@ -14,8 +14,6 @@
 #include "db_utils.h"
 #include "utils.h"
 
-#define QUERY_STRING_MAX_SIZE 1024
-
 resultset_t* perform_query(conn_t* connection, const char* query_string);
 
 void extract_account(resultset_t* resultset, int row, account_t* account);
