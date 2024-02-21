@@ -20,6 +20,8 @@ services:
     image: lso_backend:1
     command: sh -c "dockerize -wait tcp://database:5432 -timeout 60s make build_and_run"
     environment:
+      SERVER_PORT: 8080
+      SERVER_MAX_CONNECTION: 100
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: milleteschi
       POSTGRES_DB: lsodct
@@ -30,6 +32,8 @@ services:
     working_dir: '/cfiles'
     depends_on:
       - database
+    ports:
+      - '8080:8080'
     networks:
       - lso_network
 

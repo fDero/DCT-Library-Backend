@@ -13,7 +13,8 @@ resultset_t* perform_query(db_conn_t* connection, const char* query_string)
 	return resultset;
 }
 
-void extract_account(resultset_t* resultset, int row, account_t* account){
+void extract_account(resultset_t* resultset, int row, account_t* account)
+{
 	alloc_and_strcpy(&(account->name), PQgetvalue(resultset, row, 0));
 	alloc_and_strcpy(&(account->surname), PQgetvalue(resultset, row, 1));
 	alloc_and_strcpy(&(account->email), PQgetvalue(resultset, row, 2));
@@ -21,7 +22,8 @@ void extract_account(resultset_t* resultset, int row, account_t* account){
 	account->account_id = atoi(PQgetvalue(resultset, row, 4));
 }
 
-void extract_book(resultset_t* resultset, int row, book_t* book){
+void extract_book(resultset_t* resultset, int row, book_t* book)
+{
 	alloc_and_strcpy(&(book->title), PQgetvalue(resultset, row, 0));
 	alloc_and_strcpy(&(book->author), PQgetvalue(resultset, row, 1));
 	alloc_and_strcpy(&(book->publisher), PQgetvalue(resultset, row, 2));
@@ -31,7 +33,8 @@ void extract_book(resultset_t* resultset, int row, book_t* book){
 	book->book_id = atoi(PQgetvalue(resultset, row, 6));
 }
 
-void extract_loan(resultset_t* resultset, int row, loan_t* loan){
+void extract_loan(resultset_t* resultset, int row, loan_t* loan)
+{
 	strptime(PQgetvalue(resultset, row, 0), "%Y-%m-%d %H:%M:%S", &(loan->starting_time));
 	strptime(PQgetvalue(resultset, row, 1), "%Y-%m-%d %H:%M:%S", &(loan->ending_time));
 	loan->account_id = atoi(PQgetvalue(resultset, row, 2));
