@@ -10,7 +10,7 @@ COMPILER_FLAGS := -lpq -lssl -lcrypto -pthread -I./backend/include
 GTEST_FLAGS := -lgtest -lgtest_main
 C_TO_CPP_COMPATIBILITY := -Wno-write-strings
 
-build-backend:
+build-backend-docker-image:
 	docker build -t lso_backend:1 .
 
 start:
