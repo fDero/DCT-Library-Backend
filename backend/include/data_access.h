@@ -3,7 +3,6 @@
 #define DATA_ACCESS_H
 #include <assert.h>
 #include <postgresql/libpq-fe.h>
-#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
