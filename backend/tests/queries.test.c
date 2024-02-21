@@ -2,6 +2,7 @@
 #include "tests_init.cpp"
 #include "data_objects.h"
 #include "queries.h"
+#include "db_connection.h"
 
 db_conn_t* conn = NULL;
 
@@ -27,7 +28,7 @@ db_conn_t* conn = NULL;
 // INSERT INTO Loan(starting_time, ending_time, account_id, book_id, loan_id) VALUES
 // 	('2024-04-09 00:00:00','2024-04-14 00:00:00', 4, 1, 3);
 
-TEST(Database, account_by_id){
+TEST_F(Database, account_by_id){
 	printf("\n\nHELLO\n%s\n\n", db_conn_info);
 	account_t* account = get_account_by_id(conn, 1);
 	EXPECT_EQ("John", account->name);
