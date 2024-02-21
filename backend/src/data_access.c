@@ -81,7 +81,7 @@ loan_array_t* perform_loan_array_query(db_conn_t* connection, const char* query_
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
 	assert(col_count == 5);
-	loan_array_t* output_array = (loan_array_t*)malloc(sizeof(loan_array_t));;
+	loan_array_t* output_array = (loan_array_t*)malloc(sizeof(loan_array_t));
 	loan_array_init(output_array, row_count);
 	for (int row = 0; row < row_count; row++)
 	{
