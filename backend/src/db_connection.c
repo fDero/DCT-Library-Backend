@@ -9,11 +9,11 @@ void db_connection_init(){
             getenv("POSTGRES_PORT"));
 }
 
-conn_t* open_db_connection() {
-    conn_t* conn = PQconnectdb(db_conn_info);
+db_conn_t* open_db_connection() {
+    db_conn_t* conn = PQconnectdb(db_conn_info);
     return PQstatus(conn) == CONNECTION_OK ? conn : NULL;
 }
 
-void close_db_connection(conn_t* conn){
+void close_db_connection(db_conn_t* conn){
 	PQfinish(conn);
 }

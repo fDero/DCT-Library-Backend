@@ -6,7 +6,7 @@
 #endif
 #include "data_access.h"
 
-resultset_t* perform_query(conn_t* connection, const char* query_string)
+resultset_t* perform_query(db_conn_t* connection, const char* query_string)
 {
 	resultset_t* resultset = PQexec(connection, query_string);
 	assert(PQresultStatus(resultset) == PGRES_TUPLES_OK);
@@ -39,7 +39,7 @@ void extract_loan(resultset_t* resultset, int row, loan_t* loan){
 	loan->loan_id = atoi(PQgetvalue(resultset, row, 4));
 }
 
-account_array_t* perform_account_array_query(conn_t* connection, const char* query_string)
+account_array_t* perform_account_array_query(db_conn_t* connection, const char* query_string)
 {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
@@ -55,7 +55,7 @@ account_array_t* perform_account_array_query(conn_t* connection, const char* que
 	return output_array;
 }
 
-book_array_t* perform_book_array_query(conn_t* connection, const char* query_string)
+book_array_t* perform_book_array_query(db_conn_t* connection, const char* query_string)
 {
 	fflush(stdout);
 	resultset_t* resultset = perform_query(connection, query_string);
@@ -72,7 +72,7 @@ book_array_t* perform_book_array_query(conn_t* connection, const char* query_str
 	return output_array;
 }
 
-loan_array_t* perform_loan_array_query(conn_t* connection, const char* query_string)
+loan_array_t* perform_loan_array_query(db_conn_t* connection, const char* query_string)
 {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
@@ -88,7 +88,7 @@ loan_array_t* perform_loan_array_query(conn_t* connection, const char* query_str
 	return output_array;
 }
 
-account_t* perform_account_query(conn_t* connection, const char* query_string)
+account_t* perform_account_query(db_conn_t* connection, const char* query_string)
 {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
@@ -101,7 +101,7 @@ account_t* perform_account_query(conn_t* connection, const char* query_string)
 	return output;
 }
 
-book_t* perform_book_query(conn_t* connection, const char* query_string)
+book_t* perform_book_query(db_conn_t* connection, const char* query_string)
 {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
@@ -114,7 +114,7 @@ book_t* perform_book_query(conn_t* connection, const char* query_string)
 	return output;
 }
 
-loan_t* perform_loan_query(conn_t* connection, const char* query_string)
+loan_t* perform_loan_query(db_conn_t* connection, const char* query_string)
 {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);

@@ -1,3 +1,5 @@
+#! /bin/bash
+
 psql=(psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --no-password --dbname "$POSTGRES_DB")
 
 for f in /docker-entrypoint-initdb.d/*/*; do 

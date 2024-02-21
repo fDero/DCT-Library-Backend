@@ -4,7 +4,7 @@
 
 typedef struct tm timestamp_t;
 
-typedef PGconn conn_t;
+typedef PGconn db_conn_t;
 typedef PGresult resultset_t;
 
 #endif

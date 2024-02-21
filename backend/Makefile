@@ -3,5 +3,5 @@ build_and_run:
 	/bin/server
 
 test:
-	g++ tests/*.c src/*.c -o /bin/server -lpq -lssl -lcrypto -pthread -lgtest -lgtest_main -I./include
+	g++ tests/*.cpp tests/*.c src/*.c -o /bin/server -lpq -lssl -lcrypto -pthread -lgtest -lgtest_main -I./include
 	/bin/server
