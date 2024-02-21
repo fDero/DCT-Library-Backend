@@ -8,6 +8,7 @@
 #include "data_objects.h"
 
 int main() {
+		db_connection_init();
     printf("hello world! %s\n", getenv("POSTGRES_PORT"));
 		
     conn_t* conn = open_db_connection();
