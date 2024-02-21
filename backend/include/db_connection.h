@@ -8,7 +8,6 @@
 extern char db_conn_info[1024];
 
 void db_connection_init();
-void get_connection_info(char* conninfo);
 db_conn_t* open_db_connection();
 void close_db_connection(db_conn_t* conn);
 

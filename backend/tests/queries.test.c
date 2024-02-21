@@ -29,10 +29,9 @@ db_conn_t* conn = NULL;
 // 	('2024-04-09 00:00:00','2024-04-14 00:00:00', 4, 1, 3);
 
 TEST_F(Database, account_by_id){
-	printf("\n\nHELLO\n%s\n\n", db_conn_info);
 	account_t* account = get_account_by_id(conn, 1);
-	EXPECT_EQ("John", account->name);
-	EXPECT_EQ("Smith", account->surname);
-	EXPECT_EQ("john.smith@example.com", account->email);
+	EXPECT_STREQ("John", account->name);
+	EXPECT_STREQ("Smith", account->surname);
+	EXPECT_STREQ("john.smith@example.com", account->email);
 	account_destroy(account);
 }
