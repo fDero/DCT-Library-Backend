@@ -10,18 +10,21 @@ COMPILER_FLAGS := -lpq -lssl -lcrypto -pthread -I./backend/include
 GTEST_FLAGS := -lgtest -lgtest_main
 C_TO_CPP_COMPATIBILITY := -Wno-write-strings
 
-build-docker-image-for-backend:
+build-backend:
 	docker build -t lso_backend:1 .
 
 start:
 	docker-compose -f docker-compose-release.yaml up
 
-start-fresh:
+start-newdb:
 	-$(RM) postgres_volume
 	docker-compose -f docker-compose-release.yaml up
 
 test:
 	-$(RM) postgres_test_volume
+	docker-compose -f docker-compose-test.yaml up
+
+test-nodb:
 	docker-compose -f docker-compose-test.yaml up
 
 backend-build-release-local-unix:

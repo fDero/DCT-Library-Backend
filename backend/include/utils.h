@@ -1,10 +1,9 @@
-#ifndef DBUTILS
-#define DBUTILS
-#include <postgresql/libpq-fe.h>
+#ifndef UTILS_H
+#define UTILS_H
 
-typedef struct tm timestamp_t;
+#include <stdlib.h>
+#include <string.h>
 
-typedef PGconn conn_t;
-typedef PGresult resultset_t;
+void alloc_and_strcpy(char* *destination, char* source);
 
 #endif

@@ -7,9 +7,13 @@ void get_connection_info(char* conninfo) {
             getenv("POSTGRES_PORT"));
 }
 
-conn_t* get_db_connection() {
+conn_t* open_db_connection() {
     char conn_info[1024];
     get_connection_info(conn_info);
     conn_t* conn = PQconnectdb(conn_info);
     return PQstatus(conn) == CONNECTION_OK ? conn : NULL;
+}
+
+void close_db_connection(conn_t* conn){
+	PQfinish(conn);
 }

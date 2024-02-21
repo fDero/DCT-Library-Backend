@@ -12,7 +12,7 @@ services:
     command: ['postgres', '-p', '5432']
     volumes:
       - ./postgres_volume:/var/lib/postgresql/data
-      - ./database/build:/docker-entrypoint-initdb.d:ro
+      - ./database/build_schema:/docker-entrypoint-initdb.d:ro
     networks:
       - lso_network
 

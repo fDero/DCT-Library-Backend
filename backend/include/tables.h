@@ -1,11 +1,11 @@
 
-#ifndef DBTABLES
-#define DBTABLES
+#ifndef DB_TABLES_H
+#define DB_TABLES_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <postgresql/libpq-fe.h>
-#include "utils.h"
+#include "db_utils.h"
 
 struct account
 {
