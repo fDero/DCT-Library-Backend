@@ -6,12 +6,12 @@
 #include "stdbool.h"
 
 db_conn_t* conn = NULL;
-account_t* account1 = NULL;
-account_t* account2 = NULL;
-account_t* account3 = NULL;
-account_t* account4 = NULL;
-account_t* account5 = NULL;
-account_t* account6 = NULL;
+account_t* db_account_1 = NULL;
+account_t* db_account_2 = NULL;
+account_t* db_account_3 = NULL;
+account_t* db_account_4 = NULL;
+account_t* db_account_5 = NULL;
+account_t* db_account_6 = NULL;
 
 // ACCOUNTS:
 //	  NAME     |  SURNAME    |  EMAIL                          |  ID
@@ -46,14 +46,17 @@ account_t* account6 = NULL;
 // 	'2024-04-11 00:00:00' | '2024-04-16 00:00:00'  | 4      | 5       | 5 
 // 	'2024-04-12 00:00:00' | '2024-04-18 00:00:00'  | 5      | 1       | 6
 
-#define EXPECT_ACCOUNT_EQUAL(_account1, _account2) \
+#define EXPECT_ACCOUNT_EQUAL(first_account, second_account) \
     do { \
-        EXPECT_STREQ((_account1)->name, (_account2)->name); \
-        EXPECT_STREQ((_account1)->surname, (_account2)->surname); \
-        EXPECT_STREQ((_account1)->email, (_account2)->email); \
-        /* EXPECT_EQ((account1)->borrowed_books, (account2)->borrowed_books); */ \
-        EXPECT_EQ((_account1)->account_id, (_account2)->account_id); \
+        EXPECT_STREQ((first_account)->name, (second_account)->name); \
+        EXPECT_STREQ((first_account)->surname, (second_account)->surname); \
+        EXPECT_STREQ((first_account)->email, (second_account)->email); \
+        EXPECT_EQ((first_account)->borrowed_books, (second_account)->borrowed_books); \
+        EXPECT_EQ((first_account)->account_id, (second_account)->account_id); \
     } while (0)
+
+#define EXPECT_NULLPTR(a_pointer) \
+    EXPECT_EQ(a_pointer, nullptr)
 
 bool contains_account(const account_array_t* account_array, const account_t* account) {
     for (size_t i = 0; i < account_array->size; ++i) {
@@ -69,21 +72,43 @@ bool contains_account(const account_array_t* account_array, const account_t* acc
     return false;
 }
 
-TEST_F(Database, get_account_by_id){
+TEST_F(Database, get_account_by_id_1){
   account_t* account = get_account_by_id(conn, 1);
-  EXPECT_ACCOUNT_EQUAL(account, account1);
+  EXPECT_ACCOUNT_EQUAL(account, db_account_1);
   account_destroy(account);
 }
 
-TEST_F(Database, get_account_by_email){
-  account_t* account = get_account_by_email(conn, "emma.johnson@example.com");
-  EXPECT_ACCOUNT_EQUAL(account, account2);
+TEST_F(Database, get_account_by_id_2){
+  account_t* account = get_account_by_id(conn, 4);
+  EXPECT_ACCOUNT_EQUAL(account, db_account_4);
   account_destroy(account);
+}
+
+TEST_F(Database, get_account_by_id_3){
+  account_t* account = get_account_by_id(conn, 999);
+  EXPECT_NULLPTR(account);
+}
+
+TEST_F(Database, get_account_by_email_1){
+  account_t* account = get_account_by_email(conn, "emma.johnson@example.com");
+  EXPECT_ACCOUNT_EQUAL(account, db_account_2);
+  account_destroy(account);
+}
+
+TEST_F(Database, get_account_by_email_2){
+  account_t* account = get_account_by_email(conn, "sophia.davis@example.com");
+  EXPECT_ACCOUNT_EQUAL(account, db_account_6);
+  account_destroy(account);
+}
+
+TEST_F(Database, get_account_by_email_3){
+  account_t* account = get_account_by_email(conn, "bidibi.bodibi@bu.com");
+  EXPECT_NULLPTR(account);
 }
 
 TEST_F(Database, get_accounts_by_book_id){
   account_array_t* accounts = get_accounts_by_book_id(conn, 1);
-	EXPECT_TRUE(contains_account(accounts, account1));
-	EXPECT_TRUE(contains_account(accounts, account5));
+	EXPECT_TRUE(contains_account(accounts, db_account_1));
+	EXPECT_TRUE(contains_account(accounts, db_account_5));
   account_array_destroy(accounts);
 }
