@@ -2,7 +2,7 @@
 #include "tests_init.cpp"
 #include "data_objects.h"
 #include "queries.h"
-#include "db_utils.h"
+#include "db_connection.h"
 #include "stdbool.h"
 
 db_conn_t* conn = NULL;
@@ -14,27 +14,35 @@ account_t* db_account_5 = NULL;
 account_t* db_account_6 = NULL;
 
 // ACCOUNTS:
-//	  NAME     |  SURNAME    |  EMAIL                          |  ID
-//   ----------------------------------------------------------------
-// 	 'John'    |  'Smith'    |  'john.smith@example.com'     	 |  1
-// 	 'Emma'    |  'Johnson'  |  'emma.johnson@example.com'     |  2
-// 	 'William' |  'Brown'    |  'william.brown@example.com'    |  3
-// 	 'Olivia'  |  'Williams' |  'olivia.williams@example.com'  |  4
-// 	 'James'   |  'Jones'    |  'james.jones@example.com'      |  5
-// 	 'Sophia'  |  'Davis'    |  'sophia.davis@example.com'     |  6
+//  ID 	|  NAME     |  SURNAME    |  EMAIL                          
+//  ----------------------------------------------------------------
+//  1  	| 'John'    |  'Smith'    |  'john.smith@example.com'       		-- db_account_1
+//  2 	| 'Emma'    |  'Johnson'  |  'emma.johnson@example.com'         -- db_account_2
+//  3 	| 'William' |  'Brown'    |  'william.brown@example.com'        -- db_account_3
+//  4 	| 'Olivia'  |  'Williams' |  'olivia.williams@example.com'      -- db_account_4
+//  5 	| 'James'   |  'Jones'    |  'james.jones@example.com'          -- db_account_5
+//  6 	| 'Sophia'  |  'Davis'    |  'sophia.davis@example.com'         -- db_account_6
 
 
 // BOOKS:
-//   TITLE                      | AUTHOR               | PUBLISHER                   | RELEASE_DATE           |TOT.CP| ID
-//   --------------------------------------------------------------------------------------------------------------------
-// 	 'Harry Potter'             | 'J.K.Rowling'        | 'Bloomsbury'                | '1997-06-26 00:00:00'  | 10   | 1 
-// 	 '1984'                     | 'G.Orwell'           | 'Secker & Warburg'          | '1949-06-08 00:00:00'  | 6    | 2 
-// 	 'Karamazov Brothers'       | 'F.Dostoevskij'      | 'The Russian Messenger'     | '1980-11-01 00:00:00'  | 4    | 3
-// 	 'Programming  Principles   | 'Bjarne Stroustrup'  | 'Pearson'                   | '2014-05-15 00:00:00'  | 3    | 4 
-//    and Practices Using C++'  |                      |                             |                        |      |   
-// 	 'The Lord of the Rings'    | 'John Ronald Reuel   | 'George Allen and Unwin     | '1954-07-29 00:00:00'  | 2    | 5
-//                              |  Tolkien'            | (UK) Houghton Mifflin (US)' |                        |      | 
-// 	 'The Hunger Games'         | 'Suzanne Collins'    | 'Scholastic Press'          | '2008-09-14 00:00:00'  | 7    | 6
+//   ID  | TITLE                      | AUTHOR               | PUBLISHER                   | GENRES                               | RELEASE_DATE           |TOT. CP.
+//   --------------------------------------------------------------------------------------|------------------------------------------------------------------------
+// 	 1   | 'Harry Potter'             | 'J.K.Rowling'        | 'Bloomsbury'                | 'Fantasy,Young adult literature,     | '1997-06-26 00:00:00'  | 10 
+//       |                            |                      |                             |  Adventure fiction'                  |                        |
+//       |                            |                      |                             |                                      |                        |
+// 	 2   | '1984'                     | 'G.Orwell'           | 'Secker & Warburg'          | 'Fiction,Science fiction,Mystery'    | '1949-06-08 00:00:00'  | 6     
+//       |                            |                      |                             |                                      |                        |
+// 	 3   | 'Karamazov Brothers'       | 'F.Dostoevskij'      | 'The Russian Messenger'     | 'Fiction,Novel,Mystery,              | '1980-11-01 00:00:00'  | 4   
+//       |                            |                      |                             |  Historical Fiction,Literary fiction'|                        |
+//       |                            |                      |                             |                                      |                        |
+// 	 4   | 'Programming  Principles   | 'Bjarne Stroustrup'  | 'Pearson'                   | 'Education                           | '2014-05-15 00:00:00'  | 3     
+//       |  and Practices Using C++'  |                      |                             |                                      |                        |      
+//       |                            |                      |                             |                                      |                        | 
+// 	 5   | 'The Lord of the Rings'    | 'John Ronald Reuel   | 'George Allen and Unwin     | 'Fantasy fiction,Adventure fiction'  | '1954-07-29 00:00:00'  | 2    
+//       |                            |  Tolkien'            | (UK) Houghton Mifflin (US)' |                                      |                        |     
+//       |                            |                      |                             |                                      |                        |
+// 	 6   | 'The Hunger Games'         | 'Suzanne Collins'    | 'Scholastic Press'          | 'Science fiction,Adventure fiction,  | '2008-09-14 00:00:00'  | 7   
+//       |                            |                      |                             |  Young adult literature'             |                        |
 
 // LOANS:
 //  STARTING_TIME         | ENDING_TIME            | ACC.ID | BOOK ID | ID
