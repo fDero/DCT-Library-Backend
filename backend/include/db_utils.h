@@ -9,7 +9,14 @@ typedef PGconn db_conn_t;
 typedef PGresult resultset_t;
 typedef struct tm timestamp_t;
 
-void timestamp_to_string(char* str, size_t size, const timestamp_t* ts);
-timestamp_t string_to_timestamp(const char* str);
+#include <stdlib.h>
+#include <postgresql/libpq-fe.h>
+#include "db_utils.h"
+
+extern char db_conn_info[1024];
+
+void db_connection_init();
+db_conn_t* open_db_connection();
+void close_db_connection(db_conn_t* conn);
 
 #endif

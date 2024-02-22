@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <iostream>
-#include "db_connection.h"
+#include "db_utils.h"
 #include "data_objects.h"
 
 extern db_conn_t* conn;

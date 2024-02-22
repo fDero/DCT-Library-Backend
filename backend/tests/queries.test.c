@@ -2,7 +2,7 @@
 #include "tests_init.cpp"
 #include "data_objects.h"
 #include "queries.h"
-#include "db_connection.h"
+#include "db_utils.h"
 #include "stdbool.h"
 
 db_conn_t* conn = NULL;

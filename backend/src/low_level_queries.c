@@ -4,7 +4,7 @@
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
-#include "data_access.h"
+#include "queries.h"
 
 resultset_t* perform_query(db_conn_t* connection, const char* query_string)
 {

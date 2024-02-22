@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "db_connection.h"
+#include "db_utils.h"
 #include "queries.h"
 #include "data_objects.h"
 #include "socket_handlers.h"
