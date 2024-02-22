@@ -51,7 +51,6 @@ account_t* db_account_6 = NULL;
         EXPECT_STREQ((first_account)->name, (second_account)->name); \
         EXPECT_STREQ((first_account)->surname, (second_account)->surname); \
         EXPECT_STREQ((first_account)->email, (second_account)->email); \
-        EXPECT_EQ((first_account)->borrowed_books, (second_account)->borrowed_books); \
         EXPECT_EQ((first_account)->account_id, (second_account)->account_id); \
     } while (0)
 
@@ -61,11 +60,10 @@ account_t* db_account_6 = NULL;
 bool contains_account(const account_array_t* account_array, const account_t* account) {
     for (size_t i = 0; i < account_array->size; ++i) {
         const account_t* current_account = account_array->storage + i;
-        if (strcmp(account->name, current_account->name) == 0 &&
+        if (account->account_id == current_account->account_id &&
+						strcmp(account->name, current_account->name) == 0 &&
             strcmp(account->surname, current_account->surname) == 0 &&
-            strcmp(account->email, current_account->email) == 0 &&
-						account->borrowed_books == current_account->borrowed_books &&
-            account->account_id == current_account->account_id) {
+            strcmp(account->email, current_account->email) == 0) {
             return true;
         }
     }

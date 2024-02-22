@@ -18,17 +18,17 @@ protected:
       conn = open_db_connection();
 
 			db_account_1 = (account_t*) malloc (sizeof(account_t));
-			account_init(db_account_1, 1, "John", "Smith", "john.smith@example.com", 1);
+			account_init(db_account_1, 1, "John", "Smith", "john.smith@example.com");
 			db_account_2 = (account_t*) malloc (sizeof(account_t));
-			account_init(db_account_2, 2, "Emma", "Johnson", "emma.johnson@example.com", 1);
+			account_init(db_account_2, 2, "Emma", "Johnson", "emma.johnson@example.com");
 			db_account_3 = (account_t*) malloc (sizeof(account_t));
-			account_init(db_account_3, 3, "William", "Brown", "william.brown@example.com", 2);
+			account_init(db_account_3, 3, "William", "Brown", "william.brown@example.com");
 			db_account_4 = (account_t*) malloc (sizeof(account_t));
-			account_init(db_account_4, 4, "Olivia", "Williams", "olivia.williams@example.com", 1);
+			account_init(db_account_4, 4, "Olivia", "Williams", "olivia.williams@example.com");
 			db_account_5 = (account_t*) malloc (sizeof(account_t));
-			account_init(db_account_5, 5, "James", "Jones", "james.jones@example.com", 1);
+			account_init(db_account_5, 5, "James", "Jones", "james.jones@example.com");
 			db_account_6 = (account_t*) malloc (sizeof(account_t));
-			account_init(db_account_6, 6, "Sophia", "Davis", "sophia.davis@example.com", 0);
+			account_init(db_account_6, 6, "Sophia", "Davis", "sophia.davis@example.com");
     }
 
     static void TearDownTestSuite() {

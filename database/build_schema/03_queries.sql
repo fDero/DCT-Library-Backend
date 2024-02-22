@@ -1,3 +1,27 @@
+CREATE OR REPLACE FUNCTION num_loans_for_account(ID_in account.account_id%type)
+  RETURNS INT
+	AS $$
+	SELECT 
+		COUNT(*) 
+	FROM 
+		Loan  L 
+	WHERE 
+		L.account_id = ID_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION num_loans_for_book(ID_in book.book_id%type)
+  RETURNS INT
+	AS $$
+	SELECT 
+		COUNT(*) 
+	FROM 
+		Loan  L 
+	WHERE 
+		L.book_id = ID_in
+$$
+LANGUAGE SQL;
+
 CREATE OR REPLACE FUNCTION account_by_id (ID_in account.account_id%type)
 	RETURNS TABLE (
 		LIKE account
@@ -312,20 +336,13 @@ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION loan_by_id (id_in loan.loan_id%type)
 	RETURNS TABLE (
-		LIKE PastLoan
+		LIKE Loan
 	)
 	AS $$
 		SELECT
-		*, NULL AS return_time
-		FROM
-		loan
-		WHERE
-		loan_id = id_in
-	UNION
-		SELECT
 		*
 		FROM
-		Pastloan
+		loan
 		WHERE
 		loan_id = id_in
 $$
@@ -333,20 +350,13 @@ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION loans_by_account_id (id_in account.account_id%type)
 	RETURNS TABLE (
-		LIKE PastLoan
+		LIKE Loan
 	)
 	AS $$
 		SELECT
-		*, NULL AS return_time
-		FROM
-		loan L
-		WHERE
-		account_id = id_in
-	UNION
-		SELECT
 		*
 		FROM
-		Pastloan
+		loan
 		WHERE
 		account_id = id_in
 $$
@@ -354,20 +364,13 @@ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION loans_by_book_id (id_in book.book_id%type)
 	RETURNS TABLE (
-		LIKE PastLoan
+		LIKE Loan
 	)
 	AS $$
 		SELECT
-		*, NULL AS return_time
-		FROM
-		loan L
-		WHERE
-		book_id = id_in
-	UNION
-		SELECT
 		*
 		FROM
-		Pastloan
+		loan
 		WHERE
 		book_id = id_in
 $$

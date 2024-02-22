@@ -25,7 +25,6 @@ char* accountToJson(account_t* account){
     cJSON_AddStringToObject(root, "name", account->name);
     cJSON_AddStringToObject(root, "surname", account->surname);
     cJSON_AddStringToObject(root, "email", account->email);
-    cJSON_AddNumberToObject(root, "borrowed_books", account->borrowed_books);
 
 		char *jsonString = cJSON_Print(root);
 
