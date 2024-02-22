@@ -9,10 +9,10 @@ json_t* account_to_json(account_t* account){
     json_t *json_object = cJSON_CreateObject();
     assert (json_object != NULL);
     
-    add_numeric_field_to_json_obj (json_object,  "id",      account->account_id);
-    add_text_field_to_json_obj    (json_object,  "name",    account->name);
-    add_text_field_to_json_obj    (json_object,  "surname", account->surname);
-    add_text_field_to_json_obj    (json_object,  "email",   account->email);
+    add_numeric_field_to_json_obj (json_object,  "account_id", account->account_id);
+    add_text_field_to_json_obj    (json_object,  "name",       account->name);
+    add_text_field_to_json_obj    (json_object,  "surname",    account->surname);
+    add_text_field_to_json_obj    (json_object,  "email",      account->email);
     return json_object;
 }
 
@@ -21,7 +21,7 @@ json_t* book_to_json(book_t* book){
     json_t *json_object = cJSON_CreateObject();
     assert (json_object != NULL);
 
-    add_numeric_field_to_json_obj  (json_object,  "id",           book->book_id);
+    add_numeric_field_to_json_obj  (json_object,  "book_id",      book->book_id);
     add_text_field_to_json_obj     (json_object,  "author",       book->author);
     add_text_field_to_json_obj     (json_object,  "publisher",    book->publisher);
     add_timestamp_field_to_json_obj(json_object,  "release_date", &(book->release_date));
@@ -34,7 +34,7 @@ json_t* loan_to_json(loan_t* loan){
     json_t *json_object = cJSON_CreateObject();
     assert (json_object != NULL);
 
-    add_numeric_field_to_json_obj   (json_object,  "id",             loan->loan_id);
+    add_numeric_field_to_json_obj   (json_object,  "loan_id",        loan->loan_id);
     add_timestamp_field_to_json_obj (json_object,  "starting_time",  &(loan->starting_time));
     add_timestamp_field_to_json_obj (json_object,  "ending_time",    &(loan->ending_time));
     add_numeric_field_to_json_obj   (json_object,  "account_id",     loan->account_id);
