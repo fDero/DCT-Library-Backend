@@ -48,3 +48,33 @@ cJSON* loan_to_json(loan_t* loan){
     cJSON_AddNumberToObject(json_object,  "book_id",        loan->book_id);
     return json_object;
 }
+
+cJSON* account_array_to_json(account_array_t* account_array){
+    cJSON *json_array = cJSON_CreateArray();
+    for (int i = 0; i < account_array->size; i++){
+        account_t* account = &(account_array->storage[i]);
+        cJSON *json_account = book_to_json(account);
+        cJSON_AddItemToArray(json_array, json_account);
+    }
+    return json_array;
+}
+
+cJSON* book_array_to_json(book_array_t* book_array){
+    cJSON *json_array = cJSON_CreateArray();
+    for (int i = 0; i < book_array->size; i++){
+        book_t* book = &(book_array->storage[i]);
+        cJSON *json_book = book_to_json(book);
+        cJSON_AddItemToArray(json_array, json_book);
+    }
+    return json_array;
+}
+
+cJSON* loan_array_to_json(loan_array_t* loan_array){
+    cJSON *json_array = cJSON_CreateArray();
+    for (int i = 0; i < loan_array->size; i++){
+        loan_t* loan = &(loan_array->storage[i]);
+        cJSON *json_loan = loan_to_json(loan);
+        cJSON_AddItemToArray(json_array, json_loan);
+    }
+    return json_array;
+}
