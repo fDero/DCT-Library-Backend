@@ -51,48 +51,19 @@ void* client_handler(void* client_socket_ptr){
 }
 
 void listen_and_serve(){
-    printf("a\n");
-    fflush(stdout);
-
     server_port = atoi(getenv("SERVER_PORT"));
     server_max_connections = atoi(getenv("SERVER_MAX_CONNECTION"));
     assert (server_port > 0);
     assert (server_max_connections > 0);
-
-    printf("b\n");
-    fflush(stdout);
     create_listening_socket();
-    
-    printf("c\n");
-    fflush(stdout);
     bind_listening_socket();
-    
-    printf("d\n");
-    fflush(stdout);
     const int listening_error = listen(server_socket, server_max_connections);
-    
-    printf("e\n");
-    fflush(stdout);
     assert (listening_error == 0);
     while(1){
-        printf("f\n");
-        fflush(stdout);
         void* client_socket_ptr = (int*)malloc(sizeof(int));
-        
-        printf("g\n");
-        fflush(stdout);
         *((int*)client_socket_ptr) = accept_connection();
-        
-        printf("h\n");
-        fflush(stdout);
         pthread_t client_handler_thread;
-        
-        printf("i\n");
-        fflush(stdout);
         pthread_create(&client_handler_thread, NULL, client_handler, client_socket_ptr);
-        
-        printf("L\n");
-        fflush(stdout);
         pthread_detach(client_handler_thread);
     }
 }

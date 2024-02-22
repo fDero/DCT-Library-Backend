@@ -6,6 +6,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <time.h>
+#include <sys/wait.h>
 
 #define PORT 8080
 
@@ -40,6 +42,8 @@ int main() {
     // Send data
     send(sock, message, strlen(message), 0);
     printf("Message sent: %s\n", message);
+
+    pause();
 
     // Close the socket
     close(sock);

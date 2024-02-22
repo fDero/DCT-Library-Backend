@@ -15,6 +15,7 @@
 #include <cjson/cJSON.h>
 
 void json_test() {
+
     // Create a JSON object
     cJSON *root = cJSON_CreateObject();
     if (root == NULL) {
@@ -94,6 +95,9 @@ void http_test() {
 }
 
 int main() {
+
+    setbuf(stdout, NULL);
+
 	json_test();
 	http_test();
 	db_connection_init();

@@ -34,3 +34,7 @@ backend-build-test-local-unix:
 	g++ ${C_TO_CPP_COMPATIBILITY} backend/*/*.c \
 	 -o backend/server_test \
 	${COMPILER_FLAGS} ${GTEST_FLAGS}
+
+client-local:
+	gcc frontend/*.c -o frontend/client
+	./frontend/client
