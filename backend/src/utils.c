@@ -5,7 +5,6 @@
 #define _GNU_SOURCE
 #endif
 
-#include "db_connection.h"
 #include "utils.h"
 #include "db_utils.h"
 

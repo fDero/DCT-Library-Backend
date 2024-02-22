@@ -2,7 +2,7 @@
 #define QUERIES_H
 
 #include "db_utils.h"
-#include "data_access.h"
+#include "data_objects.h"
 
 #define STRING_TIMESTAMP_MAX_LENGTH 50
 #define QUERY_STRING_MAX_LENGTH 1024

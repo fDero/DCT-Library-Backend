@@ -5,6 +5,7 @@
 #define _GNU_SOURCE
 #endif
 #include "queries.h"
+#include <assert.h>
 
 resultset_t* perform_query(db_conn_t* connection, const char* query_string)
 {

@@ -72,7 +72,7 @@ book_array_t* get_books_by_data_match(
 	}
 	if (release_date != NULL){
 		char release_date_str[30];
-		timestamp_to_string(release_date_str, 30, &(release_date));
+		timestamp_to_string(release_date_str, 30, release_date);
 		sprintf(buffer, "release_date = %s AND ", release_date_str);
 		strcat(buffer, query_string);
 	}
