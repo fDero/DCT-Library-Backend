@@ -14,8 +14,29 @@
 #include <http_parser.h>
 #include <cjson/cJSON.h>
 
-void json_test() {
+char* accountToJson(account_t* account){
+    cJSON *root = cJSON_CreateObject();
+    if (root == NULL) {
+        fprintf(stderr, "Failed to create JSON object.\n");
+        return NULL;
+    }
 
+    cJSON_AddNumberToObject(root, "id", account->account_id);
+    cJSON_AddStringToObject(root, "name", account->name);
+    cJSON_AddStringToObject(root, "surname", account->surname);
+    cJSON_AddStringToObject(root, "email", account->email);
+
+		char *jsonString = cJSON_Print(root);
+
+    if (jsonString == NULL)
+        fprintf(stderr, "Failed to convert JSON object to string.\n");
+				
+    cJSON_Delete(root);
+
+		return jsonString;
+}
+
+void json_test() {
     // Create a JSON object
     cJSON *root = cJSON_CreateObject();
     if (root == NULL) {
@@ -95,11 +116,8 @@ void http_test() {
 }
 
 int main() {
-
-    setbuf(stdout, NULL);
-
+	db_connection_init();
 	json_test();
 	http_test();
-	db_connection_init();
 	listen_and_serve();
 }

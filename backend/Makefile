@@ -11,5 +11,5 @@ build_and_run:
 
 test:
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
-	g++ tests/*.cpp tests/*.c src/*.c -o /bin/server $(PG) $(GTEST) $(JSN) $(HTTP) -I./include
+	g++ tests/*.cpp tests/*.c src/*.c -o /bin/server $(PG) $(GTEST) $(JSN) $(HTTP) -I./include -fsanitize=address
 	/bin/server

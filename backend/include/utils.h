@@ -4,6 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void alloc_and_strcpy(char* *destination, char* source);
+void alloc_and_strcpy(char* *destination, const char* source);
 
 #endif
