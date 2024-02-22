@@ -10,6 +10,6 @@ typedef PGresult resultset_t;
 typedef struct tm timestamp_t;
 
 void timestamp_to_string(char* str, size_t size, const timestamp_t* ts);
-void string_to_timestamp(timestamp_t* ts, const char* str);
+timestamp_t string_to_timestamp(const char* str);
 
 #endif

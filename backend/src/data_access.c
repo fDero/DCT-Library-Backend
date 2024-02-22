@@ -15,38 +15,32 @@ resultset_t* perform_query(db_conn_t* connection, const char* query_string)
 
 void extract_account(resultset_t* resultset, int row, account_t* account)
 {
-	account_init(account,
-	             atoi(PQgetvalue(resultset, row, 0)),
-							 PQgetvalue(resultset, row, 1),
-							 PQgetvalue(resultset, row, 2),
-							 PQgetvalue(resultset, row, 3));
+	account->account_id = atoi(PQgetvalue(resultset, row, 0));
+	alloc_and_strcpy(&(account->name), PQgetvalue(resultset, row, 1));
+	alloc_and_strcpy(&(account->surname), PQgetvalue(resultset, row, 2));
+	alloc_and_strcpy(&(account->email), PQgetvalue(resultset, row, 3));
+	//account_integrity_check(account);
 }
 
 void extract_book(resultset_t* resultset, int row, book_t* book)
-{
-	timestamp_t release_date;
-	strptime(PQgetvalue(resultset, row, 4), "%Y-%m-%d %H:%M:%S", &release_date);
-	book_init(book,
-	          atoi(PQgetvalue(resultset, row, 0)),
-					  PQgetvalue(resultset, row, 1),
-					  PQgetvalue(resultset, row, 2),
-					  PQgetvalue(resultset, row, 3),
-						&release_date,
-					  atoi(PQgetvalue(resultset, row, 5)));
+{	
+	book->book_id = atoi(PQgetvalue(resultset, row, 0));
+	alloc_and_strcpy(&(book->title), PQgetvalue(resultset, row, 1));
+	alloc_and_strcpy(&(book->author), PQgetvalue(resultset, row, 2));
+	alloc_and_strcpy(&(book->publisher), PQgetvalue(resultset, row, 3));
+	book->release_date = string_to_timestamp(PQgetvalue(resultset, row, 4));
+	book->total_copies = atoi(PQgetvalue(resultset, row, 5));
+	//book_integrity_check(book);
 }
 
 void extract_loan(resultset_t* resultset, int row, loan_t* loan)
 {
-	timestamp_t starting_time;
-	strptime(PQgetvalue(resultset, row, 1), "%Y-%m-%d %H:%M:%S", &starting_time);
-	timestamp_t ending_time;
-	strptime(PQgetvalue(resultset, row, 2), "%Y-%m-%d %H:%M:%S", &ending_time);
-	loan_init(loan,
-	          atoi(PQgetvalue(resultset, row, 0)),
-						&starting_time,
-						&ending_time,
-					  atoi(PQgetvalue(resultset, row, 3)),
-						atoi(PQgetvalue(resultset, row, 4)));
+	loan->loan_id = atoi(PQgetvalue(resultset, row, 0));
+	loan->starting_time = string_to_timestamp(PQgetvalue(resultset, row, 1));
+	loan->ending_time = string_to_timestamp(PQgetvalue(resultset, row, 2));
+	loan->account_id = atoi(PQgetvalue(resultset, row, 3));
+	loan->book_id = atoi(PQgetvalue(resultset, row, 4));
+	//loan_integrity_check(loan);
 }
 
 account_array_t* perform_account_array_query(db_conn_t* connection, const char* query_string)
