@@ -82,22 +82,8 @@ TEST_F(Database, get_account_by_email){
 }
 
 TEST_F(Database, get_accounts_by_book_id){
-	printf("\na\n");
-	fflush(stdout);
   account_array_t* accounts = get_accounts_by_book_id(conn, 1);
-	account_t* account1 = (account_t*) malloc (sizeof(account_t));
-	account_init(account1, 1, "John", "Smith", "john.smith@example.com", 1);
-	account_t* account5 = (account_t*) malloc (sizeof(account_t));
-	account_init(account5, 5, "James", "Jones", "james.jones@example.com", 1);
-	printf("\nb\n");
-	fflush(stdout);
 	EXPECT_TRUE(contains_account(accounts, account1));
 	EXPECT_TRUE(contains_account(accounts, account5));
-	printf("\nc\n");
-	fflush(stdout);
-  account_destroy(account1);
-  account_destroy(account5);
-	printf("\nd\n");
-	fflush(stdout);
   account_array_destroy(accounts);
 }
