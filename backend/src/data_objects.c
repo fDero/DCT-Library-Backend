@@ -7,11 +7,12 @@ void account_init(account_t *account, int id, const char *name, const char *surn
 	alloc_and_strcpy(&(account->email), email);
 }
 
-void book_init(book_t *book, int id, const char *title, const char *author, const char *publisher, const timestamp_t* release_date, int total_copies) {
+void book_init(book_t *book, int id, const char *title, const char *author, const char *publisher, const char* genres, const timestamp_t* release_date, int total_copies) {
 	book->book_id = id;
 	alloc_and_strcpy(&(book->title), title);
 	alloc_and_strcpy(&(book->author), author);
 	alloc_and_strcpy(&(book->publisher), publisher);
+	alloc_and_strcpy(&(book->genres), genres);
 	book->release_date = *release_date;
 	book->total_copies = total_copies;
 }

@@ -29,8 +29,9 @@ void extract_book(resultset_t* resultset, int row, book_t* book)
 	alloc_and_strcpy(&(book->title), PQgetvalue(resultset, row, 1));
 	alloc_and_strcpy(&(book->author), PQgetvalue(resultset, row, 2));
 	alloc_and_strcpy(&(book->publisher), PQgetvalue(resultset, row, 3));
-	book->release_date = string_to_timestamp(PQgetvalue(resultset, row, 4));
-	book->total_copies = atoi(PQgetvalue(resultset, row, 5));
+	alloc_and_strcpy(&(book->genres), PQgetvalue(resultset, row, 4));
+	book->release_date = string_to_timestamp(PQgetvalue(resultset, row, 5));
+	book->total_copies = atoi(PQgetvalue(resultset, row, 6));
 	//book_integrity_check(book);
 }
 
@@ -70,7 +71,7 @@ book_array_t* perform_book_array_query(db_conn_t* connection, const char* query_
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
-	assert(col_count == 6);
+	assert(col_count == 7);
 	if(row_count == 0){
 		PQclear(resultset);
 		return NULL;
@@ -127,7 +128,7 @@ book_t* perform_book_query(db_conn_t* connection, const char* query_string)
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
-	assert(col_count == 6);
+	assert(col_count == 7);
 	if(row_count == 0){
 		PQclear(resultset);
 		return NULL;

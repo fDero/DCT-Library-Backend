@@ -9,9 +9,9 @@ typedef cJSON json_t;
 json_t* init_json_object();
 json_t* init_json_array();
 
-void add_numeric_field_to_json_obj(json_t* json, char* field_name, int value);
-void add_text_field_to_json_obj(json_t* json, char* field_name,char* text);
-void add_timestamp_field_to_json_obj(json_t* json, char* field_name, timestamp_t* timestamp);
+void add_numeric_field_to_json_obj(json_t* json, const char* field_name, int value);
+void add_text_field_to_json_obj(json_t* json, const char* field_name, const char* text);
+void add_timestamp_field_to_json_obj(json_t* json, const char* field_name, const timestamp_t* timestamp);
 void add_json_item_to_json_array(json_t* dest_array, json_t* src_item);
 
 json_t* account_to_json(account_t* account);

@@ -9,11 +9,11 @@ CREATE TABLE Account (
 CREATE TYPE genre_enum AS ENUM 
 ('Action fiction','Adventure fiction','Autobiography','Biography','Children''s literature',
 	'Comedy','Coming-of-age story','Contemporary literature','Contemporary romance','Crime fiction',
-	'Detective fiction','Education','Essay','Fairy tale','Fantasy','Fantasy Fiction','Fiction',
-	'Genre fiction','Graphic novel','Historical Fiction','Historical fantasy','Historical romance',
+	'Detective fiction','Education','Essay','Fairy tale','Fantasy','Fantasy fiction','Fiction',
+	'Genre fiction','Graphic novel','Historical fiction','Historical fantasy','Historical romance',
 	'History','Horror fiction','Humor','Literary fiction','Literary realism','Magical Realism',
 	'Memoir','Mystery','Narrative','New adult fiction','Non-fiction','Novel','Philosophy','Poetry',
-	'Romance novel','Satire','Science','Science fiction','Self-help book','Short Story','Social science',
+	'Romance novel','Satire','Science','Science fiction','Self-help book','Short story','Social science',
 	'Speculative fiction','Spirituality','Thriller','Travel literature','True crime','Urban fiction',
 	'Western fiction','Women''s fiction','Young adult literature');
 

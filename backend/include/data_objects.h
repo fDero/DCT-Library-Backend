@@ -21,6 +21,7 @@ struct book
     char* title;
     char* author;
     char* publisher;
+    char* genres;
     timestamp_t release_date;
     int total_copies;
     int book_id;
@@ -62,7 +63,7 @@ typedef struct book_array book_array_t;
 typedef struct loan_array loan_array_t;
 
 void account_init(account_t *account, int id, const char *name, const char *surname, const char *email);
-void book_init(book_t *book, int id, const char *title, const char *author, const char *publisher, const timestamp_t* release_date, int total_copies);
+void book_init(book_t *book, int id, const char *title, const char *author, const char *publisher, const char* genres, const timestamp_t* release_date, int total_copies);
 void loan_init(loan_t *loan, int id, const timestamp_t* starting_time, const timestamp_t* ending_time, int account_id, int book_id);
 
 void account_destroy(account_t* account);
