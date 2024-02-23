@@ -3,7 +3,7 @@
 #include "utils.h"
 #include <stdio.h>
 
-const http_request_t* http_request_decode_readonly(char* http_request_str){
+const http_request_t* http_request_decode(char* http_request_str){
     
     // INIT
     http_request_t* request = (http_request_t*)malloc(sizeof(http_request_t));
