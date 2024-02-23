@@ -1,3 +1,4 @@
+
 #include "data_objects.h"
 
 void account_init(account_t *account, int id, const char *name, const char *surname, const char *email) {

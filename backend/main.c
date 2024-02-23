@@ -7,98 +7,38 @@
 #include "queries.h"
 #include "data_objects.h"
 #include "socket_handlers.h"
+#include "http.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <http_parser.h>
 #include <cjson/cJSON.h>
-
-void json_test() {
-
-    // Create a JSON object
-    cJSON *root = cJSON_CreateObject();
-    if (root == NULL) {
-        fprintf(stderr, "Failed to create JSON object.\n");
-        return;
-    }
-
-    // Add key-value pairs to the JSON object
-    cJSON_AddStringToObject(root, "name", "John Doe");
-    cJSON_AddNumberToObject(root, "age", 30);
-    cJSON_AddBoolToObject(root, "is_student", cJSON_False);
-
-    // Create an array and add it to the JSON object
-    cJSON *grades = cJSON_CreateIntArray((const int[]){90, 85, 88}, 3);
-    cJSON_AddItemToObject(root, "grades", grades);
-
-    // Convert the JSON object to a string
-    char *jsonString = cJSON_Print(root);
-    if (jsonString == NULL) {
-        fprintf(stderr, "Failed to convert JSON object to string.\n");
-        cJSON_Delete(root);
-		return;
-	}
-
-    // Print the JSON string
-    printf("JSON Object:\n%s\n", jsonString);
-
-    // Clean up memory
-    cJSON_Delete(root);
-    free(jsonString);
-}
-
-
-int on_url(http_parser* parser, const char* at, size_t length) {
-    printf("URL: %.*s\n", (int)length, at);
-    return 0;
-}
-
-int on_header_field(http_parser* parser, const char* at, size_t length) {
-    printf("Header Field: %.*s\n", (int)length, at);
-    return 0;
-}
-
-int on_header_value(http_parser* parser, const char* at, size_t length) {
-    printf("Header Value: %.*s\n", (int)length, at);
-    return 0;
-}
-
-int on_message_complete(http_parser* parser) {
-    printf("Message Complete\n");
-    return 0;
-}
-
-void http_test() {
-
-    // Initialize http_parser parser
-    http_parser parser;
-    http_parser_settings settings;
-    http_parser_settings_init(&settings);
-    settings.on_url = on_url;
-    settings.on_header_field = on_header_field;
-    settings.on_header_value = on_header_value;
-    settings.on_message_complete = on_message_complete;
-
-    http_parser_init(&parser, HTTP_REQUEST);
-   // Example HTTP request to parse
-    const char* request_data = "GET /path HTTP/1.1\r\nHost: example.com\r\n\r\n";
-    size_t request_length = strlen(request_data);
-
-    // Parse the HTTP request
-    size_t parsed = http_parser_execute(&parser, &settings, request_data, request_length);
-
-    if (parsed != request_length) {
-        fprintf(stderr, "Error parsing HTTP request\n");
-        return;
-    }
-}
+#include <pthread.h>
 
 int main() {
-
+    db_connection_init();
     setbuf(stdout, NULL);
 
-	json_test();
-	http_test();
-	listen_and_serve();
+    printf("c backend started\n");
+
+	char request_str[2048] = 
+        "GET /somedir/page HTTP/3.3\r\n"
+        //"Host: www.host.it\r\n"
+        //"Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0"
+    ;
+
+    const http_request_t* request = http_request_decode_readonly(request_str);
+    if (request != NULL){
+        printf("HEADERS: \n%s\n", request->headers);
+        printf("METHOD:  %s\n",   request->method);
+        printf("URL:     %s\n",   request->url);
+        printf("VERSION: %s\n",   request->version);
+        printf("PAYLOAD: %s\n",   request->payload);
+    }
+    else {
+        printf("bad request\n");
+    }
+	//listen_and_serve();
 }

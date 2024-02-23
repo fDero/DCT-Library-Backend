@@ -1,4 +1,6 @@
 
+#ifndef JSON_H
+#define JSON_H
 #include "data_objects.h"
 #include "utils.h"
 #include <cjson/cJSON.h>
@@ -29,3 +31,5 @@ loan_t* loan_from_json(json_t* json);
 bool extract_int_from_json(json_t* json, const char* field_name, int* value);
 bool extract_text_from_json(json_t* json, const char* field_name, char** str);
 bool extract_timestamp_from_json(json_t* json, const char* field_name, timestamp_t* timestamp);
+
+#endif

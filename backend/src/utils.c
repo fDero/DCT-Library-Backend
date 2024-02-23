@@ -49,3 +49,27 @@ void alloc_and_strcpy(char* *destination, const char* source)
 	*destination = (char *)malloc(sizeof(char) * strlen(source) + 1);
 	strcpy(*destination, source);
 }
+
+void advance_to_next_target(char* string, int* current_char_index, char target)
+{
+    char current = string[*current_char_index];
+    while ( current != '\0' && current != target ){
+        (*current_char_index) += 1;
+        current = string[*current_char_index];
+    }
+}
+
+void advance_to_next_whitespace(char* string, int* current_char_index)
+{
+    advance_to_next_target(string, current_char_index, ' ');
+}
+
+void advance_to_next_carriage_return(char* string, int* current_char_index)
+{
+    advance_to_next_target(string, current_char_index, '\r');
+}
+
+void advance_to_next_newline(char* string, int* current_char_index)
+{
+    advance_to_next_target(string, current_char_index, '\n');
+}
