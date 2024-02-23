@@ -29,7 +29,7 @@ int main() {
         "my really beutiful payload\0"
     ;
 
-    const http_request_t* request = http_request_decode(request_str);
+    http_request_t* request = http_request_decode(request_str);
     if (request != NULL){
         printf("HEADERS: \n%s\n", request->headers);
         printf("METHOD:  %s\n",   request->method);
