@@ -2,16 +2,13 @@
 #define DB_UTILS_H
 #include <postgresql/libpq-fe.h>
 #include <time.h>
+#include <stdlib.h>
 
 #define DB_TIMESTAMP_FORMAT "%Y-%m-%d %H:%M:%S"
 
 typedef PGconn db_conn_t;
 typedef PGresult resultset_t;
 typedef struct tm timestamp_t;
-
-#include <stdlib.h>
-#include <postgresql/libpq-fe.h>
-#include "db_utils.h"
 
 extern char db_conn_info[1024];
 

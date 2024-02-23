@@ -166,6 +166,26 @@ CREATE OR REPLACE FUNCTION books_by_publisher (publisher_in book.publisher%type)
 $$
 LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION books_by_genres (genres_in Book.genres%type)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+		BEGIN
+			IF (TRIM(BOTH ',' FROM genres_in) <> '') THEN
+				RETURN QUERY
+					SELECT
+						*
+					FROM
+						book B
+					WHERE
+						string_to_array(genres_in, ',') <@ string_to_array(B.genres, ',');
+			END IF;
+			RETURN;
+		END;
+$$
+LANGUAGE PLPGSQL;
+
 CREATE OR REPLACE FUNCTION books_by_release_date (release_date_in book.release_date%type)
 	RETURNS TABLE (
 		LIKE book

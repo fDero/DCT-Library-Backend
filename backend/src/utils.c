@@ -8,8 +8,6 @@
 #include "utils.h"
 #include "db_utils.h"
 
-
-
 char db_conn_info[1024];
 
 void db_connection_init(){
@@ -38,6 +36,13 @@ timestamp_t string_to_timestamp(const char* str) {
 	return timestamp;
 }
 
+bool timestamp_equal(const timestamp_t* ts1, const timestamp_t* ts2){
+	char str1[STRING_TIMESTAMP_MAX_LENGTH];
+	char str2[STRING_TIMESTAMP_MAX_LENGTH];
+	timestamp_to_string(str1, STRING_TIMESTAMP_MAX_LENGTH, ts1);
+	timestamp_to_string(str2, STRING_TIMESTAMP_MAX_LENGTH, ts2);
+	return !strcmp(str1, str2);
+}
 
 void alloc_and_strcpy(char* *destination, const char* source)
 {

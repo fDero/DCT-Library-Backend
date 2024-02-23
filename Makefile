@@ -28,6 +28,10 @@ test:
 
 test-nodb:
 	docker-compose -f docker-compose-test.yaml up
+	
+down:
+	docker-compose -f docker-compose-release.yaml down -v
+	docker-compose -f docker-compose-test.yaml down -v
 
 backend-build-release-local-unix:
 	gcc backend/*.c backend/src/*.c -o backend/server \

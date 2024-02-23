@@ -17,6 +17,8 @@ CREATE TRIGGER loan_insertion_trigger
 BEFORE INSERT ON Loan
 FOR EACH ROW EXECUTE FUNCTION loan_insertion();
 
+------------------------------------------------
+
 CREATE OR REPLACE FUNCTION loan_deletion()
 RETURNS trigger AS $$
 	BEGIN
@@ -29,6 +31,8 @@ CREATE TRIGGER loan_deletion_trigger
 AFTER DELETE ON Loan
 FOR EACH ROW EXECUTE FUNCTION loan_deletion();
 
+-----------------------------------------------
+
 CREATE OR REPLACE FUNCTION book_insert()
 RETURNS trigger AS $$
 	BEGIN
@@ -40,6 +44,10 @@ RETURNS trigger AS $$
 			RAISE EXCEPTION 'Invalid genres';
 		END IF;
 		RETURN new;
+	EXCEPTION
+		WHEN OTHERS THEN
+			RAISE EXCEPTION 'Invalid genres'
+			USING ERRCODE = get_global('invalid_book_genres_error')::VARCHAR(10);
 	END;
 $$ LANGUAGE plpgsql;
 

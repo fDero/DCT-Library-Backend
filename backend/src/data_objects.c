@@ -36,6 +36,7 @@ void book_destroy(book_t* book) {
 	free(book->title);
 	free(book->author);
 	free(book->publisher);
+	free(book->genres);
 	free(book);
 }
 
@@ -76,6 +77,7 @@ void book_array_destroy(book_array_t *array) {
 		free(array->storage[i].title);
 		free(array->storage[i].author);
 		free(array->storage[i].publisher);
+		free(array->storage[i].genres);
 	}
 	free(array->storage);
 	free(array);
