@@ -22,6 +22,51 @@ CREATE OR REPLACE FUNCTION num_loans_for_book(ID_in book.book_id%type)
 $$
 LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION select_n_accounts (n int)
+	RETURNS TABLE (
+		LIKE account
+	)
+	AS $$
+	BEGIN
+		IF(n IS NOT NULL) THEN
+			RETURN QUERY SELECT * FROM account LIMIT n;
+		ELSE
+			RETURN QUERY SELECT * FROM account;
+		END IF;
+	END;
+$$
+LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION select_n_books (n int)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	BEGIN
+		IF(n IS NOT NULL) THEN
+			RETURN QUERY SELECT * FROM book LIMIT n;
+		ELSE
+			RETURN QUERY SELECT * FROM book;
+		END IF;
+	END;
+$$
+LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION select_n_loans (n int)
+	RETURNS TABLE (
+		LIKE loan
+	)
+	AS $$
+	BEGIN
+		IF(n IS NOT NULL) THEN
+			RETURN QUERY SELECT * FROM loan LIMIT n;
+		ELSE
+			RETURN QUERY SELECT * FROM loan;
+		END IF;
+	END;
+$$
+LANGUAGE PLPGSQL;
+
 CREATE OR REPLACE FUNCTION account_by_id (ID_in account.account_id%type)
 	RETURNS TABLE (
 		LIKE account

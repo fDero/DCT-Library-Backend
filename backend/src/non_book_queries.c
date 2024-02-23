@@ -1,5 +1,14 @@
 #include "queries.h"
 
+account_array_t* get_accounts(db_conn_t* connection, int limit){
+	char buffer[QUERY_STRING_MAX_LENGTH];
+	if(limit != DB_GET_ALL)
+		sprintf(buffer, "SELECT * FROM select_n_accounts('%d')", limit);
+	else
+		sprintf(buffer, "SELECT * FROM select_n_accounts(null)");
+	return perform_account_array_query(connection, buffer);
+}
+
 account_t* get_account_by_id(db_conn_t* connection, int id)
 {
 	char buffer[QUERY_STRING_MAX_LENGTH];
@@ -26,6 +35,15 @@ account_t* get_account_by_loan_id(db_conn_t* connection, int id)
 	char buffer[QUERY_STRING_MAX_LENGTH];
 	sprintf(buffer, "SELECT * FROM account_by_loan_id(%d)", id);
 	return perform_account_query(connection, buffer);
+}
+
+loan_array_t* get_loans(db_conn_t* connection, int limit){
+	char buffer[QUERY_STRING_MAX_LENGTH];
+	if(limit != DB_GET_ALL)
+		sprintf(buffer, "SELECT * FROM select_n_loans('%d')", limit);
+	else
+		sprintf(buffer, "SELECT * FROM select_n_loans(null)");
+	return perform_loan_array_query(connection, buffer);
 }
 
 loan_t* get_loan_by_id(db_conn_t* connection, int id)

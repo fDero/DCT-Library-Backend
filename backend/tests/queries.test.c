@@ -150,6 +150,29 @@ bool contains_loan(const loan_array_t* loan_array, const loan_t* loan) {
     return false;
 }
 
+TEST_F(Database, get_accounts_1){
+  account_array_t* accounts = get_accounts(conn, 1);
+	ASSERT_NOT_NULLPTR(accounts);
+	EXPECT_EQ(accounts->size, 1);
+  if(accounts != NULL) account_array_destroy(accounts);
+}
+
+TEST_F(Database, get_accounts_2){
+  account_array_t* accounts = get_accounts(conn, 4);
+	ASSERT_NOT_NULLPTR(accounts);
+	EXPECT_EQ(accounts->size, 4);
+  if(accounts != NULL) account_array_destroy(accounts);
+}
+
+TEST_F(Database, get_accounts_3){
+  account_array_t* accounts = get_accounts(conn, DB_GET_ALL);
+	ASSERT_NOT_NULLPTR(accounts);
+	EXPECT_EQ(accounts->size, 6);
+  if(accounts != NULL) account_array_destroy(accounts);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 TEST_F(Database, get_account_by_id_1){
   account_t* account = get_account_by_id(conn, 1);
 	ASSERT_NOT_NULLPTR(account);
@@ -237,6 +260,29 @@ TEST_F(Database, get_accounts_by_book_id_3){
   account_array_t* accounts = get_accounts_by_book_id(conn, 9999);
 	EXPECT_NULLPTR(accounts);
   if(accounts != NULL) account_array_destroy(accounts);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+TEST_F(Database, get_books_1){
+  book_array_t* books = get_books(conn, 1);
+	ASSERT_NOT_NULLPTR(books);
+	EXPECT_EQ(books->size, 1);
+  if(books != NULL) book_array_destroy(books);
+}
+
+TEST_F(Database, get_books_2){
+  book_array_t* books = get_books(conn, 3);
+	ASSERT_NOT_NULLPTR(books);
+	EXPECT_EQ(books->size, 3);
+  if(books != NULL) book_array_destroy(books);
+}
+
+TEST_F(Database, get_books_3){
+  book_array_t* books = get_books(conn, DB_GET_ALL);
+	ASSERT_NOT_NULLPTR(books);
+	EXPECT_EQ(books->size, 6);
+  if(books != NULL) book_array_destroy(books);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -467,6 +513,29 @@ TEST_F(Database, get_books_by_data_match_3){
 	ASSERT_NOT_NULLPTR(books);
 	EXPECT_EQ(books->size, 6);
   if(books != NULL) book_array_destroy(books);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+TEST_F(Database, get_loans_1){
+  loan_array_t* loans = get_loans(conn, 1);
+	ASSERT_NOT_NULLPTR(loans);
+	EXPECT_EQ(loans->size, 1);
+  if(loans != NULL) loan_array_destroy(loans);
+}
+
+TEST_F(Database, get_loans_2){
+  loan_array_t* loans = get_loans(conn, 5);
+	ASSERT_NOT_NULLPTR(loans);
+	EXPECT_EQ(loans->size, 5);
+  if(loans != NULL) loan_array_destroy(loans);
+}
+
+TEST_F(Database, get_loans_3){
+  loan_array_t* loans = get_loans(conn, DB_GET_ALL);
+	ASSERT_NOT_NULLPTR(loans);
+	EXPECT_EQ(loans->size, 6);
+  if(loans != NULL) loan_array_destroy(loans);
 }
 
 //////////////////////////////////////////////////////////////////////////////
