@@ -9,11 +9,11 @@
 
 struct http_request {
     char* source;
-    const char* method;
-	const char* url;
-	const char* version;
-	const char* headers;
-	const char* payload;
+    char const* method;
+	char const* url;
+	char const* version;
+	char const* headers;
+	char const* payload;
 };
 
 struct http_response {
@@ -34,6 +34,6 @@ typedef struct http_request http_request_t;
 typedef struct http_response http_response_t;
 typedef struct http_header_pack http_header_pack;
 
-const http_request_t* http_request_decode(char* http_request_str);
+http_request_t* http_request_decode(char* http_request_str);
 
 #endif
