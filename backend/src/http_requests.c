@@ -61,6 +61,7 @@ void http_request_destroy(http_request_t* http_request_ptr){
 };
 
 http_request_t* http_request_decode(char* http_request_str) {
+    
     // INIT
     http_request_t* request = (http_request_t*)malloc(sizeof(http_request_t));
     alloc_and_strcpy(&(request->source), http_request_str);
@@ -81,10 +82,11 @@ http_request_t* http_request_decode(char* http_request_str) {
     correct &= (request->source[current_char_index++] == '\n');
 
     /* HEADERS */ {
-        while ((request->source)[current_char_index] != '\r' &&
+        while (
+            (request->source)[current_char_index] != '\r' &&
             (request->source)[current_char_index] != '\n' &&
             (request->source)[current_char_index] != '\0' &&
-            (correct &= (current_char_index < len)) &&
+            (correct &= (current_char_index < len))       &&
             (correct &= (request->headers_num < MAX_HEADERS))
         ) {
             header_names[request->headers_num] = request->source + current_char_index;
