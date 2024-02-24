@@ -7,13 +7,18 @@
 #include <stdbool.h>
 #include <string.h>
 
+#define MAX_HEADERS 100
+
 struct http_request {
-    char* source;
-    char const* method;
+  char* source;
+  char const* method;
 	char const* url;
 	char const* version;
 	char const* headers;
+	char ** header_names;
+	char ** header_values;
 	char const* payload;
+	int headers_num;
 };
 
 struct http_response {

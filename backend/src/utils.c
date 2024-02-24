@@ -59,6 +59,20 @@ void advance_to_next_target(char* string, int* current_char_index, char target)
     }
 }
 
+void advance_to_next_targets(char* string, int* current_char_index, const char* targets)
+{
+    char current = string[*current_char_index];
+    while ( current != '\0'){
+				for(int i = 0; i < strlen(targets); i++){
+					if(current == targets[i]){
+						return;
+					}
+				}
+        (*current_char_index) += 1;
+        current = string[*current_char_index];
+    }
+}
+
 void advance_to_next_whitespace(char* string, int* current_char_index)
 {
     advance_to_next_target(string, current_char_index, ' ');
