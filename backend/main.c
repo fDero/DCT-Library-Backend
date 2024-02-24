@@ -23,8 +23,8 @@ int main() {
 
 	char request_str[2048] = 
         "GET /somedir/page HTTP/3.3\r\n"
-        //"Host: www.host.it\r\n"
-        //"Lang: eng\r\n"
+        "Host: www.host.it\r\n"
+        "Lang: eng\r\n"
         "\r\n"
         "my really beutiful payload\0"
     ;

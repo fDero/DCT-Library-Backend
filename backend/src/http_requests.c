@@ -103,6 +103,10 @@ http_request_t* http_request_decode(char* http_request_str){
     // PAYLOAD
     request->payload = request->source + current_char_index;
     correct &= (request->payload - request->method) < len;
+    
+    correct &= ( strcmp(request->method, "") != 0);
+    correct &= ( strcmp(request->version, "") != 0);
+    correct &= ( strcmp(request->url, "") != 0);
 
     // FINALIZE
     if (correct) {
