@@ -63,9 +63,10 @@ void http_request_destroy(http_request_t* http_request_ptr){
 http_request_t* http_request_decode(char* http_request_str) {
     
     // INIT
+    int len = strlen(http_request_str);
+		if(len == 0) return NULL;
     http_request_t* request = (http_request_t*)malloc(sizeof(http_request_t));
     alloc_and_strcpy(&(request->source), http_request_str);
-    int len = strlen(http_request_str);
     int current_char_index = 0;
     bool correct = true;
     char* header_names[MAX_HEADERS];

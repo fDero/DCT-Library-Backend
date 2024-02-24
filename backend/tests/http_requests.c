@@ -166,3 +166,9 @@ TEST(HTTP, invalid_request_non_spaced_headers) {
     http_request_t* request = http_request_decode(request_str);
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
+
+TEST(HTTP, invalid_request_empty) {
+		char request_str[2048] = "\0";
+		http_request_t* request = http_request_decode(request_str);
+		ASSERT_EQ(request, (http_request_t*)NULL);
+}
