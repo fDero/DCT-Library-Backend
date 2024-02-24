@@ -17,7 +17,7 @@ elif [ "$1" = "test" ]; then
     fi
     g++ ${TESTS} ${SRC} -o /bin/server ${PG} ${GTEST} ${JSN} ${HTTP} -I./include -fsanitize=address
 else
-  echo "Usage: build_and_run.sh release|test [nodb]"
+  echo "Usage: build_and_run.sh release|test [--nodb]"
   exit 1
 fi
 
