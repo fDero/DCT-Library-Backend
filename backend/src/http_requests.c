@@ -68,16 +68,13 @@ http_request_t* http_request_decode(char* http_request_str){
             (request->source)[current_char_index] != '\r' && 
             (request->source)[current_char_index] != '\n' && 
             (request->source)[current_char_index] != '\0' &&
-            (correct &= (request->headers_num < MAX_HEADERS))
+            (correct &= (request->headers_num < MAX_HEADERS)) &&
+            (correct &= (current_char_index < len))
         ){
-            if (current_char_index >= len) {
-                correct = false;
-                break;
-            }
             header_names[request->headers_num] = request->source + current_char_index;
             skip_string_terminating_with_target_safe(request->source, &current_char_index, len, ':', ":\r\n", &correct);
             skip_character_safe(request->source, &current_char_index, len, ' ', "\r\n", &correct);
-            
+
             header_values[request->headers_num++] = request->source + current_char_index;
             advance_to_next_carriage_return(request->source, &current_char_index);
             skip_string_terminating_with_target(request->source, &current_char_index, len, '\r', &correct);
