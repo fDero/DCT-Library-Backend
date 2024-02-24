@@ -82,9 +82,6 @@ http_request_t* http_request_decode(char* http_request_str){
         } 
 
         correct &= (current_char_index < len);
-        if (correct){
-            request->source[current_char_index - 1] = '\0';
-        }
         correct &= (request->source[current_char_index++] == '\r');
         correct &= (request->source[current_char_index++] == '\n');
     }
