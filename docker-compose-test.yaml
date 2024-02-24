@@ -18,7 +18,7 @@ services:
 
   backend_test:
     image: lso_backend:1
-    command: sh -c "dockerize -wait tcp://database_test:5432 -timeout 60s make test"
+    command: sh -c "dockerize -wait tcp://database_test:5432 -timeout 60s sh build_and_run.sh test"
     environment:
       GTEST_COLOR: yes
       POSTGRES_USER: postgres
