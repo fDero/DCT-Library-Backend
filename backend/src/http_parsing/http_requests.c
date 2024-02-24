@@ -3,7 +3,7 @@
 #include "utils.h"
 #include <ctype.h>
 #include <stdio.h>
-
+	
 void skip_string_terminating_with_target(
     char* string, int* current_char_index,
     int len, char target, bool* correct

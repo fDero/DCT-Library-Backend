@@ -2,10 +2,12 @@
 #define UTILS_H
 
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
 #include <stdbool.h>
 
 #define STRING_TIMESTAMP_MAX_LENGTH 50
+#define TIMESTAMP_STRING_FORMAT "%Y-%m-%d %H:%M:%S"
 
 typedef struct tm timestamp_t;
 

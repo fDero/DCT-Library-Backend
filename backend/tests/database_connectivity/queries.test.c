@@ -5,7 +5,7 @@
 #include "data_objects.h"
 #include "db_utils.h"
 #include "stdbool.h"
-#include "tests_init.cpp"
+#include "db_tests_init.hpp"
 
 db_conn_t* conn = NULL;
 

@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <postgresql/libpq-fe.h>
-#include "db_utils.h"
 #include "utils.h"
 
 struct account

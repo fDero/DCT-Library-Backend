@@ -42,7 +42,6 @@ void* client_handler(void* client_socket_ptr){
     int client_socket = *((int*) client_socket_ptr);
     free((int*)client_socket_ptr);
     char buffer[BUFFERSIZE];
-    printf("caos\n");
     while(read(client_socket, buffer, BUFFERSIZE) > 0){
         printf("messaggio inviato dal client (e ricevuto dal server: ) %s", buffer);
     }

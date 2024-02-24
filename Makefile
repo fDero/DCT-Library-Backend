@@ -27,7 +27,7 @@ test:
 	docker-compose -f docker-compose-test.yaml up
 
 test-nodb:
-	docker-compose -f docker-compose-test.yaml up
+	docker compose -f docker-compose-test.yaml run backend_test make test-nodb
 	
 down:
 	docker-compose -f docker-compose-release.yaml down -v
