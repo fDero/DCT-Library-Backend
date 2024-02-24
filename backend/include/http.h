@@ -10,29 +10,28 @@
 #define MAX_HEADERS 100
 
 struct http_request {
-  char* source;
-  char const* method;
-	char const* url;
-	char const* version;
-	char const* headers;
-	char ** header_names;
-	char ** header_values;
-	char const* payload;
-	int headers_num;
+    char* source;
+    char const* method;
+    char const* url;
+    char const* version;
+    char ** header_names;
+    char ** header_values;
+    char const* payload;
+    int headers_num;
 };
 
 struct http_response {
     char* source;
     char* version;
-	char* status;
-	char* phrase;
-	char* headers;
-	char* payload;
+    char* status;
+    char* phrase;
+    char* headers;
+    char* payload;
 };
 
 struct http_header_pack {
-	char** header_fields;
-	char** header_values;
+    char** header_fields;
+    char** header_values;
 };
 
 typedef struct http_request http_request_t;
