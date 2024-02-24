@@ -29,15 +29,11 @@ struct http_response {
     char* payload;
 };
 
-struct http_header_pack {
-    char** header_fields;
-    char** header_values;
-};
-
 typedef struct http_request http_request_t;
 typedef struct http_response http_response_t;
 typedef struct http_header_pack http_header_pack;
 
 http_request_t* http_request_decode(char* http_request_str);
+void http_request_destroy(http_request_t* http_request_ptr);
 
 #endif
