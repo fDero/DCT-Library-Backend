@@ -4,79 +4,11 @@
 #include <ctype.h>
 #include <stdio.h>
 	
-void skip_string_terminating_with_target(
-    char* string, int* current_char_index,
-    int len, char target, bool* correct
-){
-    if (!*correct) return;
-    advance_to_next_target(string, current_char_index, target);
-    *correct &= (string[*current_char_index] == target);
-    *correct &= (*current_char_index < len);
-    if (*correct) {
-        string[*current_char_index] = '\0';
-    }
-    (*current_char_index)++;
-}
-
-void skip_string_terminating_with_target_safe(
-    char* string, int* current_char_index, int len,
-    char target, const char* targets, bool* correct
-){
-    if (!*correct) return;
-    advance_to_next_targets(string, current_char_index, targets);
-    *correct &= (string[*current_char_index] == target);
-    *correct &= (*current_char_index < len);
-    if (*correct) {
-        string[*current_char_index] = '\0';
-    }
-    (*current_char_index)++;
-}
-
-void skip_character_safe(
-    char* string, int* current_char_index, int len,
-    char target, const char* avoid, bool* correct
-){
-    if (!*correct) return;
-    *correct &= (string[*current_char_index] == target);
-    (*current_char_index)++;
-    while (*current_char_index < len && string[*current_char_index] == target) {
-        (*current_char_index)++;
-    }
-    for (int i = 0; i < strlen(avoid); i++) {
-        *correct &= (string[*current_char_index] != avoid[i]);
-    }
-    *correct &= (*current_char_index < len);
-}
-
-void skip_hostname(
-    char* string, int* current_char_index, 
-    int len, bool* correct
-){
-    bool hostname_found = true;
-    const char* hostname_pattern = "http://";
-    for (int i = 0; i < 7; i++){
-        hostname_found &= ((*current_char_index + i) < len);
-        if (!hostname_found){
-            break;
-        }
-        hostname_found &= (hostname_pattern[i] == string[*current_char_index + i]);
-    }
-    if (hostname_found){
-        (*current_char_index) += 7;
-        advance_to_next_targets(string, current_char_index, "/ \r\n\0");
-        *correct &= (*current_char_index < len);
-        *correct &= ( (string[*current_char_index] == '/') || (string[*current_char_index] == ' ') );
-    }
-}
-
-bool is_blank_char(char c){
-    return c == '\r' || c == '\n' ||
-    c == ' ' || c == '\t' || c == '\0';
-}
-
 void http_request_destroy(http_request_t* http_request_ptr){
     free(http_request_ptr->header_names);
     free(http_request_ptr->header_values);
+    free(http_request_ptr->query_param_names);
+    free(http_request_ptr->query_param_values);
     free(http_request_ptr->source);
     free(http_request_ptr);
 };
@@ -93,8 +25,6 @@ http_request_t* http_request_decode(char* http_request_str) {
     alloc_and_strcpy(&(request->source), http_request_str);
     int current_char_index = 0;
     bool correct = true;
-    char* header_names[MAX_HEADERS];
-    char* header_values[MAX_HEADERS];
     request->headers_num = 0;
 
 
@@ -108,13 +38,31 @@ http_request_t* http_request_decode(char* http_request_str) {
     request->path = request->source + current_char_index;
     int request_path_index = current_char_index;
 
+    /* QUERY PARAMETERS */
+    char* query_param_names[MAX_PARAMS];
+    char* query_param_values[MAX_PARAMS];
+    int query_param_counter = 0;
     int x = current_char_index;
     advance_to_next_targets(request->source, &current_char_index, "? ");
-    request->query = request->source + current_char_index;
-    if (request->query[0] == '?'){
-        request->source[current_char_index++] = '\0';
-        (request->query)++;
-    } else {
+    if (request->source[current_char_index] == '?'){
+        do {
+            request->source[current_char_index++] = '\0';
+            if ((correct &= (++query_param_counter <= MAX_PARAMS))) {
+                query_param_names[query_param_counter-1] = request->source + current_char_index;
+                skip_string_terminating_with_target_safe(request->source, &current_char_index, len, '=', "= &\r\n\0", &correct);
+                query_param_values[query_param_counter-1] = request->source + current_char_index;
+                advance_to_next_targets(request->source, &current_char_index, " &\0\r\n=");
+                correct &= (current_char_index < len);
+                correct &= (request->source[current_char_index] != '\0');
+                correct &= (request->source[current_char_index] != '\n');
+                correct &= (request->source[current_char_index] != '\r');
+                correct &= (request->source[current_char_index] != '=');
+            }
+        } while (
+            correct && request->source[current_char_index] == '&'
+        );
+    } 
+    else {
         current_char_index = x;
     }
     
@@ -125,7 +73,8 @@ http_request_t* http_request_decode(char* http_request_str) {
     correct &= (request->source[current_char_index++] == '\n');
 
 
-
+    char* header_names[MAX_HEADERS];
+    char* header_values[MAX_HEADERS];
     /* HEADERS */ {
         while (
             (request->source)[current_char_index] != '\r' &&
@@ -169,11 +118,19 @@ http_request_t* http_request_decode(char* http_request_str) {
     request->path++;
 
     if (correct) {
+        request->query_params_num = query_param_counter;
         request->header_names  = (char**)malloc(sizeof(char*) * request->headers_num);
         request->header_values = (char**)malloc(sizeof(char*) * request->headers_num);
+        
+        request->query_param_names = (char**)malloc(sizeof(char*) * request->query_params_num);
+        request->query_param_values = (char**)malloc(sizeof(char*) * request->query_params_num);
         for (size_t i = 0; i < request->headers_num; i++) {
             request->header_names[i] = header_names[i];
             request->header_values[i] = header_values[i];
+        }
+        for (size_t i = 0; i < request->query_params_num; i++) {
+            request->query_param_names[i] = query_param_names[i];
+            request->query_param_values[i] = query_param_values[i];
         }
         return request;
     } else {

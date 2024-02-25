@@ -8,18 +8,21 @@
 #include <string.h>
 
 #define MAX_HEADERS 100
+#define MAX_PARAMS 100
 
 struct http_request {
     char* source;
     char const* method;
     char const* host;
     char const* path;
-    char const* query;
+    char ** query_param_names;
+    char ** query_param_values;
     char const* version;
     char ** header_names;
     char ** header_values;
     char const* payload;
     int headers_num;
+    int query_params_num;
 };
 
 struct http_response {

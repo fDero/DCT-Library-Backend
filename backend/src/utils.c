@@ -7,6 +7,11 @@
 
 #include "utils.h"
 
+bool is_blank_char(char c){
+    return c == '\r' || c == '\n' ||
+    c == ' ' || c == '\t' || c == '\0';
+}
+
 void timestamp_to_string(char* str, size_t size, const timestamp_t* ts) {
     strftime(str, size, TIMESTAMP_STRING_FORMAT, ts);
 }
@@ -61,4 +66,69 @@ void advance_to_next_carriage_return(char* string, int* current_char_index) {
 
 void advance_to_next_newline(char* string, int* current_char_index) {
     advance_to_next_target(string, current_char_index, '\n');
+}
+
+void skip_string_terminating_with_target(
+    char* string, int* current_char_index,
+    int len, char target, bool* correct
+){
+    if (!*correct) return;
+    advance_to_next_target(string, current_char_index, target);
+    *correct &= (string[*current_char_index] == target);
+    *correct &= (*current_char_index < len);
+    if (*correct) {
+        string[*current_char_index] = '\0';
+    }
+    (*current_char_index)++;
+}
+
+void skip_string_terminating_with_target_safe(
+    char* string, int* current_char_index, int len,
+    char target, const char* targets, bool* correct
+){
+    if (!*correct) return;
+    advance_to_next_targets(string, current_char_index, targets);
+    *correct &= (string[*current_char_index] == target);
+    *correct &= (*current_char_index < len);
+    if (*correct) {
+        string[*current_char_index] = '\0';
+    }
+    (*current_char_index)++;
+}
+
+void skip_character_safe(
+    char* string, int* current_char_index, int len,
+    char target, const char* avoid, bool* correct
+){
+    if (!*correct) return;
+    *correct &= (string[*current_char_index] == target);
+    (*current_char_index)++;
+    while (*current_char_index < len && string[*current_char_index] == target) {
+        (*current_char_index)++;
+    }
+    for (int i = 0; i < strlen(avoid); i++) {
+        *correct &= (string[*current_char_index] != avoid[i]);
+    }
+    *correct &= (*current_char_index < len);
+}
+
+void skip_hostname(
+    char* string, int* current_char_index, 
+    int len, bool* correct
+){
+    bool hostname_found = true;
+    const char* hostname_pattern = "http://";
+    for (int i = 0; i < 7; i++){
+        hostname_found &= ((*current_char_index + i) < len);
+        if (!hostname_found){
+            break;
+        }
+        hostname_found &= (hostname_pattern[i] == string[*current_char_index + i]);
+    }
+    if (hostname_found){
+        (*current_char_index) += 7;
+        advance_to_next_targets(string, current_char_index, "/ \r\n\0");
+        *correct &= (*current_char_index < len);
+        *correct &= ( (string[*current_char_index] == '/') || (string[*current_char_index] == ' ') );
+    }
 }
