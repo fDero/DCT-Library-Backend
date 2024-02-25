@@ -49,5 +49,6 @@ void parse_http_headline_termintaion(http_request_t* request, int* current_char_
 void parse_http_request_payload(http_request_t* request, int* current_char_index, int len, bool* correct);
 void parse_http_request_headers(http_request_t* request, int* current_char_index, int len, bool* correct);
 void parse_http_request_query(http_request_t* request, int* current_char_index, int len, bool* correct);
+void parse_http_headers_termination(http_request_t* request, int* current_char_index, int len, bool* correct);
 
 #endif

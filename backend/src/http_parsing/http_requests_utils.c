@@ -37,3 +37,9 @@ void parse_http_request_payload(http_request_t* request, int* current_char_index
     request->payload = request->source + *current_char_index;
     *correct &= (request->payload - request->method) < len;
 }
+
+void parse_http_headers_termination(http_request_t* request, int* current_char_index, int len, bool* correct){
+    *correct &= (*current_char_index < len);
+    *correct &= (request->source[(*current_char_index)++] == '\r');
+    *correct &= (request->source[(*current_char_index)++] == '\n');
+}
