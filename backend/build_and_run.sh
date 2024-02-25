@@ -1,7 +1,7 @@
 PG="-lpq -lssl -lcrypto -pthread"
 GTEST="-lgtest -lgtest_main"
-JSN="-lcjson"
-HTTP="-lhttp_parser"
+JSN="-ljansson"
+# HTTP="-lhttp_parser"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 SRC=$(find src -name "*.c")

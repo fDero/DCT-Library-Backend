@@ -3,10 +3,9 @@
 #define JSON_H
 #include "data_objects.h"
 #include "utils.h"
-#include <cjson/cJSON.h>
+#include <jansson.h>
 #include <stdbool.h>
-
-typedef cJSON json_t;
+#include <assert.h>
 
 json_t* init_json_object();
 json_t* init_json_array();

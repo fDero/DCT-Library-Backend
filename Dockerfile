@@ -18,9 +18,15 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y cmake
 RUN apt-get install -y make
 
-RUN git clone https://github.com/DaveGamble/cJSON && cd cJSON && mkdir build && cd build && cmake .. && cd .. && make && make install
+# RUN apt-get install -y software-properties-common
+# RUN add-apt-repository ppa:ben-collins/libjwt 
+# RUN apt-get update && apt-get install -y libjwt-dev
 
-RUN git clone https://www.github.com/nodejs/http-parser && cd http-parser && make && make install
+# RUN git clone https://github.com/DaveGamble/cJSON && cd cJSON && mkdir build && cd build && cmake .. && cd .. && make && make install
+
+# RUN git clone https://www.github.com/nodejs/http-parser && cd http-parser && make && make install
+
+RUN wget https://github.com/akheron/jansson/releases/download/v2.14/jansson-2.14.tar.gz && tar -xvzf jansson-2.14.tar.gz && cd jansson-2.14 && ./configure && make && make install
 
 RUN wget https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \

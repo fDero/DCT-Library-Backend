@@ -1,4 +1,3 @@
-
 ifdef OS
    RM := rmdir /s /q
 else

@@ -1,5 +1,3 @@
-
-#include <cjson/cJSON.h>
 #include <postgresql/libpq-fe.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -11,8 +9,21 @@
 #include "http.h"
 #include "queries.h"
 #include "socket_handlers.h"
+#include "json.h"
 
 int main() {
+		json_t* json = init_json_object();
+		add_numeric_field_to_json_obj(json, "account_id", 1);
+		add_text_field_to_json_obj(json, "name", "John");
+		add_text_field_to_json_obj(json, "surname", "Doe");
+		add_text_field_to_json_obj(json, "email", "john.doe@example.com");
+		account_t* account = account_from_json(json);
+		printf("account_id: %d\n", account->account_id);
+		printf("name: %s\n", account->name);
+		printf("surname: %s\n", account->surname);
+		printf("email: %s\n", account->email);
+		account_destroy(account);
+
     db_connection_init();
     setbuf(stdout, NULL);
 

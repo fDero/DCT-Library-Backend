@@ -1,9 +1,3 @@
-
-#include <assert.h>
-#include <cjson/cJSON.h>
-#include <stdbool.h>
-
-#include "data_objects.h"
 #include "json.h"
 
 account_t* account_from_json(json_t* json) {
