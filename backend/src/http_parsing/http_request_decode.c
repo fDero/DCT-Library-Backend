@@ -54,7 +54,9 @@ http_request_t* http_request_decode(char* http_request_str) {
     
     parse_http_request_method(request, &current_char_index, len, &correct);
     parse_http_request_host(request, &current_char_index, len, &correct);
+    parse_http_request_path(request, &current_char_index, len, &correct);
     parse_http_request_query(request, &current_char_index, len, &correct);
+    parse_http_request_version(request, &current_char_index, len, &correct);
     parse_http_headline_termintaion(request, &current_char_index, len, &correct);
     parse_http_request_headers(request, &current_char_index, len, &correct);
     parse_http_request_payload(request, &current_char_index, len, &correct);
