@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-int parse_http_request_query(http_request_t* request, int* current_char_index, int len, bool* correct){
+void parse_http_request_query(http_request_t* request, int* current_char_index, int len, bool* correct){
     
     char* query_param_names[MAX_PARAMS];
     char* query_param_values[MAX_PARAMS];
@@ -36,10 +36,9 @@ int parse_http_request_query(http_request_t* request, int* current_char_index, i
     if (*correct) alloc_and_arrcopy(&(request->query_param_names), query_param_names, query_param_counter);
     if (*correct) alloc_and_arrcopy(&(request->query_param_values), query_param_values, query_param_counter);
     request->query_params_num = query_param_counter;
-    return *current_char_index;
 }
 
-int parse_http_request_headers(http_request_t* request, int* current_char_index, int len, bool* correct){
+void parse_http_request_headers(http_request_t* request, int* current_char_index, int len, bool* correct){
     char* header_names[MAX_HEADERS];
     char* header_values[MAX_HEADERS];
     
@@ -66,5 +65,4 @@ int parse_http_request_headers(http_request_t* request, int* current_char_index,
 
     if (*correct) alloc_and_arrcopy(&(request->header_names), header_names, request->headers_num);
     if (*correct) alloc_and_arrcopy(&(request->header_values), header_values, request->headers_num);
-    return *current_char_index;
 }

@@ -34,7 +34,8 @@ void validate_http_request(http_request_t* request, bool* correct){
     *correct &= !is_blank_char(request->method[0]);
 }
 
-void finalize_http_request(http_request_t* request, int request_path_index){
+void finalize_http_request(http_request_t* request){
+    int request_path_index = request->path - request->source;
     request->source[request_path_index] = '\0';
     request->path++;
 }
@@ -51,15 +52,15 @@ http_request_t* http_request_decode(char* http_request_str) {
     int current_char_index = 0;
     bool correct = true;
     
-    int request_method_index   = parse_http_request_method(request, &current_char_index, len, &correct);
-    int request_path_index     = parse_http_request_host(request, &current_char_index, len, &correct);
-    int request_query_index    = parse_http_request_query(request, &current_char_index, len, &correct);
-    int request_headline_index = parse_http_headline_termintaion(request, &current_char_index, len, &correct);
-    int request_headers_index  = parse_http_request_headers(request, &current_char_index, len, &correct);
-    int request_payload_index  = parse_http_request_payload(request, &current_char_index, len, &correct);
-
+    parse_http_request_method(request, &current_char_index, len, &correct);
+    parse_http_request_host(request, &current_char_index, len, &correct);
+    parse_http_request_query(request, &current_char_index, len, &correct);
+    parse_http_headline_termintaion(request, &current_char_index, len, &correct);
+    parse_http_request_headers(request, &current_char_index, len, &correct);
+    parse_http_request_payload(request, &current_char_index, len, &correct);
+    
     validate_http_request(request, &correct);
-    finalize_http_request(request, request_path_index);
+    finalize_http_request(request);
     
     if(correct){
         return request;
