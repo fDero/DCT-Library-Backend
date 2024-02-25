@@ -35,6 +35,14 @@ void alloc_and_strcpy(char** destination, const char* source) {
     strcpy(*destination, source);
 }
 
+void alloc_and_arrcopy(char*** dest, char** src, int size){
+    *dest = (char**)malloc(sizeof(char*) * size);
+    for (size_t i = 0; i < size; i++){
+        (*dest)[i] = src[i];
+    }
+}
+
+
 void advance_to_next_target(char* string, int* current_char_index, char target) {
     char current = string[*current_char_index];
     while (current != '\0' && current != target) {

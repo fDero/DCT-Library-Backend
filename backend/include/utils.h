@@ -13,6 +13,8 @@ typedef struct tm timestamp_t;
 
 void alloc_and_strcpy(char* *destination, const char* source);
 
+void alloc_and_arrcopy(char*** dest, char** src, int size);
+
 void timestamp_to_string(char* str, size_t size, const timestamp_t* ts);
 
 timestamp_t string_to_timestamp(const char* str);
@@ -32,16 +34,7 @@ void advance_to_next_newline(char* string, int* current_char_index);
 void skip_string_terminating_with_target(
     char* string, int* current_char_index,
     int len, char target, bool* correct
-){
-    if (!*correct) return;
-    advance_to_next_target(string, current_char_index, target);
-    *correct &= (string[*current_char_index] == target);
-    *correct &= (*current_char_index < len);
-    if (*correct) {
-        string[*current_char_index] = '\0';
-    }
-    (*current_char_index)++;
-}
+);
 
 void skip_string_terminating_with_target_safe(
     char* string, int* current_char_index, int len,
@@ -52,6 +45,7 @@ void skip_character_safe(
     char* string, int* current_char_index, int len,
     char target, const char* avoid, bool* correct
 );
+
 void skip_hostname(
     char* string, int* current_char_index, 
     int len, bool* correct
