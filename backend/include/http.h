@@ -12,7 +12,9 @@
 struct http_request {
     char* source;
     char const* method;
-    char const* url;
+    char const* host;
+    char const* path;
+    char const* query;
     char const* version;
     char ** header_names;
     char ** header_values;

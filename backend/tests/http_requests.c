@@ -5,23 +5,96 @@
 
 TEST(HTTP, valid_request_with_no_headers) {
     char request_str[2048] =
-        "GET /somedir/page HTTP/3.3\r\n"
+        "GET /somedir/page HTTP/1.1\r\n"
         "\r\n"
         "my really beutiful payload\0";
 
     http_request_t* request = http_request_decode(request_str);
     ASSERT_NE(request, (http_request_t*)NULL);
+    EXPECT_STREQ(request->host, "");
     EXPECT_EQ(request->headers_num, 0);
+    EXPECT_STREQ(request->query, "");
     EXPECT_STREQ(request->method, "GET");
-    EXPECT_STREQ(request->url, "/somedir/page");
-    EXPECT_STREQ(request->version, "HTTP/3.3");
+    EXPECT_STREQ(request->path, "somedir/page");
+    EXPECT_STREQ(request->version, "HTTP/1.1");
     EXPECT_STREQ(request->payload, "my really beutiful payload");
     http_request_destroy(request);
 }
 
 TEST(HTTP, valid_request_with_two_headers) {
     char request_str[2048] =
-        "GET /somedir/page HTTP/3.3\r\n"
+        "GET /somedir/page HTTP/1.1\r\n"
+        "Host: www.somehost.com\r\n"
+        "Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_NE(request, (http_request_t*)NULL);
+    EXPECT_EQ(request->headers_num, 2);
+    EXPECT_STREQ(request->host, ""); 
+    EXPECT_STREQ(request->header_names[0], "Host");
+    EXPECT_STREQ(request->header_names[1], "Lang");
+    EXPECT_STREQ(request->header_values[0], "www.somehost.com");
+    EXPECT_STREQ(request->header_values[1], "eng");
+    EXPECT_STREQ(request->method, "GET");
+    EXPECT_STREQ(request->query, "");
+    EXPECT_STREQ(request->path, "somedir/page");
+    EXPECT_STREQ(request->version, "HTTP/1.1");
+    EXPECT_STREQ(request->payload, "my really beutiful payload");   
+    http_request_destroy(request);
+}
+
+
+TEST(HTTP, valid_request_HTTP_1_0) {
+    char request_str[2048] =
+        "GET http://www.somehost.com/somedir/page HTTP/1.0\r\n"
+        "Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_NE(request, (http_request_t*)NULL);
+    EXPECT_EQ(request->headers_num, 1);
+    EXPECT_STREQ(request->header_names[0], "Lang");
+    EXPECT_STREQ(request->header_values[0], "eng");
+    EXPECT_STREQ(request->method, "GET");
+    EXPECT_STREQ(request->host, "http://www.somehost.com");
+    EXPECT_STREQ(request->path, "somedir/page");
+    EXPECT_STREQ(request->version, "HTTP/1.0");
+    EXPECT_STREQ(request->query, "");
+    EXPECT_STREQ(request->payload, "my really beutiful payload");   
+    http_request_destroy(request);
+}
+
+
+
+TEST(HTTP, valid_request_HTTP_1_0_with_query) {
+    char request_str[2048] =
+        "GET http://www.somehost.com/somedir/page?p=1,q=7 HTTP/1.0\r\n"
+        "Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_NE(request, (http_request_t*)NULL);
+    EXPECT_EQ(request->headers_num, 1);
+    EXPECT_STREQ(request->header_names[0], "Lang");
+    EXPECT_STREQ(request->header_values[0], "eng");
+    EXPECT_STREQ(request->method, "GET");
+    EXPECT_STREQ(request->query, "p=1,q=7");
+    EXPECT_STREQ(request->host, "http://www.somehost.com");
+    EXPECT_STREQ(request->path, "somedir/page");
+    EXPECT_STREQ(request->version, "HTTP/1.0");
+    EXPECT_STREQ(request->payload, "my really beutiful payload");   
+    http_request_destroy(request);
+}
+
+
+
+TEST(HTTP, valid_request_HTTP_1_1_with_query) {
+    char request_str[2048] =
+        "GET /somedir/page?p=1&q=7 HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
         "Lang: eng\r\n"
         "\r\n"
@@ -31,15 +104,18 @@ TEST(HTTP, valid_request_with_two_headers) {
     ASSERT_NE(request, (http_request_t*)NULL);
     EXPECT_EQ(request->headers_num, 2);
     EXPECT_STREQ(request->header_names[0], "Host");
-    EXPECT_STREQ(request->header_names[1], "Lang");
     EXPECT_STREQ(request->header_values[0], "www.somehost.com");
+    EXPECT_STREQ(request->header_names[1], "Lang");
     EXPECT_STREQ(request->header_values[1], "eng");
     EXPECT_STREQ(request->method, "GET");
-    EXPECT_STREQ(request->url, "/somedir/page");
-    EXPECT_STREQ(request->version, "HTTP/3.3");
+    EXPECT_STREQ(request->query, "p=1&q=7");
+    EXPECT_STREQ(request->host, "");
+    EXPECT_STREQ(request->path, "somedir/page");
+    EXPECT_STREQ(request->version, "HTTP/1.1");
     EXPECT_STREQ(request->payload, "my really beutiful payload");   
     http_request_destroy(request);
 }
+
 
 TEST(HTTP, invalid_request_missing_version1) {
     char request_str[2048] =
@@ -82,7 +158,7 @@ TEST(HTTP, invalid_request_missing_version3) {
 
 TEST(HTTP, invalid_request_missing_url1) {
     char request_str[2048] =
-        "GET HTTP/3.3\r\n"
+        "GET HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
         "Lang: eng\r\n"
         "\r\n"
@@ -95,7 +171,7 @@ TEST(HTTP, invalid_request_missing_url1) {
 
 TEST(HTTP, invalid_request_missing_url2) {
     char request_str[2048] =
-        "GET  HTTP/3.3\r\n"
+        "GET  HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
         "Lang: eng\r\n"
         "\r\n"
@@ -108,7 +184,7 @@ TEST(HTTP, invalid_request_missing_url2) {
 
 TEST(HTTP, invalid_request_missing_url3) {
     char request_str[2048] =
-        "GET   HTTP/3.3\r\n"
+        "GET   HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
         "Lang: eng\r\n"
         "\r\n"
@@ -121,7 +197,7 @@ TEST(HTTP, invalid_request_missing_url3) {
 
 TEST(HTTP, invalid_request_missing_method1) {
     char request_str[2048] =
-        "/url/myurl HTTP/3.3\r\n"
+        "/url/myurl HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
         "Lang: eng\r\n"
         "\r\n"
@@ -133,7 +209,7 @@ TEST(HTTP, invalid_request_missing_method1) {
 
 TEST(HTTP, invalid_request_missing_method2) {
     char request_str[2048] =
-        " /url/myurl HTTP/3.3\r\n"
+        " /url/myurl HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
         "Lang: eng\r\n"
         "\r\n"
@@ -145,7 +221,7 @@ TEST(HTTP, invalid_request_missing_method2) {
 
 TEST(HTTP, invalid_request_missing_method3) {
     char request_str[2048] =
-        "  /url/myurl HTTP/3.3\r\n"
+        "  /url/myurl HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
         "Lang: eng\r\n"
         "\r\n"
@@ -157,7 +233,7 @@ TEST(HTTP, invalid_request_missing_method3) {
 
 TEST(HTTP, invalid_request_non_spaced_headers) {
     char request_str[2048] =
-        "GET  /url/myurl HTTP/3.3\r\n"
+        "GET  /url/myurl HTTP/1.1\r\n"
         "Host:www.somehost.com\r\n"
         "Lang: eng\r\n"
         "\r\n"

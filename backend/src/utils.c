@@ -30,8 +30,7 @@ void alloc_and_strcpy(char** destination, const char* source) {
     strcpy(*destination, source);
 }
 
-void advance_to_next_target(char* string, int* current_char_index,
-                            char target) {
+void advance_to_next_target(char* string, int* current_char_index, char target) {
     char current = string[*current_char_index];
     while (current != '\0' && current != target) {
         (*current_char_index) += 1;
@@ -39,8 +38,7 @@ void advance_to_next_target(char* string, int* current_char_index,
     }
 }
 
-void advance_to_next_targets(char* string, int* current_char_index,
-                             const char* targets) {
+void advance_to_next_targets(char* string, int* current_char_index, const char* targets) {
     char current = string[*current_char_index];
     while (current != '\0') {
         for (int i = 0; i < strlen(targets); i++) {

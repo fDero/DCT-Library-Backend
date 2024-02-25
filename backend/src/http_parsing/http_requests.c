@@ -48,6 +48,27 @@ void skip_character_safe(
     *correct &= (*current_char_index < len);
 }
 
+void skip_hostname(
+    char* string, int* current_char_index, 
+    int len, bool* correct
+){
+    bool hostname_found = true;
+    const char* hostname_pattern = "http://";
+    for (int i = 0; i < 7; i++){
+        hostname_found &= ((*current_char_index + i) < len);
+        if (!hostname_found){
+            break;
+        }
+        hostname_found &= (hostname_pattern[i] == string[*current_char_index + i]);
+    }
+    if (hostname_found){
+        (*current_char_index) += 7;
+        advance_to_next_targets(string, current_char_index, "/ \r\n\0");
+        *correct &= (*current_char_index < len);
+        *correct &= ( (string[*current_char_index] == '/') || (string[*current_char_index] == ' ') );
+    }
+}
+
 bool is_blank_char(char c){
     return c == '\r' || c == '\n' ||
     c == ' ' || c == '\t' || c == '\0';
@@ -61,10 +82,13 @@ void http_request_destroy(http_request_t* http_request_ptr){
 };
 
 http_request_t* http_request_decode(char* http_request_str) {
-    
+
+
     // INIT
     int len = strlen(http_request_str);
-		if(len == 0) return NULL;
+	if(len == 0) {
+        return NULL;
+    }
     http_request_t* request = (http_request_t*)malloc(sizeof(http_request_t));
     alloc_and_strcpy(&(request->source), http_request_str);
     int current_char_index = 0;
@@ -73,14 +97,34 @@ http_request_t* http_request_decode(char* http_request_str) {
     char* header_values[MAX_HEADERS];
     request->headers_num = 0;
 
+
+
     // HEADLINE
     request->method = request->source + current_char_index;
     skip_string_terminating_with_target_safe(request->source, &current_char_index, len, ' ', " \n\r", &correct);
-    request->url = request->source + current_char_index;
+    request->host = request->source + current_char_index;
+    
+    skip_hostname(request->source, &current_char_index, len, &correct);
+    request->path = request->source + current_char_index;
+    int request_path_index = current_char_index;
+
+    int x = current_char_index;
+    advance_to_next_targets(request->source, &current_char_index, "? ");
+    request->query = request->source + current_char_index;
+    if (request->query[0] == '?'){
+        request->source[current_char_index++] = '\0';
+        (request->query)++;
+    } else {
+        current_char_index = x;
+    }
+    
     skip_string_terminating_with_target_safe(request->source, &current_char_index, len, ' ', " \n\r", &correct);
     request->version = request->source + current_char_index;
+    
     skip_string_terminating_with_target_safe(request->source, &current_char_index, len, '\r', " \n\r", &correct);
     correct &= (request->source[current_char_index++] == '\n');
+
+
 
     /* HEADERS */ {
         while (
@@ -104,17 +148,26 @@ http_request_t* http_request_decode(char* http_request_str) {
         correct &= (request->source[current_char_index++] == '\n');
     }
 
+
+
     // PAYLOAD
     request->payload = request->source + current_char_index;
     correct &= (request->payload - request->method) < len;
 
+
+
+
     // FINALIZE
     correct &= (strcmp(request->method, "") != 0);
     correct &= (strcmp(request->version, "") != 0);
-    correct &= (strcmp(request->url, "") != 0);
+    correct &= (strcmp(request->path, "") != 0);
     correct &= !is_blank_char(request->version[0]);
-    correct &= !is_blank_char(request->url[0]);
+    correct &= !is_blank_char(request->path[0]);
     correct &= !is_blank_char(request->method[0]);
+
+    request->source[request_path_index] = '\0';
+    request->path++;
+
     if (correct) {
         request->header_names  = (char**)malloc(sizeof(char*) * request->headers_num);
         request->header_values = (char**)malloc(sizeof(char*) * request->headers_num);

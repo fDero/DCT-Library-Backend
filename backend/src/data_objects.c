@@ -1,17 +1,21 @@
 
 #include "data_objects.h"
 
-void account_init(account_t *account, int id, const char *name,
-                  const char *surname, const char *email) {
+void account_init(
+    account_t *account, int id, const char *name,
+    const char *surname, const char *email
+){
     account->account_id = id;
     alloc_and_strcpy(&(account->name), name);
     alloc_and_strcpy(&(account->surname), surname);
     alloc_and_strcpy(&(account->email), email);
 }
 
-void book_init(book_t *book, int id, const char *title, const char *author,
-               const char *publisher, const char *genres,
-               const timestamp_t *release_date, int total_copies) {
+void book_init(
+    book_t *book, int id, const char *title, const char *author,
+    const char *publisher, const char *genres,
+    const timestamp_t *release_date, int total_copies
+){
     book->book_id = id;
     alloc_and_strcpy(&(book->title), title);
     alloc_and_strcpy(&(book->author), author);
@@ -21,8 +25,10 @@ void book_init(book_t *book, int id, const char *title, const char *author,
     book->total_copies = total_copies;
 }
 
-void loan_init(loan_t *loan, int id, const timestamp_t *starting_time,
-               const timestamp_t *ending_time, int account_id, int book_id) {
+void loan_init(
+    loan_t *loan, int id, const timestamp_t *starting_time,
+    const timestamp_t *ending_time, int account_id, int book_id
+){
     loan->loan_id = id;
     loan->starting_time = *starting_time;
     loan->ending_time = *ending_time;
