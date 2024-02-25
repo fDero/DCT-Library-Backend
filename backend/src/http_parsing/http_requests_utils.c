@@ -16,6 +16,11 @@ void parse_http_request_host(http_request_t* request, int* current_char_index, i
 
 void parse_http_request_path(http_request_t* request, int* current_char_index, int len, bool* correct){
     request->path = request->source + *current_char_index;
+    int x = *current_char_index;
+    advance_to_next_targets(request->source, current_char_index, "? ");
+    if (request->source[*current_char_index] != '?'){
+        *current_char_index = x;
+    }
 }
 
 void parse_http_request_version(http_request_t* request, int* current_char_index, int len, bool* correct){

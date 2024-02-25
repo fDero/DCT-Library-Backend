@@ -6,16 +6,14 @@
 
 void parse_http_request_query(http_request_t* request, int* current_char_index, int len, bool* correct){
     
+    if (request->source[*current_char_index] != '?') {
+        return;
+    }
+    
     char* query_param_names[MAX_PARAMS];
     char* query_param_values[MAX_PARAMS];
     int query_param_counter = 0;
-    int x = *current_char_index;
-    advance_to_next_targets(request->source, current_char_index, "? ");
-    
-    if (request->source[*current_char_index] != '?'){
-        *current_char_index = x;
-    }
-    else do {
+    do {
         request->source[*current_char_index] = '\0';
         (*current_char_index)++;
         if ((*correct &= (++query_param_counter <= MAX_PARAMS))) {
