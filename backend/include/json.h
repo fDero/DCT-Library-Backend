@@ -16,6 +16,15 @@ void add_timestamp_field_to_json_obj(json_t* json, const char* field_name, const
 void add_json_item_to_json_array(json_t* dest_array, json_t* src_item);
 
 char* json_to_string(json_t* json);
+char* json_to_string_and_free(json_t* json);
+
+char* account_to_json_string(account_t* account);
+char* book_to_json_string(book_t* book);
+char* loan_to_json_string(loan_t* loan);
+
+char* account_array_to_json_string(account_array_t* account_array);
+char* book_array_to_json_string(book_array_t* book_array);
+char* loan_array_to_json_string(loan_array_t* loan_array);
 
 json_t* account_to_json(account_t* account);
 json_t* book_to_json(book_t* book);

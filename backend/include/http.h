@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "utils.h"
 
 #define MAX_HEADERS 100
 #define MAX_PARAMS 100
@@ -26,11 +27,12 @@ struct http_request {
 };
 
 struct http_response {
-    char* source;
     char* version;
     char* status;
     char* phrase;
-    char* headers;
+    char ** header_names;
+    char ** header_values;
+    int headers_num;
     char* payload;
 };
 
@@ -50,5 +52,14 @@ void parse_http_request_payload(http_request_t* request, int* current_char_index
 void parse_http_request_headers(http_request_t* request, int* current_char_index, int len, bool* correct);
 void parse_http_request_query(http_request_t* request, int* current_char_index, int len, bool* correct);
 void parse_http_headers_termination(http_request_t* request, int* current_char_index, int len, bool* correct);
+
+void http_response_init(http_response_t* response);
+char* http_response_encode(http_response_t* response);
+void http_response_destroy(http_response_t* response);
+void http_response_set_version(http_response_t* response, const char* version);
+void http_response_set_status(http_response_t* response, const char* status);
+void http_response_set_phrase(http_response_t* response, const char* phrase);
+void http_response_add_header(http_response_t* response, const char* name, const char* value);
+void http_response_set_payload(http_response_t* response, const char* payload);
 
 #endif

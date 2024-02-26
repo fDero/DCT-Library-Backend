@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "db_utils.h"
+#include "http.h"
+#include <sys/socket.h>
+#include "respond.h"
 
 #define BUFFERSIZE 1024
 
@@ -41,9 +45,14 @@ int accept_connection(){
 void* client_handler(void* client_socket_ptr){
     int client_socket = *((int*) client_socket_ptr);
     free((int*)client_socket_ptr);
+		pthread_setspecific(db_conn_key, (void*)open_db_connection());
     char buffer[BUFFERSIZE];
     while(read(client_socket, buffer, BUFFERSIZE) > 0){
+				buffer[BUFFERSIZE - 1] = '\0';
         printf("messaggio inviato dal client (e ricevuto dal server: ) %s", buffer);
+				http_request_t* request = http_request_decode(buffer);
+				http_response_t* response = respond(request);
+				send(client_socket, response->payload, strlen(response->payload), MSG_EOR);
     }
     close(client_socket);
     pthread_exit(0);

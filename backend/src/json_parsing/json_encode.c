@@ -1,5 +1,29 @@
 #include "json.h"
 
+char* account_to_json_string(account_t* account){
+	return json_to_string_and_free(account_to_json(account));
+}
+
+char* book_to_json_string(book_t* book){
+	return json_to_string_and_free(book_to_json(book));
+}
+
+char* loan_to_json_string(loan_t* loan){
+	return json_to_string_and_free(loan_to_json(loan));
+}
+
+char* account_array_to_json_string(account_array_t* account_array){
+	return json_to_string_and_free(account_array_to_json(account_array));
+}
+
+char* book_array_to_json_string(book_array_t* book_array){
+	return json_to_string_and_free(book_array_to_json(book_array));
+}
+
+char* loan_array_to_json_string(loan_array_t* loan_array){
+	return json_to_string_and_free(loan_array_to_json(loan_array));
+}
+
 json_t* account_to_json(account_t* account){
     
     json_t *json_object = init_json_object();
