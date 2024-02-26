@@ -26,8 +26,11 @@ test:
 	docker-compose -f docker-compose-test.yaml up
 
 test-nodb:
+	docker compose -f docker-compose-test.yaml run backend_test sh build_and_run.sh test --nodb -fsanitize=address
+
+test-nodb-nofsanitize:
 	docker compose -f docker-compose-test.yaml run backend_test sh build_and_run.sh test --nodb
-	
+
 down:
 	docker-compose -f docker-compose-release.yaml down -v
 	docker-compose -f docker-compose-test.yaml down -v

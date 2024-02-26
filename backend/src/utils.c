@@ -5,6 +5,8 @@
 #define _GNU_SOURCE
 #endif
 
+#include <stdio.h>
+
 #include "utils.h"
 
 bool is_blank_char(char c){
@@ -51,9 +53,9 @@ void advance_to_next_target(char* string, int* current_char_index, char target) 
     }
 }
 
-void advance_to_next_targets(char* string, int* current_char_index, const char* targets) {
+void advance_to_next_targets(char* string, int* current_char_index, const char* targets, int len) {
     char current = string[*current_char_index];
-    while (current != '\0') {
+    while (current != '\0' && (*current_char_index) < len) {
         for (int i = 0; i < strlen(targets); i++) {
             if (current == targets[i]) {
                 return;
@@ -65,15 +67,15 @@ void advance_to_next_targets(char* string, int* current_char_index, const char* 
 }
 
 void advance_to_next_whitespace(char* string, int* current_char_index) {
-    advance_to_next_target(string, current_char_index, ' ');
+    //advance_to_next_target(string, current_char_index, ' ');
 }
 
 void advance_to_next_carriage_return(char* string, int* current_char_index) {
-    advance_to_next_target(string, current_char_index, '\r');
+    //advance_to_next_target(string, current_char_index, '\r');
 }
 
 void advance_to_next_newline(char* string, int* current_char_index) {
-    advance_to_next_target(string, current_char_index, '\n');
+    //advance_to_next_target(string, current_char_index, '\n');
 }
 
 void skip_string_terminating_with_target(
@@ -95,7 +97,7 @@ void skip_string_terminating_with_target_safe(
     char target, const char* targets, bool* correct
 ){
     if (!*correct) return;
-    advance_to_next_targets(string, current_char_index, targets);
+    advance_to_next_targets(string, current_char_index, targets, len);
     *correct &= (string[*current_char_index] == target);
     *correct &= (*current_char_index < len);
     if (*correct) {
@@ -135,7 +137,7 @@ void skip_hostname(
     }
     if (hostname_found){
         (*current_char_index) += 7;
-        advance_to_next_targets(string, current_char_index, "/ \r\n\0");
+        advance_to_next_targets(string, current_char_index, "/ \r\n\0", len);
         *correct &= (*current_char_index < len);
         *correct &= ( (string[*current_char_index] == '/') || (string[*current_char_index] == ' ') );
     }

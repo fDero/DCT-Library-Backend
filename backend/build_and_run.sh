@@ -10,12 +10,18 @@ if [ "$1" = "release" ]; then
     gcc main.c ${SRC} -o /bin/server ${PG} ${GTEST} ${JSN} ${HTTP} -I./include
 elif [ "$1" = "test" ]; then
     TESTS=$(find tests -name "*.c")
-    if [ "$2" = "--nodb" ]; then
+    if [ "$2" = "--nodb" ] || [ "$3" = "--nodb" ]; then
         TESTS=$(IFS=' '; echo "$TESTS" | grep -v "database_connectivity")
         SRC=$(IFS=' '; echo "$SRC" | grep -v "database_connectivity")
         PG=""
     fi
-    g++ ${TESTS} ${SRC} -o /bin/server ${PG} ${GTEST} ${JSN} ${HTTP} -I./include -fsanitize=address
+    if [ "$2" = "-fsanitize=address" ]; then
+        flags=$2
+    fi
+    if [ "$3" = "-fsanitize=address" ]; then
+        flags=$3
+    fi
+    g++ ${TESTS} ${SRC} -o /bin/server ${PG} ${GTEST} ${JSN} ${HTTP} -I./include ${flags}
 else
   echo "Usage: build_and_run.sh release|test [--nodb]"
   exit 1

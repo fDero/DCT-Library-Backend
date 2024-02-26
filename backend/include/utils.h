@@ -21,7 +21,7 @@ timestamp_t string_to_timestamp(const char* str);
 
 bool timestamp_equal(const timestamp_t* ts1, const timestamp_t* ts2);
 
-void advance_to_next_targets(char* string, int* current_char_index, const char* targets);
+void advance_to_next_targets(char* string, int* current_char_index, const char* targets, int len);
 
 void advance_to_next_target(char* string, int* current_char_index, char target);
 

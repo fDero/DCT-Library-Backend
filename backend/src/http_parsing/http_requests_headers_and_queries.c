@@ -15,7 +15,7 @@ void parse_http_request_query(http_request_t* request, int* current_char_index, 
             query_param_names[query_param_counter-1] = request->source + *current_char_index;
             skip_string_terminating_with_target_safe(request->source, current_char_index, len, '=', "= &\r\n\0", correct);
             query_param_values[query_param_counter-1] = request->source + *current_char_index;
-            advance_to_next_targets(request->source, current_char_index, " &\0\r\n=");
+            advance_to_next_targets(request->source, current_char_index, " &\0\r\n=", len);
             *correct &= (*current_char_index < len);
             *correct &= (request->source[*current_char_index] != '\0');
             *correct &= (request->source[*current_char_index] != '\n');
@@ -41,11 +41,12 @@ void parse_http_request_headers(http_request_t* request, int* current_char_index
         (*correct &= (request->headers_num < MAX_HEADERS))
     ) {
         header_names[request->headers_num] = request->source + *current_char_index;
-        skip_string_terminating_with_target_safe(request->source, current_char_index, len, ':', ":\r\n", correct);
-        skip_character_safe(request->source, current_char_index, len, ' ', "\r\n", correct);
+        skip_string_terminating_with_target_safe(request->source, current_char_index, len, ':', ":\r\n\0", correct);
+        if (!(*correct)) return;
+        *correct &= (request->source[*current_char_index] == ' ');
+        (*current_char_index)++;
         header_values[request->headers_num++] = request->source + *current_char_index;
-        advance_to_next_carriage_return(request->source, current_char_index);
-        skip_string_terminating_with_target(request->source, current_char_index, len, '\r', correct);
+        skip_string_terminating_with_target_safe(request->source, current_char_index, len, '\r', ":\r\n\0", correct);
         *correct &= (request->source[*current_char_index] == '\n');
         (*current_char_index)++;
     }
