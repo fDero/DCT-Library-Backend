@@ -49,9 +49,10 @@ void* client_handler(void* client_socket_ptr){
     char buffer[BUFFERSIZE];
     while(read(client_socket, buffer, BUFFERSIZE) > 0){
 				buffer[BUFFERSIZE - 1] = '\0';
-        printf("messaggio inviato dal client (e ricevuto dal server: ) %s", buffer);
+        printf("Messaggio ricevuto dal server:\n%s", buffer);
 				http_request_t* request = http_request_decode(buffer);
 				http_response_t* response = respond(request);
+				printf("Messaggio inviato al client:\n%s %s %s\r\n\r\n%s", response->version, response->status, response->phrase, response->payload);
 				send(client_socket, response->payload, strlen(response->payload), MSG_EOR);
     }
     close(client_socket);

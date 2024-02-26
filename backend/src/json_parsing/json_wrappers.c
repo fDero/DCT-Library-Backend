@@ -5,7 +5,8 @@ char* json_to_string(json_t* json){
 }
 
 char* json_to_string_and_free(json_t* json){
-		char* str = json_dumps(json, JSON_COMPACT);
+		char* str;
+		alloc_and_strcpy(&str, json_dumps(json, JSON_COMPACT));
 		free(json);
 		return str;
 }

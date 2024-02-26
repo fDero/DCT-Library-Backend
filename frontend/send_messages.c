@@ -45,7 +45,10 @@ int main() {
     send(sock, message, strlen(message), 0);
     printf("Message sent: %s\n", message);
 
-    pause();
+		char buffer[1000];
+
+		read(sock, buffer, 1000);
+		printf("Response received: %s\n", buffer);
 
     // Close the socket
     close(sock);

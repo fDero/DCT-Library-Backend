@@ -15,15 +15,15 @@ build-backend-docker-image:
 	docker build -t lso_backend:1 .
 
 start:
-	docker-compose -f docker-compose-release.yaml up
+	docker-compose -f docker-compose-release.yaml up --remove-orphans
 
 start-newdb:
 	-$(RM) postgres_volume
-	docker-compose -f docker-compose-release.yaml up
+	docker-compose -f docker-compose-release.yaml up --remove-orphans
 
 test:
 	-$(RM) postgres_test_volume
-	docker-compose -f docker-compose-test.yaml up
+	docker-compose -f docker-compose-test.yaml up --remove-orphans
 
 test-nodb:
 	docker compose -f docker-compose-test.yaml run backend_test sh build_and_run.sh test --nodb -fsanitize=address

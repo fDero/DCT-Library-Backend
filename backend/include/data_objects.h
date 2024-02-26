@@ -8,30 +8,30 @@
 
 struct account
 {
+    int account_id;
     char* name;
     char* surname;
     char* email;
-    int account_id;
 };
 
 struct book
 {
+    int book_id;
     char* title;
     char* author;
     char* publisher;
     char* genres;
     timestamp_t release_date;
     int total_copies;
-    int book_id;
 };
 
 struct loan
 {
+    int loan_id;
     timestamp_t starting_time;
     timestamp_t ending_time;
     int account_id;
     int book_id;
-    int loan_id;
 };
 
 typedef struct account account_t;
