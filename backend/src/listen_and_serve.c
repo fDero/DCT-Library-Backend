@@ -45,17 +45,16 @@ int accept_connection(){
 void* client_handler(void* client_socket_ptr){
     int client_socket = *((int*) client_socket_ptr);
     free((int*)client_socket_ptr);
-		pthread_setspecific(db_conn_key, (void*)open_db_connection());
+	pthread_setspecific(db_conn_key, (void*)open_db_connection());
     char buffer[BUFFERSIZE];
-    while(read(client_socket, buffer, BUFFERSIZE) > 0){
-				buffer[BUFFERSIZE - 1] = '\0';
-        printf("Messaggio ricevuto dal server:\n%s", buffer);
-				http_request_t* request = http_request_decode(buffer);
-				http_response_t* response = respond(request);
-				printf("Messaggio inviato al client:\n%s %s %s\r\n\r\n%s", response->version, response->status, response->phrase, response->payload);
-				send(client_socket, response->payload, strlen(response->payload), MSG_EOR);
-    }
-    close(client_socket);
+    read(client_socket, buffer, BUFFERSIZE);
+    buffer[BUFFERSIZE - 1] = '\0';
+    printf("Messaggio ricevuto dal server:\n%s", buffer);
+    http_request_t* request = http_request_decode(buffer);
+    http_response_t* response = respond(request);
+    printf("Messaggio inviato al client:\n%s %s %s\r\n\r\n%s", response->version, response->status, response->phrase, response->payload);
+    send(client_socket, response->payload, strlen(response->payload), MSG_EOR);
+    close(client_socket);        
     pthread_exit(0);
 }
 

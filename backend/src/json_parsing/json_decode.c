@@ -18,7 +18,7 @@ book_t* book_from_json(json_t* json) {
     book_t* extracted_book = (book_t*)malloc(sizeof(book_t));
     bool valid = true;
     valid &= extract_int_from_json(json, "book_id", &(extracted_book->book_id));
-    valid &= extract_int_from_json(json, "title", &(extracted_book->title));
+    valid &= extract_text_from_json(json, "title", &(extracted_book->title));
     valid &= extract_text_from_json(json, "author", &(extracted_book->author));
     valid &= extract_text_from_json(json, "publisher", &(extracted_book->publisher));
     valid &= extract_text_from_json(json, "genres", &(extracted_book->genres));
