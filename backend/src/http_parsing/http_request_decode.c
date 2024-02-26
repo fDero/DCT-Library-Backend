@@ -26,12 +26,13 @@ http_request_t* http_request_init(){
 }
 
 void validate_http_request(http_request_t* request, bool* correct){
-    *correct &= (strcmp(request->method, "") != 0);
-    *correct &= (strcmp(request->version, "") != 0);
-    *correct &= (strcmp(request->path, "") != 0);
-    *correct &= !is_blank_char(request->version[0]);
-    *correct &= !is_blank_char(request->path[0]);
-    *correct &= !is_blank_char(request->method[0]);
+    *correct &= *correct
+        && (strcmp(request->method, "") != 0)
+        && (strcmp(request->version, "") != 0)
+        && (strcmp(request->path, "") != 0)
+        && !is_blank_char(request->version[0])
+        && !is_blank_char(request->path[0])
+        && !is_blank_char(request->method[0]);
 }
 
 void finalize_http_request(http_request_t* request){

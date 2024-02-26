@@ -375,3 +375,15 @@ TEST(HTTP, invalid_request_no_space_after_colon_in_header) {
     http_request_t* request = http_request_decode(request_str);
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
+
+TEST(HTTP, invalid_request_no_weird_query) {
+    char request_str[2048] =
+        "GET /somedir/page?a&b HTTP/1.1\r\n"
+        "Host: www.somehost.com\r\n"
+        "Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_EQ(request, (http_request_t*)NULL);
+}
