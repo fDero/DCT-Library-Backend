@@ -35,6 +35,14 @@ void validate_http_request(http_request_t* request, bool* correct){
         && !is_blank_char(request->method[0]);
 }
 
+void validate_http_query_params(http_request_t* request, bool* correct, int len){
+    for (int i = 0; i < request->query_params_num; i++){
+        *correct &= *correct
+            && (strcmp(request->query_param_names[i], "") != 0)
+            && (strcmp(request->query_param_values[i], "") != 0);
+    }
+}
+
 void finalize_http_request(http_request_t* request){
     int request_path_index = request->path - request->source;
     request->source[request_path_index] = '\0';
@@ -65,6 +73,7 @@ http_request_t* http_request_decode(char* http_request_str) {
 
 
     validate_http_request(request, &correct);
+    validate_http_query_params(request, &correct, len);
     finalize_http_request(request);
     
     if(correct){
