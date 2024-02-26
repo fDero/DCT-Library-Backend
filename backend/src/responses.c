@@ -16,7 +16,9 @@ http_response_t* response_get_books(http_request_t* request){
 	http_response_set_phrase(response, "OK");
 	db_conn_t* connection = (db_conn_t*) pthread_getspecific(db_conn_key);
 	book_array_t* books = get_books(connection, 100);
-	http_response_set_payload(response, book_array_to_json_string(books));
+	char* payload = book_array_to_json_string(books);
+	http_response_set_payload(response, payload);
 	book_array_destroy(books);
+	free(payload);
 	return response;
 }

@@ -42,8 +42,10 @@ json_t* book_to_json(book_t* book){
     assert (json_object != NULL);
 
     add_numeric_field_to_json_obj  (json_object,  "book_id",      book->book_id);
+    add_text_field_to_json_obj     (json_object,  "title",       book->title);
     add_text_field_to_json_obj     (json_object,  "author",       book->author);
     add_text_field_to_json_obj     (json_object,  "publisher",    book->publisher);
+    add_text_field_to_json_obj     (json_object,  "genres",       book->genres);
     add_timestamp_field_to_json_obj(json_object,  "release_date", &(book->release_date));
     add_numeric_field_to_json_obj  (json_object,  "total_copies", book->total_copies);
     return json_object;

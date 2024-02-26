@@ -9,6 +9,16 @@
 
 #include "utils.h"
 
+int console_log(const char* str, ...) {
+    va_list arguments;
+    va_start(arguments, str);
+    int ret = vprintf(str, arguments);
+    va_end(arguments);
+		fflush(stdout);
+		fflush(stdout);
+		return ret;
+}
+
 bool is_blank_char(char c){
     return c == '\r' || c == '\n' ||
     c == ' ' || c == '\t' || c == '\0';

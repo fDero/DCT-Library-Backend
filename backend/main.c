@@ -13,6 +13,8 @@
 #include <pthread.h>
 
 int main() {
+		console_log("%sInitiating DB connection%s\n", GREEN, WHITE);
 		db_connection_init();
+		console_log("%sInitiating server routine%s\n", GREEN, WHITE);
     listen_and_serve();
 }
