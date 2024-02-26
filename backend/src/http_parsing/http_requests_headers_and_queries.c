@@ -46,7 +46,7 @@ void parse_http_request_headers(http_request_t* request, int* current_char_index
         *correct &= (request->source[*current_char_index] == ' ');
         (*current_char_index)++;
         header_values[request->headers_num++] = request->source + *current_char_index;
-        skip_string_terminating_with_target_safe(request->source, current_char_index, len, '\r', ":\r\n\0", correct);
+        skip_string_terminating_with_target_safe(request->source, current_char_index, len, '\r', "\r\n\0", correct);
         *correct &= (request->source[*current_char_index] == '\n');
         (*current_char_index)++;
     }

@@ -14,7 +14,9 @@
 int main() {
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    char *message = "Hello from client";
+    char *message = "GET /books HTTP/1.1\r\n"
+										"Host: locahost:8080\r\n"
+										"\r\n\0";
 
     // Create socket
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {

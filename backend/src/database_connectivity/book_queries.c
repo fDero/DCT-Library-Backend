@@ -4,7 +4,7 @@
 book_array_t* get_books(db_conn_t* connection, int limit) {
     char buffer[QUERY_STRING_MAX_LENGTH];
     if (limit != DB_GET_ALL)
-        sprintf(buffer, "SELECT * FROM select_n_books('%d')", limit);
+        sprintf(buffer, "SELECT * FROM select_n_books(%d)", limit);
     else
         sprintf(buffer, "SELECT * FROM select_n_books(null)");
     return perform_book_array_query(connection, buffer);
