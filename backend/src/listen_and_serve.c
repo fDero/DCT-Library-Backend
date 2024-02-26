@@ -79,7 +79,7 @@ void* client_handler(void* client_void_ptr){
     char buffer[BUFFERSIZE];
     while(read(client->socket, buffer, BUFFERSIZE) > 0){
     	buffer[BUFFERSIZE - 1] = '\0';
-    	console_log("%sRequest received from the server (%s:%d):\n%s%s\n", YELLOW, client_ip, client_port, buffer, WHITE);
+    	console_log("%sRequest received from a client (%s:%d):\n%s%s\n", YELLOW, client_ip, client_port, buffer, WHITE);
     	http_request_t* request = http_request_decode(buffer);
     	http_response_t* response = respond(request);
     	send(client->socket, response->payload, strlen(response->payload), MSG_EOR);
