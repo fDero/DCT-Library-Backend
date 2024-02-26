@@ -257,3 +257,93 @@ TEST(HTTP, invalid_request_empty) {
 		http_request_t* request = http_request_decode(request_str);
 		ASSERT_EQ(request, (http_request_t*)NULL);
 }
+
+TEST(HTTP, valid_request_no_payload) {
+    char request_str[2048] =
+        "GET /somedir/page HTTP/1.1\r\n"
+        "Host: www.somehost.com\r\n"
+        "Lang: eng\r\n"
+        "\r\n";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_NE(request, (http_request_t*)NULL);
+    EXPECT_EQ(request->headers_num, 2);
+    EXPECT_STREQ(request->host, ""); 
+    EXPECT_STREQ(request->header_names[0], "Host");
+    EXPECT_STREQ(request->header_names[1], "Lang");
+    EXPECT_STREQ(request->header_values[0], "www.somehost.com");
+    EXPECT_STREQ(request->header_values[1], "eng");
+    EXPECT_STREQ(request->method, "GET");
+    EXPECT_STREQ(request->path, "somedir/page");
+    EXPECT_STREQ(request->version, "HTTP/1.1");
+    EXPECT_STREQ(request->payload, "");   
+    http_request_destroy(request);
+}
+
+TEST(HTTP, invalid_request_no_method) {
+    char request_str[2048] =
+        "/somedir/page HTTP/1.1\r\n"
+        "Host: www.somehost.com\r\n"
+        "Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_EQ(request, (http_request_t*)NULL);
+}
+
+TEST(HTTP, invalid_request_no_host) {
+    char request_str[2048] =
+        "GET /somedir/page HTTP/1.1\r\n"
+        "Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_EQ(request, (http_request_t*)NULL);
+}
+
+TEST(HTTP, invalid_request_no_path) {
+    char request_str[2048] =
+        "GET HTTP/1.1\r\n"
+        "Host: www.somehost.com\r\n"
+        "Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_EQ(request, (http_request_t*)NULL);
+}
+
+TEST(HTTP, invalid_request_no_version) {
+    char request_str[2048] =
+        "GET /somedir/page\r\n"
+        "Host: www.somehost.com\r\n"
+        "Lang: eng\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_EQ(request, (http_request_t*)NULL);
+}
+
+TEST(HTTP, invalid_request_no_headers) {
+    char request_str[2048] =
+        "GET /somedir/page HTTP/1.1\r\n"
+        "\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_EQ(request, (http_request_t*)NULL);
+}
+
+TEST(HTTP, invalid_request_no_newline_after_headers) {
+    char request_str[2048] =
+        "GET /somedir/page HTTP/1.1\r\n"
+        "Host: www.somehost.com\r\n"
+        "Lang: eng\r\n"
+        "my really beutiful payload\0";
+
+    http_request_t* request = http_request_decode(request_str);
+    ASSERT_EQ(request, (http_request_t*)NULL);
+}

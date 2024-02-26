@@ -15,6 +15,8 @@ void add_text_field_to_json_obj(json_t* json, const char* field_name, const char
 void add_timestamp_field_to_json_obj(json_t* json, const char* field_name, const timestamp_t* timestamp);
 void add_json_item_to_json_array(json_t* dest_array, json_t* src_item);
 
+char* json_to_string(json_t* json);
+
 json_t* account_to_json(account_t* account);
 json_t* book_to_json(book_t* book);
 json_t* loan_to_json(loan_t* loan);

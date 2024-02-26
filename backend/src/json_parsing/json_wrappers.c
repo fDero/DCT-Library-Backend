@@ -1,5 +1,9 @@
 #include "json.h"
 
+char* json_to_string(json_t* json){
+		return json_dumps(json, JSON_COMPACT);
+}
+
 json_t* init_json_object(){
     return json_object();
 }
