@@ -20,12 +20,6 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y cmake
 RUN apt-get install -y make
 
-RUN git clone https://github.com/intel/tinycrypt \
-    && cd tinycrypt                              \
-    && make                                      \         
-    && cp -r lib/include/tinycrypt /usr/include  \
-    && cp lib/libtinycrypt.a /usr/lib
-
 # RUN apt-get install -y software-properties-common
 # RUN add-apt-repository ppa:ben-collins/libjwt 
 # RUN apt-get update && apt-get install -y libjwt-dev
@@ -33,6 +27,22 @@ RUN git clone https://github.com/intel/tinycrypt \
 # RUN git clone https://github.com/DaveGamble/cJSON && cd cJSON && mkdir build && cd build && cmake .. && cd .. && make && make install
 
 # RUN git clone https://www.github.com/nodejs/http-parser && cd http-parser && make && make install
+
+RUN git clone https://github.com/intel/tinycrypt \
+    && cd tinycrypt                              \
+    && make                                      \         
+    && cp -r lib/include/tinycrypt /usr/include  \
+    && cp lib/libtinycrypt.a /usr/lib
+
+RUN wget https://github.com/GlitchedPolygons/l8w8jwt/releases/download/2.3.2/l8w8jwt-2.3.2-linux-x86_64.tar.gz \
+		&& tar -xzf l8w8jwt-2.3.2-linux-x86_64.tar.gz \
+		&& mv l8w8jwt/bin/release/libl8w8jwt.so.2.3.2 /usr/local/lib \
+		&& ln -s /usr/local/lib/libl8w8jwt.so.2.3.2 /usr/local/lib/libl8w8jwt.so \
+		&& ln -s /usr/local/lib/libl8w8jwt.so.2.3.2 /usr/local/lib/libl8w8jwt.so.2 \
+		&& mv l8w8jwt/include/l8w8jwt /usr/include \
+		&& ldconfig \
+		&& rm l8w8jwt-2.3.2-linux-x86_64.tar.gz \
+		&& rm -rf l8w8jwt
 
 RUN wget https://github.com/akheron/jansson/releases/download/v2.14/jansson-2.14.tar.gz && tar -xvzf jansson-2.14.tar.gz && cd jansson-2.14 && ./configure && make && make install
 
