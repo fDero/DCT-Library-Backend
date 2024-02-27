@@ -13,11 +13,19 @@ http_response_t* basic_response(http_request_t* request){
 }
 
 http_response_t* response_bad_request(http_request_t* request){
-	return NULL;
+	http_response_t* response = basic_response(request);
+	http_response_set_status(response, "400");
+	http_response_set_phrase(response, "Bad Request");
+	http_response_add_header(response, "Connection", "close");
+	return response;
 }
 
-http_response_t* response_not_authenticated(http_request_t* request){
-	return NULL;
+http_response_t* response_unauthorized(http_request_t* request){
+	http_response_t* response = basic_response(request);
+	http_response_set_status(response, "401");
+	http_response_set_phrase(response, "Unauthorized");
+	http_response_add_header(response, "Connection", "close");
+	return response;
 }
 
 http_response_t* response_get_books(http_request_t* request){

@@ -13,7 +13,8 @@ void http_response_init(http_response_t* response) {
 
 char* http_response_encode(http_response_t* response) {
     int buffer_size = 0;
-		buffer_size += strlen(response->version) + strlen(response->status) + strlen(response->phrase) + strlen(response->payload) + 7;
+		buffer_size += strlen(response->version) + strlen(response->status) + strlen(response->phrase) + 7;
+		if(response->payload != NULL) buffer_size += strlen(response->payload);
 		for(int i = 0; i < response->headers_num; i++){
 			buffer_size += strlen(response->header_names[i]) + strlen(response->header_values[i]) + 4;
 		}
@@ -22,7 +23,7 @@ char* http_response_encode(http_response_t* response) {
 		for(int i = 0; i < response->headers_num; i++){
 			sprintf(buffer + strlen(buffer), "%s: %s\r\n", response->header_names[i], response->header_values[i]);
 		}
-		sprintf(buffer + strlen(buffer), "\r\n%s", response->payload);
+		sprintf(buffer + strlen(buffer), "\r\n%s", response->payload != NULL ? response->payload : "");
 		return buffer;
 }
 
