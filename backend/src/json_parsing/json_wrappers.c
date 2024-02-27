@@ -58,8 +58,9 @@ bool extract_text_from_json(json_t* json, const char* field_name, char** str){
 bool extract_timestamp_from_json(json_t* json, const char* field_name, timestamp_t* timestamp){
     json_t* field = json_object_get(json, field_name);
     if(json_is_string(field)){
-        *timestamp = string_to_timestamp(json_string_value(field));
-        return true;
+        timestamp_t* tempts = string_to_timestamp(json_string_value(field)); 
+        *timestamp = *tempts;
+				free(tempts);
     }
     return false;
 }

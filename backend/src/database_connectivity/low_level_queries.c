@@ -31,7 +31,9 @@ void extract_book(resultset_t* resultset, int row, book_t* book)
 	alloc_and_strcpy(&(book->author), PQgetvalue(resultset, row, 2));
 	alloc_and_strcpy(&(book->publisher), PQgetvalue(resultset, row, 3));
 	alloc_and_strcpy(&(book->genres), PQgetvalue(resultset, row, 4));
-	book->release_date = string_to_timestamp(PQgetvalue(resultset, row, 5));
+	timestamp_t* release_date = string_to_timestamp(PQgetvalue(resultset, row, 5));
+	book->release_date = *release_date;
+	free(release_date);
 	book->total_copies = atoi(PQgetvalue(resultset, row, 6));
 	//book_integrity_check(book);
 }
@@ -39,8 +41,12 @@ void extract_book(resultset_t* resultset, int row, book_t* book)
 void extract_loan(resultset_t* resultset, int row, loan_t* loan)
 {
 	loan->loan_id = atoi(PQgetvalue(resultset, row, 0));
-	loan->starting_time = string_to_timestamp(PQgetvalue(resultset, row, 1));
-	loan->ending_time = string_to_timestamp(PQgetvalue(resultset, row, 2));
+	timestamp_t* starting_time = string_to_timestamp(PQgetvalue(resultset, row, 1));
+	timestamp_t* ending_time = string_to_timestamp(PQgetvalue(resultset, row, 2));
+	loan->starting_time = *starting_time;
+	loan->ending_time = *ending_time;
+	free(starting_time);
+	free(ending_time);
 	loan->account_id = atoi(PQgetvalue(resultset, row, 3));
 	loan->book_id = atoi(PQgetvalue(resultset, row, 4));
 	//loan_integrity_check(loan);

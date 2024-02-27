@@ -39,9 +39,10 @@ void timestamp_to_string(char* str, size_t size, const timestamp_t* ts) {
     strftime(str, size, TIMESTAMP_STRING_FORMAT, ts);
 }
 
-timestamp_t string_to_timestamp(const char* str) {
-    timestamp_t timestamp;
-    strptime(str, TIMESTAMP_STRING_FORMAT, &timestamp);
+timestamp_t* string_to_timestamp(const char* str) {
+		if(str == NULL) return NULL;
+    timestamp_t* timestamp = (timestamp_t*)malloc(sizeof(timestamp_t));
+    strptime(str, TIMESTAMP_STRING_FORMAT, timestamp);
     return timestamp;
 }
 

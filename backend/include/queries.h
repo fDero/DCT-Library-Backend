@@ -39,7 +39,7 @@ book_array_t*    get_books_by_genres(db_conn_t* connection, const char* genres);
 book_array_t*    get_books_by_release_date(db_conn_t* connection, const timestamp_t* release_date);
 book_array_t*    get_books_by_data_match(
                     db_conn_t* connection, const char* title, const char* author, 
-                    const char* publisher, const char* genres, const timestamp_t* release_date);
+                    const char* publisher, const char* genres, const timestamp_t* release_date, int limit);
 
 loan_array_t*    get_loans(db_conn_t* connection, int limit);
 loan_t*          get_loan_by_id(db_conn_t* connection, int id);

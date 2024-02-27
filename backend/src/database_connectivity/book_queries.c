@@ -67,7 +67,8 @@ book_array_t* get_books_by_release_date(db_conn_t* connection,
 book_array_t* get_books_by_data_match(db_conn_t* connection, const char* title,
                                       const char* author, const char* publisher,
                                       const char* genres,
-                                      const timestamp_t* release_date) {
+                                      const timestamp_t* release_date,
+																			int limit) {
     char buffer[800];
     char query_string[1000] = "SELECT * FROM Book WHERE ";
     if (title != NULL) {
@@ -96,5 +97,8 @@ book_array_t* get_books_by_data_match(db_conn_t* connection, const char* title,
         strcat(query_string, buffer);
     }
     strcat(query_string, " TRUE");
+		if(limit!=DB_GET_ALL){
+			sprintf(query_string + strlen(query_string), " LIMIT %d", limit);
+		}
     return perform_book_array_query(connection, query_string);
 }

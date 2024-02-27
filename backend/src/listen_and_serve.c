@@ -89,8 +89,8 @@ void* client_handler(void* client_void_ptr){
 		}
     console_log(GREEN, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
     close(client->socket);
-		free(client);     
-		free(client_ip);   
+		free(client);
+		free(client_ip);
     pthread_exit(0);
 }
 

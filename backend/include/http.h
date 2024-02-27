@@ -55,6 +55,8 @@ void parse_http_request_headers(http_request_t* request, int* current_char_index
 void parse_http_request_query(http_request_t* request, int* current_char_index, int len, bool* correct);
 void parse_http_headers_termination(http_request_t* request, int* current_char_index, int len, bool* correct);
 
+const char* get_query_param_value(http_request_t* request, const char* query_param_name);
+
 void http_response_init(http_response_t* response);
 char* http_response_encode(http_response_t* response);
 void http_response_destroy(http_response_t* response);
