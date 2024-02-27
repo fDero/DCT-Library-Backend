@@ -11,6 +11,7 @@
 #include "http.h"
 #include <sys/socket.h>
 #include "respond.h"
+#include <stdbool.h>
 
 #define BUFFERSIZE 1024
 
@@ -77,6 +78,7 @@ void* client_handler(void* client_void_ptr){
 
 		pthread_setspecific(db_conn_key, (void*)open_db_connection());
     char buffer[BUFFERSIZE];
+
     while(read(client->socket, buffer, BUFFERSIZE) > 0){
     	buffer[BUFFERSIZE - 1] = '\0';
     	console_log(YELLOW, "Request received from a client (%s:%d):\n%s\n", client_ip, client_port, buffer);
@@ -86,6 +88,11 @@ void* client_handler(void* client_void_ptr){
     	send(client->socket, response_str, strlen(response_str), MSG_EOR);
     	console_log(YELLOW, "Response sent to the client (%s:%d):\n%s\n", client_ip, client_port, response_str);
 			free(response_str);
+			const char* keepalive_str = get_header_value(request, "Connection");
+			if(keepalive_str != NULL && strcmp(keepalive_str, "keep-alive") != 0){
+				break;
+			}
+			http_request_destroy(request);
 		}
     console_log(GREEN, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
     close(client->socket);
