@@ -20,6 +20,7 @@ services:
     image: lso_backend:1
     command: sh -c "dockerize -wait tcp://database:5432 -timeout 60s sh build_and_run.sh release"
     environment:
+      SERVER: 'LSO-Backend/1.0.0'
       SERVER_PORT: 8080
       SERVER_MAX_CONNECTION: 100
       POSTGRES_USER: postgres

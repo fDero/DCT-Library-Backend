@@ -17,12 +17,17 @@ int console_log(const char* color, const char* str, ...) {
 		}
     int ret = vprintf(str, arguments);
     va_end(arguments);
-		// if (COLORED_OUTPUT_ENABLED && color != NULL) {
-		// 	printf("%s", WHITE);
-		// }
 		fflush(stdout);
 		fflush(stdout);
 		return ret;
+}
+
+char* get_current_http_time(){
+		time_t now = time(NULL);
+		timestamp_t* now_timestamp = gmtime(&now);
+		char* time_str = (char*)malloc(sizeof(char) * 40);
+		strftime(time_str, 40, "%a, %d %b %Y %H:%M:%S %Z", now_timestamp);
+		return time_str;
 }
 
 bool is_blank_char(char c){

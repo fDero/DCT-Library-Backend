@@ -10,6 +10,7 @@
 
 #define MAX_HEADERS 100
 #define MAX_PARAMS 100
+#define HTTP_RESPONSE_STARTING_HEADER_CAPACITY 8
 
 struct http_request {
     char* source;
@@ -33,6 +34,7 @@ struct http_response {
     char ** header_names;
     char ** header_values;
     int headers_num;
+		int header_capacity;
     char* payload;
 };
 

@@ -8,6 +8,9 @@
 #include "json.h"
 #include "data_objects.h"
 #include "db_utils.h"
+#include "utils.h"
+
+extern char *server;
 
 http_response_t* respond(http_request_t* request);
 

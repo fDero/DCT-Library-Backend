@@ -16,12 +16,15 @@ extern bool COLORED_OUTPUT_ENABLED;
 #define CYAN    "\x1b[36m"
 #define WHITE   "\x1b[0m"
 
-int console_log(const char* color, const char* str, ...);
 
 #define STRING_TIMESTAMP_MAX_LENGTH 50
 #define TIMESTAMP_STRING_FORMAT "%Y-%m-%d %H:%M:%S"
 
 typedef struct tm timestamp_t;
+
+int console_log(const char* color, const char* str, ...);
+
+char* get_current_http_time();
 
 void alloc_and_strcpy(char* *destination, const char* source);
 

@@ -82,8 +82,10 @@ void* client_handler(void* client_void_ptr){
     	console_log(YELLOW, "Request received from a client (%s:%d):\n%s\n", client_ip, client_port, buffer);
     	http_request_t* request = http_request_decode(buffer);
     	http_response_t* response = respond(request);
-    	send(client->socket, response->payload, strlen(response->payload), MSG_EOR);
-    	console_log(YELLOW, "Response sent to the client (%s:%d):\n%s %s %s\r\n\r\n%s\n", client_ip, client_port, response->version, response->status, response->phrase, response->payload);
+			char* response_str = http_response_encode(response);
+    	send(client->socket, response_str, strlen(response_str), MSG_EOR);
+    	console_log(YELLOW, "Response sent to the client (%s:%d):\n%s\n", client_ip, client_port, response_str);
+			free(response_str);
 		}
     console_log(GREEN, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
     close(client->socket);

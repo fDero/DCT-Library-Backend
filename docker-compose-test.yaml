@@ -20,6 +20,7 @@ services:
     image: lso_backend:1
     command: sh -c "dockerize -wait tcp://database_test:5432 -timeout 60s sh build_and_run.sh test"
     environment:
+      SERVER: 'LSO-Backend/1.0.0'
       GTEST_COLOR: yes
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: milleteschi
