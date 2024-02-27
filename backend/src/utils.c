@@ -9,11 +9,17 @@
 
 #include "utils.h"
 
-int console_log(const char* str, ...) {
+int console_log(const char* color, const char* str, ...) {
     va_list arguments;
     va_start(arguments, str);
+		if (COLORED_OUTPUT_ENABLED && color != NULL) {
+			printf("%s", color);
+		}
     int ret = vprintf(str, arguments);
     va_end(arguments);
+		// if (COLORED_OUTPUT_ENABLED && color != NULL) {
+		// 	printf("%s", WHITE);
+		// }
 		fflush(stdout);
 		fflush(stdout);
 		return ret;

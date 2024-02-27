@@ -79,12 +79,13 @@ void* client_handler(void* client_void_ptr){
     char buffer[BUFFERSIZE];
     while(read(client->socket, buffer, BUFFERSIZE) > 0){
     	buffer[BUFFERSIZE - 1] = '\0';
-    	console_log("%sRequest received from a client (%s:%d):\n%s%s\n", YELLOW, client_ip, client_port, buffer, WHITE);
+    	console_log(YELLOW, "Request received from a client (%s:%d):\n%s\n", client_ip, client_port, buffer);
     	http_request_t* request = http_request_decode(buffer);
     	http_response_t* response = respond(request);
     	send(client->socket, response->payload, strlen(response->payload), MSG_EOR);
-    	console_log("%sResponse sent to the client (%s:%d):\n%s %s %s\r\n\r\n%s%s\n", YELLOW, client_ip, client_port, response->version, response->status, response->phrase, response->payload, WHITE);
+    	console_log(YELLOW, "Response sent to the client (%s:%d):\n%s %s %s\r\n\r\n%s\n", client_ip, client_port, response->version, response->status, response->phrase, response->payload);
 		}
+    console_log(GREEN, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
     close(client->socket);
 		free(client);     
 		free(client_ip);   
@@ -96,15 +97,15 @@ void listen_and_serve(){
     server_max_connections = atoi(getenv("SERVER_MAX_CONNECTION"));
     assert (server_port > 0);
     assert (server_max_connections > 0);
-		console_log("%sCreating a socket for the server%s\n", GREEN, WHITE);
+		console_log(GREEN, "Creating a socket for the server\n");
     create_listening_socket();
-		console_log("%sBinding the socket%s\n", GREEN, WHITE);
+		console_log(GREEN, "Binding the socket\n");
     bind_listening_socket();
-		console_log("%sListening for connections%s\n", GREEN, WHITE);
+		console_log(GREEN, "Listening for connections\n");
     const int listening_error = listen(server_socket, server_max_connections);
     assert (listening_error == 0);
     while(1){
-				console_log("%sWaiting to accept a connection%s\n", GREEN, WHITE);
+				console_log(GREEN, "Waiting to accept a connection\n");
         client_t* client_ptr = accept_connection();
         pthread_t client_handler_thread;
         pthread_create(&client_handler_thread, NULL, client_handler, client_ptr);

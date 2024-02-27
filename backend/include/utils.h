@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
+extern bool COLORED_OUTPUT_ENABLED;
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
@@ -15,7 +16,7 @@
 #define CYAN    "\x1b[36m"
 #define WHITE   "\x1b[0m"
 
-int console_log(const char* str, ...);
+int console_log(const char* color, const char* str, ...);
 
 #define STRING_TIMESTAMP_MAX_LENGTH 50
 #define TIMESTAMP_STRING_FORMAT "%Y-%m-%d %H:%M:%S"
