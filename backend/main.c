@@ -12,7 +12,7 @@
 #include <pthread.h>
 
 char* server;
-bool COLORED_OUTPUT_ENABLED = true;
+const bool COLORED_OUTPUT_ENABLED = true;
 
 void init_server_str(){
 	char server_env [50]; 

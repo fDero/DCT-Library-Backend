@@ -26,7 +26,7 @@ http_response_t* response_get_books(http_request_t* request){
 	http_response_set_phrase(response, "OK");
 	http_response_add_header(response, "Connection", "keep-alive");
 	db_conn_t* connection = (db_conn_t*) pthread_getspecific(db_conn_key);
-
+	
 	const char* title = get_query_param_value(request, "title");
 	const char* author = get_query_param_value(request, "author");
 	const char* publisher = get_query_param_value(request, "publisher");
@@ -37,6 +37,7 @@ http_response_t* response_get_books(http_request_t* request){
 
 	char* payload = book_array_to_json_string(books);
 	http_response_set_payload(response, payload);
+
 	http_response_add_header(response, "Content-Type", "application/json");
 	char buff[20];
 	sprintf(buff, "%lu", strlen(payload));

@@ -28,6 +28,7 @@ json_t* account_to_json(account_t* account){
     
     json_t *json_object = init_json_object();
     assert (json_object != NULL);
+		if(account == NULL) return json_object;
     
     add_numeric_field_to_json_obj (json_object,  "account_id", account->account_id);
     add_text_field_to_json_obj    (json_object,  "name",       account->name);
@@ -40,6 +41,7 @@ json_t* book_to_json(book_t* book){
     
     json_t *json_object = init_json_object();
     assert (json_object != NULL);
+		if(book == NULL) return json_object;
 
     add_numeric_field_to_json_obj  (json_object,  "book_id",      book->book_id);
     add_text_field_to_json_obj     (json_object,  "title",       book->title);
@@ -55,6 +57,7 @@ json_t* loan_to_json(loan_t* loan){
     
     json_t *json_object = init_json_object();
     assert (json_object != NULL);
+		if(loan == NULL) return json_object;
 
     add_numeric_field_to_json_obj   (json_object,  "loan_id",        loan->loan_id);
     add_timestamp_field_to_json_obj (json_object,  "starting_time",  &(loan->starting_time));
@@ -67,6 +70,7 @@ json_t* loan_to_json(loan_t* loan){
 json_t* account_array_to_json(account_array_t* account_array){
     
     json_t *json_array = init_json_array();
+		if(account_array == NULL) return json_array;
     
     for (int i = 0; i < account_array->size; i++){
         account_t *account = &(account_array->storage[i]);
@@ -80,6 +84,7 @@ json_t* account_array_to_json(account_array_t* account_array){
 json_t* book_array_to_json(book_array_t* book_array){
     
     json_t *json_array = init_json_array();
+		if(book_array == NULL) return json_array;
     
     for (int i = 0; i < book_array->size; i++){
         book_t *book = &(book_array->storage[i]);
@@ -93,6 +98,7 @@ json_t* book_array_to_json(book_array_t* book_array){
 json_t* loan_array_to_json(loan_array_t* loan_array){
     
     json_t *json_array = init_json_array();
+		if(loan_array == NULL) return json_array;
     
     for (int i = 0; i < loan_array->size; i++){
         loan_t *loan = &(loan_array->storage[i]);
