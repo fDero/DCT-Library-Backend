@@ -31,59 +31,44 @@ loan_t* db_loan_5 = NULL;
 loan_t* db_loan_6 = NULL;
 
 // ACCOUNTS:
-//  ID 	|  NAME     |  SURNAME    |  EMAIL
+//  ID 	|  NAME     |  SURNAME    |  EMAIL                          
 //  ----------------------------------------------------------------
-//  1  	| 'John'    |  'Smith'    |  'john.smith@example.com' -- db_account_1 2
-//  | 'Emma'    |  'Johnson'  |  'emma.johnson@example.com'         --
-//  db_account_2 3 	| 'William' |  'Brown'    |  'william.brown@example.com'
-//  -- db_account_3 4 	| 'Olivia'  |  'Williams' |
-//  'olivia.williams@example.com'      -- db_account_4 5 	| 'James'   |
-//  'Jones'    |  'james.jones@example.com'          -- db_account_5 6 	|
-//  'Sophia'  |  'Davis'    |  'sophia.davis@example.com'         --
-//  db_account_6
+//  1  	| 'John'    |  'Smith'    |  'john.smith@example.com'       		-- db_account_1
+//  2 	| 'Emma'    |  'Johnson'  |  'emma.johnson@example.com'         -- db_account_2
+//  3 	| 'William' |  'Brown'    |  'william.brown@example.com'        -- db_account_3
+//  4 	| 'Olivia'  |  'Williams' |  'olivia.williams@example.com'      -- db_account_4
+//  5 	| 'James'   |  'Jones'    |  'james.jones@example.com'          -- db_account_5
+//  6 	| 'Sophia'  |  'Davis'    |  'sophia.davis@example.com'         -- db_account_6
 
 // BOOKS:
-//   ID  | TITLE                      | AUTHOR               | PUBLISHER |
-//   GENRES                               | RELEASE_DATE           |TOT. CP.
+//   ID  | TITLE                      | AUTHOR               | PUBLISHER                   | GENRES                               | RELEASE_DATE           |TOT. CP.
 //   --------------------------------------------------------------------------------------|------------------------------------------------------------------------
-// 	 1   | 'Harry Potter'             | 'J.K.Rowling'        | 'Bloomsbury'
-// | 'Fantasy,Young adult literature,     | '1997-06-26 00:00:00'  | 10
-// --db_book_1
-//       |                            |                      | |  Adventure
-//       fiction'                  |                        | | | | | | |
-// 	 2   | '1984'                     | 'G.Orwell'           | 'Secker &
-// Warburg'          | 'Fiction,Science fiction,Mystery'    | '1949-06-08
-// 00:00:00'  | 6          --db_book_2
-//       |                            |                      | | | |
-// 	 3   | 'Karamazov Brothers'       | 'F.Dostoevskij'      | 'The Russian
-// Messenger'     | 'Fiction,Novel,Mystery,              | '1980-11-01 00:00:00'
-// | 4          --db_book_3
-//       |                            |                      | |  Historical
-//       fiction,Literary fiction'|                        | | | | | | |
-// 	 4   | 'Programming  Principles   | 'Bjarne Stroustrup'  | 'Pearson' |
-// 'Education'                          | '2014-05-15 00:00:00'  | 3 --db_book_4
-//       |  and Practices Using C++'  |                      | | | | | | | | | |
-// 	 5   | 'The Lord of the Rings'    | 'John Ronald Reuel   | 'George Allen
-// and Unwin     | 'Fantasy fiction,Adventure fiction'  | '1954-07-29 00:00:00'
-// | 2          --db_book_5
-//       |                            |  Tolkien'            | (UK) Houghton
-//       Mifflin (US)' |                                      | | | | | | | |
-// 	 6   | 'The Hunger Games'         | 'Suzanne Collins'    | 'Scholastic
-// Press'          | 'Science fiction,Adventure fiction,  | '2008-09-14
-// 00:00:00'  | 7          --db_book_6
-//       |                            |                      | |  Young adult
-//       literature'             |                        |
+// 	 1   | 'Harry Potter'             | 'J.K. Rowling'       | 'Bloomsbury'                | 'Fantasy,Young adult literature,     | '1997-06-26 00:00:00'  | 10         --db_book_1
+//       |                            |                      |                             |  Adventure fiction'                  |                        |
+//       |                            |                      |                             |                                      |                        |
+// 	 2   | '1984'                     | 'G. Orwell'          | 'Secker & Warburg'          | 'Fiction,Science fiction,Mystery'    | '1949-06-08 00:00:00'  | 6          --db_book_2  
+//       |                            |                      |                             |                                      |                        |
+// 	 3   | 'Karamazov Brothers'       | 'F. Dostoevskij'     | 'The Russian Messenger'     | 'Fiction,Novel,Mystery,              | '1980-11-01 00:00:00'  | 4          --db_book_3
+//       |                            |                      |                             |  Historical fiction,Literary fiction'|                        |
+//       |                            |                      |                             |                                      |                        |
+// 	 4   | 'Programming  Principles   | 'Bjarne Stroustrup'  | 'Pearson'                   | 'Education'                          | '2014-05-15 00:00:00'  | 3          --db_book_4
+//       |  and Practices Using C++'  |                      |                             |                                      |                        |      
+//       |                            |                      |                             |                                      |                        | 
+// 	 5   | 'The Lord of the Rings'    | 'John Ronald Reuel   | 'George Allen and Unwin     | 'Fantasy fiction,Adventure fiction'  | '1954-07-29 00:00:00'  | 2          --db_book_5
+//       |                            |  Tolkien'            | (UK) Houghton Mifflin (US)' |                                      |                        |     
+//       |                            |                      |                             |                                      |                        |
+// 	 6   | 'The Hunger Games'         | 'Suzanne Collins'    | 'Scholastic Press'          | 'Science fiction,Adventure fiction,  | '2008-09-14 00:00:00'  | 7          --db_book_6
+//       |                            |                      |                             |  Young adult literature'             |                        |
 
 // LOANS:
 //  ID | STARTING_TIME         | ENDING_TIME            | ACC.ID | BOOK ID
 //  -----------------------------------------------------------------------
-// 	1  | '2024-04-02 00:00:00' | '2024-04-14 00:00:00'  | 1      | 1
-// --db_loan_1 	2  | '2024-04-05 00:00:00' | '2024-04-18 00:00:00'  | 2      | 2
-// --db_loan_2 	3  | '2024-04-08 00:00:00' | '2024-04-12 00:00:00'  | 3      | 4
-// --db_loan_3 	4  | '2024-04-10 00:00:00' | '2024-04-20 00:00:00'  | 3      | 2
-// --db_loan_4 	5  | '2024-04-11 00:00:00' | '2024-04-16 00:00:00'  | 4      | 5
-// --db_loan_5 	6  | '2024-04-12 00:00:00' | '2024-04-18 00:00:00'  | 5      | 1
-// --db_loan_6
+// 	1  | '2024-04-02 00:00:00' | '2024-04-14 00:00:00'  | 1      | 1         --db_loan_1
+// 	2  | '2024-04-05 00:00:00' | '2024-04-18 00:00:00'  | 2      | 2         --db_loan_2
+// 	3  | '2024-04-08 00:00:00' | '2024-04-12 00:00:00'  | 3      | 4         --db_loan_3
+// 	4  | '2024-04-10 00:00:00' | '2024-04-20 00:00:00'  | 3      | 2         --db_loan_4
+// 	5  | '2024-04-11 00:00:00' | '2024-04-16 00:00:00'  | 4      | 5         --db_loan_5
+// 	6  | '2024-04-12 00:00:00' | '2024-04-18 00:00:00'  | 5      | 1         --db_loan_6
 
 #define EXPECT_NULLPTR(a_pointer) EXPECT_EQ(a_pointer, nullptr)
 

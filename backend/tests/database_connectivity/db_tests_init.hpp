@@ -81,12 +81,12 @@ class Database : public ::testing::Test {
         timestamp_t* timestamp_book_6 =
             string_to_timestamp("2008-09-14 00:00:00");
 
-        book_init(db_book_1, 1, "Harry Potter", "J.K.Rowling", "Bloomsbury",
+        book_init(db_book_1, 1, "Harry Potter", "J.K. Rowling", "Bloomsbury",
                   "Fantasy,Young adult literature,Adventure fiction",
                   timestamp_book_1, 10);
-        book_init(db_book_2, 2, "1984", "G.Orwell", "Secker & Warburg",
+        book_init(db_book_2, 2, "1984", "G. Orwell", "Secker & Warburg",
                   "Fiction,Science fiction,Mystery", timestamp_book_2, 6);
-        book_init(db_book_3, 3, "Karamazov Brothers", "F.Dostoevskij",
+        book_init(db_book_3, 3, "Karamazov Brothers", "F. Dostoevskij",
                   "The Russian Messenger",
                   "Fiction,Novel,Mystery,Historical fiction,Literary fiction",
                   timestamp_book_3, 4);
