@@ -62,10 +62,12 @@ void skip_character_safe(
 );
 
 void skip_hostname(
-    char* string, int* current_char_index, 
+    char* string, int* current_char_index,
     int len, bool* correct
 );
 
 bool is_blank_char(char c);
+
+char* sha256_hash_string(const char* string);
 
 #endif
