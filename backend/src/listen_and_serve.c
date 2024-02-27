@@ -90,6 +90,7 @@ void* client_handler(void* client_void_ptr){
 			free(response_str);
 			const char* keepalive_str = get_header_value(request, "Connection");
 			if(keepalive_str != NULL && strcmp(keepalive_str, "keep-alive") != 0){
+				http_request_destroy(request);
 				break;
 			}
 			http_request_destroy(request);
