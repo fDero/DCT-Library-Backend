@@ -17,6 +17,9 @@ int console_log(const char* color, const char* str, ...) {
 		}
     int ret = vprintf(str, arguments);
     va_end(arguments);
+		if (COLORED_OUTPUT_ENABLED && color != NULL) {
+			printf("%s", DEFAULT_COLOR);
+		}
 		fflush(stdout);
 		fflush(stdout);
 		return ret;
