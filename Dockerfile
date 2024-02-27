@@ -10,6 +10,8 @@ ENV DOCKERIZE_VERSION v0.7.0
 
 RUN apt-get update
 
+RUN apt-get install -y redis-server
+RUN apt-get install -y libhiredis-dev
 RUN apt-get install -y wget
 RUN apt-get install -y gcc
 RUN apt-get install -y gpp
@@ -17,6 +19,12 @@ RUN apt-get install -y git
 RUN apt-get install -y build-essential
 RUN apt-get install -y cmake
 RUN apt-get install -y make
+
+RUN git clone https://github.com/intel/tinycrypt \
+    && cd tinycrypt                              \
+    && make                                      \         
+    && cp -r lib/include/tinycrypt /usr/include  \
+    && cp lib/libtinycrypt.a /usr/lib
 
 # RUN apt-get install -y software-properties-common
 # RUN add-apt-repository ppa:ben-collins/libjwt 
@@ -35,7 +43,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERS
 RUN apt-get install -y libgtest-dev 
 RUN apt-get install -y locate
 RUN apt-get install -y ranger
-RUN apt-get install -y postgresql-all
+RUN apt-get install -y postgresql-all                 
 
 EXPOSE 5432
 EXPOSE 5433
