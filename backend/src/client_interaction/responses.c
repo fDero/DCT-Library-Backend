@@ -41,7 +41,14 @@ http_response_t* response_get_books(http_request_t* request){
 	const char* genres = get_query_param_value(request, "genres");
 	const char* release_date = get_query_param_value(request, "release_date");
 	const timestamp_t* release_date_timestamp = string_to_timestamp(release_date);
-	book_array_t* books = get_books_by_data_match(connection, title, author, publisher, genres, release_date_timestamp, 200);
+	const char* ids = get_query_param_value(request, "id");
+	book_array_t* books;
+	if(ids!=NULL){
+		books = get_books_by_ids(connection, ids);
+	}
+	else {
+		books = get_books_by_data_match(connection, title, author, publisher, genres, release_date_timestamp, 200);
+	}
 
 	char* payload = book_array_to_json_string(books);
 	http_response_set_payload(response, payload);
@@ -63,9 +70,9 @@ http_response_t* response_get_loans(http_request_t* request){
 	db_conn_t* connection = (db_conn_t*) pthread_getspecific(db_conn_key);
 	
 	int id = atoi(get_query_param_value(request, "account_id"));
-	console_log(MAGENTA,"id:%d\n", id);
+
 	loan_array_t* loans = (id != 0 ? get_loans_by_account_id(connection, id) : NULL);
-	console_log(MAGENTA,"loans != NULL:%d\n", loans != NULL);
+	
 	char* payload = loan_array_to_json_string(loans);
 	http_response_set_payload(response, payload);
 

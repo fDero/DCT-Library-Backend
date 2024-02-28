@@ -74,7 +74,6 @@ account_array_t* perform_account_array_query(db_conn_t* connection, const char* 
 
 book_array_t* perform_book_array_query(db_conn_t* connection, const char* query_string)
 {
-	fflush(stdout);
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);

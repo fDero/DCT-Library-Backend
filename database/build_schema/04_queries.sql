@@ -125,7 +125,21 @@ CREATE OR REPLACE FUNCTION account_by_loan_id (id_in loan.loan_id%type)
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION book_by_id (id_in loan.loan_id%type)
+CREATE OR REPLACE FUNCTION books_by_ids (ids_in integer[])
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		book
+	WHERE
+		book_id = ANY(ids_in)
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION book_by_id (id_in book.book_id%type)
 	RETURNS TABLE (
 		LIKE book
 	)

@@ -10,6 +10,12 @@ book_array_t* get_books(db_conn_t* connection, int limit) {
     return perform_book_array_query(connection, buffer);
 }
 
+book_array_t* get_books_by_ids(db_conn_t* connection, const char* ids) {
+    char buffer[QUERY_STRING_MAX_LENGTH];
+    sprintf(buffer, "SELECT * FROM books_by_ids(ARRAY[%s])", ids);
+    return perform_book_array_query(connection, buffer);
+}
+
 book_t* get_book_by_id(db_conn_t* connection, int id) {
     char buffer[QUERY_STRING_MAX_LENGTH];
     sprintf(buffer, "SELECT * FROM book_by_id(%d)", id);

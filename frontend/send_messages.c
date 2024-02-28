@@ -14,7 +14,7 @@
 int main() {
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    char *message = "GET /books HTTP/1.1\r\n"
+    char *message = "GET /books?title=Harry+Potter HTTP/1.1\r\n"
 										"Host: locahost:8080\r\n"
 										"Connection: close\r\n"
 										"\r\n\0";

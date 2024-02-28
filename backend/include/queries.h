@@ -29,6 +29,7 @@ account_t*       get_account_by_loan_id(db_conn_t* connection, int id);
 account_array_t* get_accounts_by_book_id(db_conn_t* connection, int id);
 
 book_array_t*    get_books(db_conn_t* connection, int limit);
+book_array_t* 	 get_books_by_ids(db_conn_t* connection, const char* ids);
 book_t*          get_book_by_id(db_conn_t* connection, int id);
 book_t*          get_book_by_loan_id(db_conn_t* connection, int id);
 book_array_t*    get_books_by_account_id(db_conn_t* connection, int id);
