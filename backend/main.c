@@ -15,10 +15,9 @@
 #include "respond.h"
 
 #include <hiredis/hiredis.h>
+#include "cache.h"
 
-extern redisContext *c;
-//char* insert_unique_value_in_cache_and_get_key(const char* val);
-//char* retrieve_value_from_cache_with_key(const char* key);
+char* sha256_hash_number(long long int num);
 
 void init_server_str(){
 	char server_env [50];
@@ -27,37 +26,36 @@ void init_server_str(){
 	strcpy(server, server_env);
 }
 
-int main() {
-	setbuf(stdout, NULL);
-	char* hashed_string = sha256_hash_string("Hello World");
-	printf("%s\n\n\n", hashed_string);
-	free(hashed_string);
-    redisReply *reply;
-
-	printf("Hello Hello Hello\n");
-
+void cache_connection_init(){
 	int redis_port = atoi(getenv("REDISPORT"));
 	printf("%d\n", redis_port);
-    c = redisConnect(getenv("REDISHOST"), redis_port);
-    if (c->err) {
-        printf("error: %s\n", c->errstr);
-        return 1;
-    }
+    cache_connection = redisConnect(getenv("REDISHOST"), redis_port);
+    assert (!(cache_connection->err));
+}
 
-	printf("Hello\n");
-
-    /* PING server */
-    reply = redisCommand(c,"PING %s", "Hello World");
-    printf("RESPONSE: %s\n", reply->str);
-    freeReplyObject(reply);
-
-	
-
-    redisFree(c);
-
+void start_server(){
+	setbuf(stdout, NULL);
 	init_server_str();
+	cache_connection_init();
 	console_log(GREEN, "Initiating DB connection\n");
 	db_connection_init();
 	console_log(GREEN, "Initiating server routine\n");
 	listen_and_serve();
+}
+
+int main() {
+	cache_connection_init();
+	redisReply *reply;
+	reply = redisCommand(cache_connection,"PING %s", "Hello World");
+    printf("RESPONSE: %s\n", reply->str);
+    freeReplyObject(reply);
+	
+	insert_key_value_pair_into_cache("abcd", "ok");
+
+	char* val = get_value_by_key("abcd");
+	printf("%s\n", val);
+	free(val);
+
+
+	redisFree(cache_connection);
 }

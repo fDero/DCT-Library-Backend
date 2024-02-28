@@ -8,8 +8,6 @@
 #include <hiredis/hiredis.h>
 #include "utils.h"
 
-extern redisContext *c;
-
 char* sha256_hash_string(const char* string){
     int len = strlen(string);
     uint8_t digest[32];
@@ -24,4 +22,10 @@ char* sha256_hash_string(const char* string){
             hashed_string[i] = digest[i];
     }
     return hashed_string;
+}
+
+char* sha256_hash_number(long long int num){
+    char buffer[150];
+    sprintf(buffer, "%lld", num);
+    return sha256_hash_string(buffer);
 }

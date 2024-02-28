@@ -2,4 +2,4 @@
 #include <hiredis/hiredis.h>
 
 char* server;
-redisContext *c;
+redisContext *cache_connection;
