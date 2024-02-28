@@ -12,6 +12,7 @@ struct account
     char* name;
     char* surname;
     char* email;
+    char* password;
 };
 
 struct book
@@ -60,7 +61,7 @@ typedef struct account_array account_array_t;
 typedef struct book_array book_array_t;
 typedef struct loan_array loan_array_t;
 
-void account_init(account_t *account, int id, const char *name, const char *surname, const char *email);
+void account_init(account_t *account, int id, const char *name, const char *surname, const char *email, const char* password);
 void book_init(book_t *book, int id, const char *title, const char *author, const char *publisher, const char* genres, const timestamp_t* release_date, int total_copies);
 void loan_init(loan_t *loan, int id, const timestamp_t* starting_time, const timestamp_t* ending_time, int account_id, int book_id);
 

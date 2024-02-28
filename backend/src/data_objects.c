@@ -3,12 +3,13 @@
 
 void account_init(
     account_t *account, int id, const char *name,
-    const char *surname, const char *email
+    const char *surname, const char *email, const char* password
 ){
     account->account_id = id;
     alloc_and_strcpy(&(account->name), name);
     alloc_and_strcpy(&(account->surname), surname);
     alloc_and_strcpy(&(account->email), email);
+    alloc_and_strcpy(&(account->password), password);
 }
 
 void book_init(
@@ -37,15 +38,16 @@ void loan_init(
 }
 
 void account_destroy(account_t *account) {
-		if (account == NULL) return;
+	if (account == NULL) return;
     free(account->name);
     free(account->surname);
     free(account->email);
+    free(account->password);
     free(account);
 }
 
 void book_destroy(book_t *book) {
-		if (book == NULL) return;
+	if (book == NULL) return;
     free(book->title);
     free(book->author);
     free(book->publisher);
@@ -71,8 +73,9 @@ void loan_array_init(loan_array_t *array, size_t size) {
 }
 
 void account_array_destroy(account_array_t *array) {
-		if (array == NULL) return;
+	if (array == NULL) return;
     for (int i = 0; i < array->size; i++) {
+        free(array->storage[i].password);
         free(array->storage[i].name);
         free(array->storage[i].surname);
         free(array->storage[i].email);

@@ -21,6 +21,7 @@ void extract_account(resultset_t* resultset, int row, account_t* account)
 	alloc_and_strcpy(&(account->name), PQgetvalue(resultset, row, 1));
 	alloc_and_strcpy(&(account->surname), PQgetvalue(resultset, row, 2));
 	alloc_and_strcpy(&(account->email), PQgetvalue(resultset, row, 3));
+	alloc_and_strcpy(&(account->password), PQgetvalue(resultset, row, 4));
 	//account_integrity_check(account);
 }
 
@@ -57,7 +58,7 @@ account_array_t* perform_account_array_query(db_conn_t* connection, const char* 
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
-	assert(col_count == 4);
+	assert(col_count == 5);
 	if(row_count == 0){
 		PQclear(resultset);
 		return NULL;
@@ -117,7 +118,7 @@ account_t* perform_account_query(db_conn_t* connection, const char* query_string
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
-	assert(col_count == 4);
+	assert(col_count == 5);
 	if(row_count == 0){
 		PQclear(resultset);
 		return NULL;

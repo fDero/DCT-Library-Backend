@@ -3,7 +3,8 @@ CREATE TABLE Account (
 	account_id       SERIAL      PRIMARY KEY,
 	name             VARCHAR(30) NOT NULL,
 	surname          VARCHAR(40) NOT NULL,
-	email            VARCHAR(50) NOT NULL UNIQUE
+	email            VARCHAR(50) NOT NULL UNIQUE,
+	password         VARCHAR(32) NOT NULL
 );
 
 CREATE TYPE genre_enum AS ENUM 
@@ -35,7 +36,7 @@ CREATE TABLE Loan (
 	book_id       INT       NOT NULL,
 
 	FOREIGN KEY (account_id)
-  REFERENCES Account(account_id),
+    REFERENCES Account(account_id),
 
 	FOREIGN KEY (book_id)
 	REFERENCES Book(book_id)
@@ -51,7 +52,7 @@ CREATE TABLE PastLoan (
 	return_time   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
 	FOREIGN KEY (account_id)
-  REFERENCES Account(account_id),
+    REFERENCES Account(account_id),
 
 	FOREIGN KEY (book_id)
 	REFERENCES Book(book_id)

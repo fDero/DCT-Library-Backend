@@ -3,13 +3,13 @@ delete from pastloan cascade;
 delete from account cascade;
 delete from book cascade;
 
-INSERT INTO Account(name,surname,email, account_id) VALUES
-	('John',    'Smith',    'john.smith@example.com'       , 1),
-	('Emma',    'Johnson',  'emma.johnson@example.com'     , 2),
-	('William', 'Brown',    'william.brown@example.com'    , 3),
-	('Olivia',  'Williams', 'olivia.williams@example.com'  , 4),
-	('James',   'Jones',    'james.jones@example.com'      , 5),
-	('Sophia',  'Davis',    'sophia.davis@example.com'     , 6);
+INSERT INTO Account(name,surname,email, account_id, password) VALUES
+	('John',    'Smith',    'john.smith@example.com'       , 1, 'ABCDEFGH'),
+	('Emma',    'Johnson',  'emma.johnson@example.com'     , 2, 'ABCDEFGH'),
+	('William', 'Brown',    'william.brown@example.com'    , 3, 'ABCDEFGH'),
+	('Olivia',  'Williams', 'olivia.williams@example.com'  , 4, 'ABCDEFGH'),
+	('James',   'Jones',    'james.jones@example.com'      , 5, 'ABCDEFGH'),
+	('Sophia',  'Davis',    'sophia.davis@example.com'     , 6, 'ABCDEFGH');
 
 
 INSERT INTO Book(title,author,publisher,genres,release_date,total_copies, book_id) VALUES

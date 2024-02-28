@@ -20,6 +20,8 @@ services:
     image: lso_backend:1
     command: sh -c "dockerize -wait tcp://database:5432 -timeout 60s sh build_and_run.sh release"
     environment:
+      REDISHOST: 'redis'
+      REDISPORT: '6379'
       SERVER: 'LSO-Backend/1.0.0'
       SERVER_PORT: 8080
       SERVER_MAX_CONNECTION: 100
@@ -35,6 +37,14 @@ services:
       - database
     ports:
       - '8080:8080'
+    networks:
+      - lso_network
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
     networks:
       - lso_network
 

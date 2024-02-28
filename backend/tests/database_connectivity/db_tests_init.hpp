@@ -56,17 +56,17 @@ class Database : public ::testing::Test {
         db_loan_6 = (loan_t*)malloc(sizeof(loan_t));
 
         account_init(db_account_1, 1, "John", "Smith",
-                     "john.smith@example.com");
+                     "john.smith@example.com", "ABCDEFGH");
         account_init(db_account_2, 2, "Emma", "Johnson",
-                     "emma.johnson@example.com");
+                     "emma.johnson@example.com", "ABCDEFGH");
         account_init(db_account_3, 3, "William", "Brown",
-                     "william.brown@example.com");
+                     "william.brown@example.com", "ABCDEFGH");
         account_init(db_account_4, 4, "Olivia", "Williams",
-                     "olivia.williams@example.com");
+                     "olivia.williams@example.com", "ABCDEFGH");
         account_init(db_account_5, 5, "James", "Jones",
-                     "james.jones@example.com");
+                     "james.jones@example.com", "ABCDEFGH");
         account_init(db_account_6, 6, "Sophia", "Davis",
-                     "sophia.davis@example.com");
+                     "sophia.davis@example.com", "ABCDEFGH");
 
         timestamp_t* timestamp_book_1 =
             string_to_timestamp("1997-06-26 00:00:00");

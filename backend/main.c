@@ -12,8 +12,13 @@
 #include "queries.h"
 #include "socket_handlers.h"
 #include "json.h"
+#include "respond.h"
 
-char* server;
+#include <hiredis/hiredis.h>
+
+extern redisContext *c;
+char* insert_unique_value_in_cache_and_get_key(const char* val);
+char* retrieve_value_from_cache_with_key(const char* key);
 
 void init_server_str(){
 	char server_env [50];
@@ -23,9 +28,47 @@ void init_server_str(){
 }
 
 int main() {
+	setbuf(stdout, NULL);
 	char* hashed_string = sha256_hash_string("Hello World");
 	printf("%s\n\n\n", hashed_string);
 	free(hashed_string);
+    redisReply *reply;
+
+	printf("Hello Hello Hello\n");
+
+	int redis_port = atoi(getenv("REDISPORT"));
+	printf("%d\n", redis_port);
+    c = redisConnect(getenv("REDISHOST"), redis_port);
+    if (c->err) {
+        printf("error: %s\n", c->errstr);
+        return 1;
+    }
+
+	printf("Hello\n");
+
+    /* PING server */
+    reply = redisCommand(c,"PING %s", "Hello World");
+    printf("RESPONSE: %s\n", reply->str);
+    freeReplyObject(reply);
+
+	char* key = insert_unique_value_in_cache_and_get_key("alfredo");
+
+	reply = redisCommand(c, "KEYS *");
+if (reply != NULL && reply->type == REDIS_REPLY_ARRAY) {
+    for (int i = 0; i < reply->elements; i++) {
+        printf("Key: %s\n", reply->element[i]->str);
+    }
+    freeReplyObject(reply);
+} else {
+    printf("Error or no keys found.\n");
+}
+
+
+	char* val = retrieve_value_from_cache_with_key(key);
+	free(key);
+	free(val);
+
+    redisFree(c);
 
 	init_server_str();
 	console_log(GREEN, "Initiating DB connection\n");
