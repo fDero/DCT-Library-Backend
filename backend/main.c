@@ -17,8 +17,8 @@
 #include <hiredis/hiredis.h>
 
 extern redisContext *c;
-char* insert_unique_value_in_cache_and_get_key(const char* val);
-char* retrieve_value_from_cache_with_key(const char* key);
+//char* insert_unique_value_in_cache_and_get_key(const char* val);
+//char* retrieve_value_from_cache_with_key(const char* key);
 
 void init_server_str(){
 	char server_env [50];
@@ -51,22 +51,7 @@ int main() {
     printf("RESPONSE: %s\n", reply->str);
     freeReplyObject(reply);
 
-	char* key = insert_unique_value_in_cache_and_get_key("alfredo");
-
-	reply = redisCommand(c, "KEYS *");
-if (reply != NULL && reply->type == REDIS_REPLY_ARRAY) {
-    for (int i = 0; i < reply->elements; i++) {
-        printf("Key: %s\n", reply->element[i]->str);
-    }
-    freeReplyObject(reply);
-} else {
-    printf("Error or no keys found.\n");
-}
-
-
-	char* val = retrieve_value_from_cache_with_key(key);
-	free(key);
-	free(val);
+	
 
     redisFree(c);
 
