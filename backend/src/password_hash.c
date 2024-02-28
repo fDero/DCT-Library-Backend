@@ -8,6 +8,7 @@
 #include <hiredis/hiredis.h>
 #include "utils.h"
 
+
 char* sha256_hash_string(const char* string){
     int len = strlen(string);
     uint8_t digest[32];
