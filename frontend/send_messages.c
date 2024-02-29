@@ -29,7 +29,6 @@ int main() {
         "Sec-Fetch-Site: none\r\n"
         // "Content-Length: 1\r\n"
         "Sec-Fetch-User: ?1\r\n\r\n"
-        "a\0"
     ;
 
     // Create socket

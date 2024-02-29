@@ -217,7 +217,7 @@ http_request_t *http_request_decode(const char *request_str)
 
 	enum llhttp_errno err = llhttp_execute(&parser, request_str, request_len);
 	pthread_setspecific(http_request_key, NULL);
-	console_log(RED, "Error: %d\n", err);
+	
 	if ((err != HPE_OK && err != HPE_INVALID_METHOD) || 
 	    (err == HPE_INVALID_METHOD && request->headers_num == 0))
 	{
