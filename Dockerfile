@@ -68,7 +68,7 @@ RUN apt-get install -y ranger
 RUN apt-get install -y postgresql-all 
 RUN apt-get install -y redis-server
 RUN apt-get install -y libhiredis-dev   
-RUN apt-get install -y libcurl4-openssl-dev libcurl4 libcurl3-gnutls libcurl-ocaml libcurl4-gnutls-dev libcurlpp0 libcurl-ocaml-dev libcurlpp-dev libcurl4-doc libcurl3-nss libcurl4-nss-dev       
+RUN apt-get install -y libcurl4-openssl-dev	
 
 RUN ldconfig
 

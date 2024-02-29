@@ -8,7 +8,7 @@
 #include <string.h>
 #include "utils.h"
 #include "llhttp.h"
-// #include "curl/urlapi.h"
+#include "curl/urlapi.h"
 
 #define HTTP_RESPONSE_STARTING_HEADER_CAPACITY 8
 

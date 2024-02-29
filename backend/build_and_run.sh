@@ -3,7 +3,7 @@ GTEST="-lgtest -lgtest_main"
 JSN="-ljansson"
 REDIS="-lhiredis"
 HASH="-ltinycrypt"
-# URL="-lcurl"
+URL="-lcurl"
 HTTP="-lllhttp"
 JWT="-ll8w8jwt"
 FLAGS=-fsanitize=address

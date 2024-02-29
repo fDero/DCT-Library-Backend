@@ -51,93 +51,93 @@ int http_request_add_query_param_name(http_request_t *request, char *name)
 	return 0;
 }
 
-// int on_url(llhttp_t *parser, const char *start, size_t length)
-// {
-// 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
-// 	char *source_url = request->_source + (start - request->_origin_addr);
-// 	source_url[length] = '\0';
-// 	char buffer[length + 9];
-// 	char *scheme = NULL;
-// 	char *host = NULL;
-// 	char *path = NULL;
-// 	char *query = NULL;
-// 	CURLUcode valid;
-// 	CURLU *curl = curl_url();
+int on_url(llhttp_t *parser, const char *start, size_t length)
+{
+	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
+	char *source_url = request->_source + (start - request->_origin_addr);
+	source_url[length] = '\0';
+	char buffer[length + 9];
+	char *scheme = NULL;
+	char *host = NULL;
+	char *path = NULL;
+	char *query = NULL;
+	CURLUcode valid;
+	CURLU *curl = curl_url();
 
-// 	if (strstr(source_url, "://") == NULL)
-// 	{
-// 		strcpy(buffer, "http://A");
-// 		strcat(buffer, source_url);
-// 		valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
-// 	}
-// 	else
-// 	{
-// 		valid = curl_url_set(curl, CURLUPART_URL, source_url, 0);
-// 	}
+	if (strstr(source_url, "://") == NULL)
+	{
+		strcpy(buffer, "http://A");
+		strcat(buffer, source_url);
+		valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
+	}
+	else
+	{
+		valid = curl_url_set(curl, CURLUPART_URL, source_url, 0);
+	}
 
-// 	if (valid != CURLUE_OK)
-// 	{
-// 		curl_url_cleanup(curl);
-// 		return -1;
-// 	}
+	if (valid != CURLUE_OK)
+	{
+		curl_url_cleanup(curl);
+		return -1;
+	}
 
-// 	curl_url_get(curl, CURLUPART_SCHEME, &scheme, CURLU_URLDECODE);
-// 	source_url[strlen(scheme)] = '\0';
-// 	source_url += strlen(scheme) + 3;
+	curl_url_get(curl, CURLUPART_SCHEME, &scheme, CURLU_URLDECODE);
+	source_url[strlen(scheme)] = '\0';
+	source_url += strlen(scheme) + 3;
 
-// 	curl_url_get(curl, CURLUPART_HOST, &host, CURLU_URLDECODE);
+	curl_url_get(curl, CURLUPART_HOST, &host, CURLU_URLDECODE);
 
-// 	if (strcmp(host, "A") != 0)
-// 	{
-// 		request->host = source_url;
-// 		strcpy(source_url, host);
-// 		source_url[strlen(host)] = '\0';
-// 		source_url += strlen(host) + 1;
-// 	}
-// 	curl_url_get(curl, CURLUPART_PATH, &path, CURLU_URLDECODE);
-// 	request->path = source_url;
-// 	strcpy(source_url, path + 1);
-// 	source_url[strlen(path) - 1] = '\0';
-// 	source_url += strlen(path);
+	if (strcmp(host, "A") != 0)
+	{
+		request->host = source_url;
+		strcpy(source_url, host);
+		source_url[strlen(host)] = '\0';
+		source_url += strlen(host) + 1;
+	}
+	curl_url_get(curl, CURLUPART_PATH, &path, CURLU_URLDECODE);
+	request->path = source_url;
+	strcpy(source_url, path + 1);
+	source_url[strlen(path) - 1] = '\0';
+	source_url += strlen(path);
 
-// 	if (curl_url_get(curl, CURLUPART_QUERY, &query, 0) == CURLUE_OK)
-// 	{
-// 		CURL *curl_easy = curl_easy_init();
-// 		size_t query_length = strlen(query);
-// 		for (int i = 0, j = 0; j < query_length + 1; j++)
-// 		{
-// 			if (query[j] == '=')
-// 			{
-// 				int name_length;
-// 				char *name = curl_easy_unescape(curl_easy, query + i, j - i, &name_length);
-// 				strncpy(source_url, name, name_length);
-// 				source_url[name_length] = '\0';
-// 				http_request_add_query_param_name(request, source_url);
-// 				source_url += name_length + 1;
-// 				i = j + 1;
-// 				curl_free(name);
-// 			}
-// 			else if (query[j] == '&' || query[j] == '\0')
-// 			{
-// 				int value_length;
-// 				char *value = curl_easy_unescape(curl_easy, query + i, j - i, &value_length);
-// 				strncpy(source_url, value, value_length);
-// 				source_url[value_length] = '\0';
-// 				request->query_params[request->query_params_num - 1].value = source_url;
-// 				source_url += value_length + 1;
-// 				i = j + 1;
-// 				curl_free(value);
-// 			}
-// 		}
-// 		curl_easy_cleanup(curl_easy);
-// 	}
-// 	curl_url_cleanup(curl);
-// 	curl_free(scheme);
-// 	curl_free(host);
-// 	curl_free(path);
-// 	curl_free(query);
-// 	return 0;
-// }
+	if (curl_url_get(curl, CURLUPART_QUERY, &query, 0) == CURLUE_OK)
+	{
+		CURL *curl_easy = curl_easy_init();
+		size_t query_length = strlen(query);
+		for (int i = 0, j = 0; j < query_length + 1; j++)
+		{
+			if (query[j] == '=')
+			{
+				int name_length;
+				char *name = curl_easy_unescape(curl_easy, query + i, j - i, &name_length);
+				strncpy(source_url, name, name_length);
+				source_url[name_length] = '\0';
+				http_request_add_query_param_name(request, source_url);
+				source_url += name_length + 1;
+				i = j + 1;
+				curl_free(name);
+			}
+			else if (query[j] == '&' || query[j] == '\0')
+			{
+				int value_length;
+				char *value = curl_easy_unescape(curl_easy, query + i, j - i, &value_length);
+				strncpy(source_url, value, value_length);
+				source_url[value_length] = '\0';
+				request->query_params[request->query_params_num - 1].value = source_url;
+				source_url += value_length + 1;
+				i = j + 1;
+				curl_free(value);
+			}
+		}
+		curl_easy_cleanup(curl_easy);
+	}
+	curl_url_cleanup(curl);
+	curl_free(scheme);
+	curl_free(host);
+	curl_free(path);
+	curl_free(query);
+	return 0;
+}
 
 int on_version(llhttp_t *parser, const char *start, size_t length)
 {
@@ -199,7 +199,7 @@ http_request_t *http_request_decode(const char *request_str)
 	llhttp_settings_init(&settings);
 
 	settings.on_method = on_method;
-	// settings.on_url = on_url;
+	settings.on_url = on_url;
 	settings.on_version = on_version;
 	settings.on_header_field = on_header_field;
 	settings.on_header_value = on_header_value;
@@ -216,10 +216,6 @@ http_request_t *http_request_decode(const char *request_str)
 
 	enum llhttp_errno err = llhttp_execute(&parser, request_str, request_len);
 	pthread_setspecific(http_request_key, NULL);
-
-	//
-	request->path = request->method;
-	//
 
 	if (err != HPE_OK)
 	{
