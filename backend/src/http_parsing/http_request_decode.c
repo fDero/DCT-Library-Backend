@@ -225,7 +225,7 @@ http_request_t *http_request_decode(const char *request_str)
 		return NULL;
 	}
 
-	if(err == HPE_INVALID_METHOD){
+	if(err == HPE_INVALID_METHOD && request->headers_num > 0){
 		const char* last_header = request->headers[request->headers_num - 1].value;
 		request->payload = last_header + strlen(last_header) + 4;
 	}
