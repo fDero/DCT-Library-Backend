@@ -12,7 +12,7 @@ struct client{
 	socklen_t addrlen;
 };
 
-typedef  struct client client_t;
+typedef struct client client_t;
 
 void listen_and_serve();
 void* client_handler(void* client_void_ptr);
