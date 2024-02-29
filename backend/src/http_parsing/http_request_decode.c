@@ -5,6 +5,7 @@ extern pthread_key_t http_request_key;
 
 void http_request_destroy(http_request_t *http_request)
 {
+	free(http_request->version);
 	free(http_request->headers);
 	free(http_request->query_params);
 	free(http_request->_source);
@@ -142,9 +143,9 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 int on_version(llhttp_t *parser, const char *start, size_t length)
 {
 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
-	char *version = request->_source + (start - request->_origin_addr);
+	char* version = (char*)malloc(sizeof(char) * strlen("HTTP/?.?"));
+	sprintf(version, "HTTP/%d.%d", parser->http_major, parser->http_minor);
 	request->version = version;
-	version[length] = '\0';
 	return 0;
 }
 
@@ -217,12 +218,14 @@ http_request_t *http_request_decode(const char *request_str)
 	enum llhttp_errno err = llhttp_execute(&parser, request_str, request_len);
 	pthread_setspecific(http_request_key, NULL);
 	console_log(RED, "Error: %d\n", err);
-	if (err != HPE_OK)
+	if (err != HPE_OK && err != HPE_INVALID_METHOD)
 	{
 		http_request_destroy(request);
 		return NULL;
 	}
 	
+	printf("VERSION %s\n\n", request->version);
+
 	if(request->payload==NULL)
 	request->payload = request->method + strlen(request->method);
 

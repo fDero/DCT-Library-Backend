@@ -45,7 +45,7 @@ struct http_request
 	char const *host;
 	char const *path;
 	query_param_t *query_params;
-	char const *version;
+	char *version;
 	header_line_t *headers;
 	char const *payload;
 	size_t headers_num;
