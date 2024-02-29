@@ -13,7 +13,7 @@
 #include "respond.h"
 #include <stdbool.h>
 
-#define BUFFERSIZE 1024
+#define BUFFERSIZE 2048
 
 int server_port = -1;
 int server_max_connections = -1;
@@ -83,22 +83,20 @@ void* client_handler(void* client_void_ptr){
     while(read(client->socket, buffer, BUFFERSIZE) > 0){
     	buffer[BUFFERSIZE - 1] = '\0';
     	console_log(YELLOW, "Request received from a client (%s:%d):\n%s\n", client_ip, client_port, buffer);
-		http_request_t* request = http_request_decode(buffer);
-    	
-		console_log(YELLOW, "request decoded\n");
+		console_log(RED, "check\n");
+        http_request_t* request = http_request_decode(buffer);
 		
-		console_log(BLUE, "METHOD(%d) VERSION(%d)\n", (request->method == NULL), (request->version == NULL));		
-		console_log(BLUE, "PATH(%d) HOST(%d) PAYLOAD(%d)\n", (request->path == NULL), (request->host == NULL), (request->payload == NULL));
-
 		http_response_t* response = respond(request);
 		char* response_str = http_response_encode(response);
     	send(client->socket, response_str, strlen(response_str), MSG_EOR);
     	console_log(YELLOW, "Response sent to the client (%s:%d):\n%s\n", client_ip, client_port, response_str);
 		
-		console_log(YELLOW, "before response str free\n");
 		free(response_str);
-		console_log(YELLOW, "response str free\n");
-		
+
+		if(request == NULL){
+            console_log(RED, "BREAKING\n");
+			break;
+		}
 		const char* keepalive_str = get_header_value(request, "Connection");
 		if(keepalive_str == NULL || strcmp(keepalive_str, "keep-alive") != 0){
 			console_log(RED, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
@@ -106,9 +104,7 @@ void* client_handler(void* client_void_ptr){
 			break;
 		}
 
-		console_log(YELLOW, "before request destroy\n");
 		http_request_destroy(request);
-		console_log(YELLOW, "request destroyed\n");
 	}
     console_log(GREEN, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
     close(client->socket);
