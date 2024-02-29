@@ -41,7 +41,10 @@ client_t* accept_connection(){
 		client->addrlen = sizeof(client->address);
     client->socket = accept(server_socket, &client->address, &client->addrlen);
     assert(client->socket > 0);
-
+		struct timeval timeout;
+    timeout.tv_sec = 60;
+    timeout.tv_usec = 0;
+    setsockopt(client->socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0;
     return client;
 }
 
@@ -82,14 +85,15 @@ void* client_handler(void* client_void_ptr){
     while(read(client->socket, buffer, BUFFERSIZE) > 0){
     	buffer[BUFFERSIZE - 1] = '\0';
     	console_log(YELLOW, "Request received from a client (%s:%d):\n%s\n", client_ip, client_port, buffer);
-    	http_request_t* request = http_request_decode(buffer);
+			http_request_t* request = http_request_decode(buffer);
     	http_response_t* response = respond(request);
 			char* response_str = http_response_encode(response);
     	send(client->socket, response_str, strlen(response_str), MSG_EOR);
     	console_log(YELLOW, "Response sent to the client (%s:%d):\n%s\n", client_ip, client_port, response_str);
 			free(response_str);
 			const char* keepalive_str = get_header_value(request, "Connection");
-			if(keepalive_str != NULL && strcmp(keepalive_str, "keep-alive") != 0){
+			if(keepalive_str == NULL || strcmp(keepalive_str, "keep-alive") != 0){
+				console_log(RED, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
 				http_request_destroy(request);
 				break;
 			}

@@ -7,25 +7,52 @@
 #include <stdbool.h>
 #include <string.h>
 #include "utils.h"
+#include "llhttp.h"
+// #include "curl/urlapi.h"
 
-#define MAX_HEADERS 100
-#define MAX_PARAMS 100
 #define HTTP_RESPONSE_STARTING_HEADER_CAPACITY 8
 
-struct http_request {
-    char* source;
-    char const* method;
-    char const* host;
-    char const* path;
-    char ** query_param_names;
-    char ** query_param_values;
-    char const* version;
-    char ** header_names;
-    char ** header_values;
-    char const* payload;
-    int headers_num;
-    int query_params_num;
+extern pthread_key_t http_request_key;
+
+#define STARTING_HEADERS_CAPACITY 16
+#define STARTING_QUERY_PARAMS_CAPACITY 16
+#define HEADERS_MULTIPLICATION_FACTOR 2
+#define QUERY_PARAMS_MULTIPLICATION_FACTOR 2
+
+struct header_line
+{
+	char const *name;
+	char const *value;
 };
+
+struct query_param
+{
+	char const *name;
+	char const *value;
+};
+
+typedef struct header_line header_line_t;
+typedef struct query_param query_param_t;
+
+struct http_request
+{
+	char const *_origin_addr;
+	char *_source;
+	size_t _headers_capacity;
+	size_t _query_params_capacity;
+
+	char const *method;
+	char const *host;
+	char const *path;
+	query_param_t *query_params;
+	char const *version;
+	header_line_t *headers;
+	char const *payload;
+	size_t headers_num;
+	size_t query_params_num;
+};
+
+typedef struct http_request http_request_t;
 
 struct http_response {
     char* version;
@@ -42,19 +69,8 @@ typedef struct http_request http_request_t;
 typedef struct http_response http_response_t;
 typedef struct http_header_pack http_header_pack;
 
-http_request_t* http_request_decode(char* http_request_str);
+http_request_t* http_request_decode(const char* http_request_str);
 void http_request_destroy(http_request_t* http_request_ptr);
-
-void http_request_string_decode(char* src, char* dst, int srclen, bool* correct);
-void parse_http_request_method(http_request_t* request, int* current_char_index, int len, bool* correct);
-void parse_http_request_host(http_request_t* request, int* current_char_index, int len, bool* correct);
-void parse_http_request_path(http_request_t* request, int* current_char_index, int len, bool* correct);
-void parse_http_request_version(http_request_t* request, int* current_char_index, int len, bool* correct);
-void parse_http_headline_termination(http_request_t* request, int* current_char_index, int len, bool* correct);
-void parse_http_request_payload(http_request_t* request, int* current_char_index, int len, bool* correct);
-void parse_http_request_headers(http_request_t* request, int* current_char_index, int len, bool* correct);
-void parse_http_request_query(http_request_t* request, int* current_char_index, int len, bool* correct);
-void parse_http_headers_termination(http_request_t* request, int* current_char_index, int len, bool* correct);
 
 const char* get_header_value(http_request_t* request, const char* header_name);
 const char* get_query_param_value(http_request_t* request, const char* query_param_name);

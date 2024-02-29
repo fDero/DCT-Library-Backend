@@ -1,99 +1,230 @@
-
 #include "http.h"
-#include "utils.h"
-#include <ctype.h>
-#include <stdio.h>
-	
-void http_request_destroy(http_request_t* http_request_ptr){
-    free(http_request_ptr->header_names);
-    free(http_request_ptr->header_values);
-    free(http_request_ptr->query_param_names);
-    free(http_request_ptr->query_param_values);
-    free(http_request_ptr->source);
-    free(http_request_ptr);
+#include "pthread.h"
+
+extern pthread_key_t http_request_key;
+
+void http_request_destroy(http_request_t *http_request)
+{
+	free(http_request->headers);
+	free(http_request->query_params);
+	free(http_request->_source);
+	free(http_request);
 };
 
-http_request_t* http_request_init(){
-    http_request_t* request = (http_request_t*)malloc(sizeof(http_request_t));
-    request->source = NULL;
-    request->headers_num = 0;
-    request->query_params_num = 0;
-    request->header_names = NULL;
-    request->header_values = NULL;
-    request->query_param_names = NULL;
-    request->query_param_values = NULL;
-    return request;
+void http_request_init(http_request_t *request, const char *request_str)
+{
+	request->_origin_addr = request_str;
+	request->_source = (char *)malloc(strlen(request_str) + 1);
+	strcpy(request->_source, request_str);
+
+	request->method = NULL;
+	request->host = NULL;
+	request->path = NULL;
+	request->_query_params_capacity = STARTING_QUERY_PARAMS_CAPACITY;
+	request->query_params = malloc(request->_query_params_capacity * sizeof(struct query_param));
+	request->query_params_num = 0;
+	request->version = NULL;
+	request->_headers_capacity = STARTING_HEADERS_CAPACITY;
+	request->headers = malloc(request->_headers_capacity * sizeof(struct header_line));
+	request->headers_num = 0;
+	request->payload = NULL;
 }
 
-void validate_http_request(http_request_t* request, bool* correct){
-    *correct &= *correct
-        && (strcmp(request->method, "") != 0)
-        && (strcmp(request->version, "") != 0)
-        && (strcmp(request->path, "") != 0)
-        && !is_blank_char(request->version[0])
-        && !is_blank_char(request->path[0])
-        && !is_blank_char(request->method[0]);
+int on_method(llhttp_t *parser, const char *start, size_t length)
+{
+	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
+	char *method = request->_source + (start - request->_origin_addr);
+	request->method = method;
+	method[length] = '\0';
+	return 0;
 }
 
-void validate_http_query_params(http_request_t* request, bool* correct, int len){
-    for (int i = 0; i < request->query_params_num; i++){
-        *correct &= *correct
-            && (strcmp(request->query_param_names[i], "") != 0)
-            && (strcmp(request->query_param_values[i], "") != 0);
-    }
+int http_request_add_query_param_name(http_request_t *request, char *name)
+{
+	if (request->query_params_num >= request->_query_params_capacity)
+	{
+		request->_query_params_capacity *= QUERY_PARAMS_MULTIPLICATION_FACTOR;
+		request->query_params = realloc(request->query_params, request->_query_params_capacity);
+	}
+	request->query_params[request->query_params_num].name = name;
+	request->query_params_num++;
+	return 0;
 }
 
-void finalize_http_request(http_request_t* request){
-    int request_path_index = request->path - request->source;
-    request->source[request_path_index] = '\0';
-    request->path++;
+// int on_url(llhttp_t *parser, const char *start, size_t length)
+// {
+// 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
+// 	char *source_url = request->_source + (start - request->_origin_addr);
+// 	source_url[length] = '\0';
+// 	char buffer[length + 9];
+// 	char *scheme = NULL;
+// 	char *host = NULL;
+// 	char *path = NULL;
+// 	char *query = NULL;
+// 	CURLUcode valid;
+// 	CURLU *curl = curl_url();
+
+// 	if (strstr(source_url, "://") == NULL)
+// 	{
+// 		strcpy(buffer, "http://A");
+// 		strcat(buffer, source_url);
+// 		valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
+// 	}
+// 	else
+// 	{
+// 		valid = curl_url_set(curl, CURLUPART_URL, source_url, 0);
+// 	}
+
+// 	if (valid != CURLUE_OK)
+// 	{
+// 		curl_url_cleanup(curl);
+// 		return -1;
+// 	}
+
+// 	curl_url_get(curl, CURLUPART_SCHEME, &scheme, CURLU_URLDECODE);
+// 	source_url[strlen(scheme)] = '\0';
+// 	source_url += strlen(scheme) + 3;
+
+// 	curl_url_get(curl, CURLUPART_HOST, &host, CURLU_URLDECODE);
+
+// 	if (strcmp(host, "A") != 0)
+// 	{
+// 		request->host = source_url;
+// 		strcpy(source_url, host);
+// 		source_url[strlen(host)] = '\0';
+// 		source_url += strlen(host) + 1;
+// 	}
+// 	curl_url_get(curl, CURLUPART_PATH, &path, CURLU_URLDECODE);
+// 	request->path = source_url;
+// 	strcpy(source_url, path + 1);
+// 	source_url[strlen(path) - 1] = '\0';
+// 	source_url += strlen(path);
+
+// 	if (curl_url_get(curl, CURLUPART_QUERY, &query, 0) == CURLUE_OK)
+// 	{
+// 		CURL *curl_easy = curl_easy_init();
+// 		size_t query_length = strlen(query);
+// 		for (int i = 0, j = 0; j < query_length + 1; j++)
+// 		{
+// 			if (query[j] == '=')
+// 			{
+// 				int name_length;
+// 				char *name = curl_easy_unescape(curl_easy, query + i, j - i, &name_length);
+// 				strncpy(source_url, name, name_length);
+// 				source_url[name_length] = '\0';
+// 				http_request_add_query_param_name(request, source_url);
+// 				source_url += name_length + 1;
+// 				i = j + 1;
+// 				curl_free(name);
+// 			}
+// 			else if (query[j] == '&' || query[j] == '\0')
+// 			{
+// 				int value_length;
+// 				char *value = curl_easy_unescape(curl_easy, query + i, j - i, &value_length);
+// 				strncpy(source_url, value, value_length);
+// 				source_url[value_length] = '\0';
+// 				request->query_params[request->query_params_num - 1].value = source_url;
+// 				source_url += value_length + 1;
+// 				i = j + 1;
+// 				curl_free(value);
+// 			}
+// 		}
+// 		curl_easy_cleanup(curl_easy);
+// 	}
+// 	curl_url_cleanup(curl);
+// 	curl_free(scheme);
+// 	curl_free(host);
+// 	curl_free(path);
+// 	curl_free(query);
+// 	return 0;
+// }
+
+int on_version(llhttp_t *parser, const char *start, size_t length)
+{
+	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
+	char *version = request->_source + (start - request->_origin_addr);
+	request->version = version;
+	version[length] = '\0';
+	return 0;
 }
 
-http_request_t* http_request_decode(char* http_request_str) {
+int http_request_add_header_name(http_request_t *request, char *name)
+{
+	if (request->headers_num >= request->_headers_capacity)
+	{
+		request->_headers_capacity *= HEADERS_MULTIPLICATION_FACTOR;
+		request->headers = realloc(request->headers, request->_headers_capacity);
+	}
+	request->headers[request->headers_num].name = name;
+	request->headers_num++;
+	return 0;
+}
 
-    int len = -1;
-    if (http_request_str == NULL || (len = strlen(http_request_str)) <= 0){
-        return NULL;
-    }
+int on_header_field(llhttp_t *parser, const char *start, size_t length)
+{
+	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
+	char *header_name = request->_source + (start - request->_origin_addr);
+	http_request_add_header_name(request, header_name);
+	header_name[length] = '\0';
+	return 0;
+}
 
-    bool correct = true;
-    http_request_t* request = http_request_init();
-		// request->source = (char*)malloc(len + 1);
-		// http_request_string_decode(http_request_str, request->source, len + 1, &correct);
-		// console_log(RED, http_request_str);
-		// console_log(BLUE, request->source);
-		alloc_and_strcpy(&request->source, http_request_str);
-    int current_char_index = 0;
-    
-		console_log(CYAN, "method(%d)\n", correct);
-    parse_http_request_method(request, &current_char_index, len, &correct);
-		console_log(CYAN, "host(%d)\n", correct);
-    parse_http_request_host(request, &current_char_index, len, &correct);
-		console_log(CYAN, "path(%d)\n", correct);
-    parse_http_request_path(request, &current_char_index, len, &correct);
-		console_log(CYAN, "query(%d)\n", correct);
-    parse_http_request_query(request, &current_char_index, len, &correct);
-		console_log(CYAN, "version(%d)\n", correct);
-    parse_http_request_version(request, &current_char_index, len, &correct);
-		console_log(CYAN, "headline(%d)\n", correct);
-    parse_http_headline_termination(request, &current_char_index, len, &correct);
-		console_log(CYAN, "headers(%d)\n", correct);
-    parse_http_request_headers(request, &current_char_index, len, &correct);
-		console_log(CYAN, "headers_termination(%d)\n", correct);
-    parse_http_headers_termination(request, &current_char_index, len, &correct);
-		console_log(CYAN, "payload(%d)\n", correct);
-    parse_http_request_payload(request, &current_char_index, len, &correct);
+int on_header_value(llhttp_t *parser, const char *start, size_t length)
+{
+	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
+	char *header_value = request->_source + (start - request->_origin_addr);
+	request->headers[request->headers_num - 1].value = header_value;
+	header_value[length] = '\0';
+	if (request->host == NULL && strcmp(request->headers[request->headers_num - 1].name, "Host") == 0)
+	{
+		request->host = header_value;
+	}
+	return 0;
+}
 
-    validate_http_request(request, &correct);
-    validate_http_query_params(request, &correct, len);
-    finalize_http_request(request);
-    
-    if(correct){
-				console_log(GREEN, "Correct request\n");
-        return request;
-    } else {
-				console_log(GREEN, "Incorrect request\n");
-        http_request_destroy(request);
-        return NULL;
-    }
+int on_body(llhttp_t *parser, const char *start, size_t length)
+{
+	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
+	char *payload = request->_source + (start - request->_origin_addr);
+	request->payload = payload;
+	payload[length] = '\0';
+	return 0;
+}
+
+http_request_t *http_request_decode(const char *request_str)
+{
+	llhttp_t parser;
+	llhttp_settings_t settings;
+
+	llhttp_settings_init(&settings);
+
+	settings.on_method = on_method;
+	// settings.on_url = on_url;
+	settings.on_version = on_version;
+	settings.on_header_field = on_header_field;
+	settings.on_header_value = on_header_value;
+	settings.on_body = on_body;
+
+	llhttp_init(&parser, HTTP_REQUEST, &settings);
+
+	http_request_t *request = malloc(sizeof(http_request_t));
+	http_request_init(request, request_str);
+
+	pthread_setspecific(http_request_key, request);
+
+	int request_len = strlen(request_str);
+
+	enum llhttp_errno err = llhttp_execute(&parser, request_str, request_len);
+	pthread_setspecific(http_request_key, NULL);
+
+	//
+	request->path = request->method;
+	//
+
+	if (err != HPE_OK)
+	{
+		http_request_destroy(request);
+		return NULL;
+	}
+	return request;
 }

@@ -34,6 +34,7 @@ void cache_connection_init(){
 }
 
 void start_server(){
+	pthread_key_create(&http_request_key, NULL);
 	setbuf(stdout, NULL);
 	init_server_str();
 	cache_connection_init();
@@ -61,7 +62,7 @@ void main2() {
 	redisFree(cache_connection);
 }
 
-int main(){
+void main3(){
 	cache_connection_init();
 	redisReply *reply;
 	reply = redisCommand(cache_connection,"PING %s", "Hello World");
@@ -77,4 +78,9 @@ int main(){
 	free(val);
 	free(key);
 	redisFree(cache_connection);
+}
+
+int main(){
+	start_server();
+	return 0;
 }
