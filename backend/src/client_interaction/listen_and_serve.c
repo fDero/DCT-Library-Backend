@@ -106,16 +106,16 @@ void* client_handler(void* client_void_ptr){
 
 		http_request_destroy(request);
 	}
-    console_log(GREEN, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
-    close(client->socket);
+  console_log(GREEN, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
+  close(client->socket);
 	free(client);
 	free(client_ip);
-    pthread_exit(0);
+  pthread_exit(0);
 }
 
 void listen_and_serve(){
-    server_port = atoi(getenv("SERVER_PORT"));
-    server_max_connections = atoi(getenv("SERVER_MAX_CONNECTION"));
+  server_port = atoi(getenv("SERVER_PORT"));
+  server_max_connections = atoi(getenv("SERVER_MAX_CONNECTION"));
 	assert (server_port > 0);
 	assert (server_max_connections > 0);
 	console_log(GREEN, "Creating a socket for the server\n");
@@ -128,7 +128,7 @@ void listen_and_serve(){
 
 	while(1){
 		console_log(GREEN, "Waiting to accept a connection\n");
-        client_t* client_ptr = accept_connection();
+    client_t* client_ptr = accept_connection();
 		pthread_t client_handler_thread;
 		pthread_create(&client_handler_thread, NULL, client_handler, client_ptr);
 		pthread_detach(client_handler_thread);

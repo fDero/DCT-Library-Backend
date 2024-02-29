@@ -218,13 +218,17 @@ http_request_t *http_request_decode(const char *request_str)
 	enum llhttp_errno err = llhttp_execute(&parser, request_str, request_len);
 	pthread_setspecific(http_request_key, NULL);
 	console_log(RED, "Error: %d\n", err);
-	if (err != HPE_OK && err != HPE_INVALID_METHOD)
+	if ((err != HPE_OK && err != HPE_INVALID_METHOD) || 
+	    (err == HPE_INVALID_METHOD && request->headers_num == 0))
 	{
 		http_request_destroy(request);
 		return NULL;
 	}
-	
-	printf("VERSION %s\n\n", request->version);
+
+	if(err == HPE_INVALID_METHOD){
+		const char* last_header = request->headers[request->headers_num - 1].value;
+		request->payload = last_header + strlen(last_header) + 4;
+	}
 
 	if(request->payload==NULL)
 	request->payload = request->method + strlen(request->method);

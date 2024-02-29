@@ -27,7 +27,7 @@ int main() {
         "Sec-Fetch-Dest: document\r\n"
         "Sec-Fetch-Mode: navigate\r\n"
         "Sec-Fetch-Site: none\r\n"
-        "Content-Length: 1\r\n"
+        // "Content-Length: 1\r\n"
         "Sec-Fetch-User: ?1\r\n\r\n"
         "a\0"
     ;
