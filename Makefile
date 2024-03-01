@@ -32,8 +32,8 @@ test-nodb-nofsanitize:
 	docker compose -f docker-compose-test.yaml run backend_test sh build_and_run.sh test --nodb
 
 down:
-	docker-compose -f docker-compose-release.yaml down -v
-	docker-compose -f docker-compose-test.yaml down -v
+	docker-compose -f docker-compose-release.yaml down -v --remove-orphans
+	docker-compose -f docker-compose-test.yaml down -v --remove-orphans
 
 backend-build-release-local-unix:
 	gcc backend/*.c backend/src/*.c -o backend/server \

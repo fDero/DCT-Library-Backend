@@ -48,7 +48,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
 	char *source_url = request->_source + (start - request->_origin_addr);
 	source_url[length] = '\0';
-	char buffer[length + 9];
+	char buffer[length + 16];
 	char *scheme = NULL;
 	char *host = NULL;
 	char *path = NULL;
@@ -57,17 +57,13 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	int valid = 1;
 	CURLU *curl = curl_url();
 	char* contains_scheme = strstr(source_url, "://");
-
 	if (contains_scheme == NULL)
 	{
-		strcpy(buffer, "http://A");
-		strcat(buffer, source_url);
-		curl_valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
+		strcpy(buffer, "http://");
+		if(source_url[0] == '/') strcat(buffer, "no-host");
 	}
-	else
-	{
-		curl_valid = curl_url_set(curl, CURLUPART_URL, source_url, 0);
-	}
+	strcat(buffer, source_url);
+	curl_valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
 
 	if (curl_valid != CURLUE_OK)
 	{
@@ -83,7 +79,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 
 	curl_url_get(curl, CURLUPART_HOST, &host, CURLU_URLDECODE);
 
-	if (strcmp(host, "A") != 0)
+	if (strcmp(host, "no-host") != 0)
 	{
 		request->host = source_url;
 		strcpy(source_url, host);
