@@ -11,7 +11,7 @@ http_response_t* respond(http_request_t* request){
 		if(!strcmp(request->path, "loans")){
 			return response_get_loans(request);
 		}
-		return response_bad_request(request);
+		return response_not_found(request);
 	}
-	return response_bad_request(request);
+	return response_method_not_allowed(request);
 }

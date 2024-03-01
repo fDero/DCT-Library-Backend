@@ -48,7 +48,8 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
 	char *source_url = request->_source + (start - request->_origin_addr);
 	source_url[length] = '\0';
-	char buffer[length + 16] = "";
+	char buffer[length + 16];
+	buffer[0] = '\0';
 	char *scheme = NULL;
 	char *host = NULL;
 	char *path = NULL;
@@ -176,7 +177,8 @@ int on_header_value(llhttp_t *parser, const char *start, size_t length)
 	if (request->host == NULL && strcmp(request->headers[request->headers_num - 1].name, "Host") == 0)
 	{
 		request->host = header_value;
-		char buffer[length + 8] = "";
+		char buffer[length + 8];
+		buffer[0] = '\0';
 
 		CURLUcode curl_valid;
 		CURLU *curl = curl_url();

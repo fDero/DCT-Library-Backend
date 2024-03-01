@@ -16,6 +16,9 @@ http_response_t* respond(http_request_t* request);
 
 http_response_t* response_bad_request(http_request_t* request);
 http_response_t* response_unauthorized(http_request_t* request);
+http_response_t* response_not_found(http_request_t* request);
+http_response_t* response_method_not_allowed(http_request_t* request);
+
 http_response_t* response_get_books(http_request_t* request);
 http_response_t* response_get_loans(http_request_t* request);
 

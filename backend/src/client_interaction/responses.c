@@ -8,6 +8,7 @@ http_response_t* basic_response(http_request_t* request){
 	char* now = get_current_http_time();
 	http_response_add_header(response, "Date", now);
 	http_response_add_header(response, "Content-Language", "en");
+	http_response_add_header(response, "Connection", "keep-alive");
 	free(now);
 	return response;
 }
@@ -16,7 +17,6 @@ http_response_t* response_bad_request(http_request_t* request){
 	http_response_t* response = basic_response(request);
 	http_response_set_status(response, "400");
 	http_response_set_phrase(response, "Bad Request");
-	http_response_add_header(response, "Connection", "close");
 	return response;
 }
 
@@ -24,7 +24,20 @@ http_response_t* response_unauthorized(http_request_t* request){
 	http_response_t* response = basic_response(request);
 	http_response_set_status(response, "401");
 	http_response_set_phrase(response, "Unauthorized");
-	http_response_add_header(response, "Connection", "close");
+	return response;
+}
+
+http_response_t* response_not_found(http_request_t* request){
+	http_response_t* response = basic_response(request);
+	http_response_set_status(response, "404");
+	http_response_set_phrase(response, "Not Found");
+	return response;
+}
+
+http_response_t* response_method_not_allowed(http_request_t* request){
+	http_response_t* response = basic_response(request);
+	http_response_set_status(response, "405");
+	http_response_set_phrase(response, "Method Not Allowed");
 	return response;
 }
 
@@ -32,7 +45,6 @@ http_response_t* response_get_books(http_request_t* request){
 	http_response_t* response = basic_response(request);
 	http_response_set_status(response, "200");
 	http_response_set_phrase(response, "OK");
-	http_response_add_header(response, "Connection", "keep-alive");
 	db_conn_t* connection = (db_conn_t*) pthread_getspecific(db_conn_key);
 	
 	const char* title = get_query_param_value(request, "title");
@@ -66,7 +78,6 @@ http_response_t* response_get_loans(http_request_t* request){
 	http_response_t* response = basic_response(request);
 	http_response_set_status(response, "200");
 	http_response_set_phrase(response, "OK");
-	http_response_add_header(response, "Connection", "keep-alive");
 	db_conn_t* connection = (db_conn_t*) pthread_getspecific(db_conn_key);
 	
 	int id = atoi(get_query_param_value(request, "account_id"));

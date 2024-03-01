@@ -83,8 +83,7 @@ void* client_handler(void* client_void_ptr){
     while(read(client->socket, buffer, BUFFERSIZE) > 0){
     	buffer[BUFFERSIZE - 1] = '\0';
     	console_log(YELLOW, "Request received from a client (%s:%d):\n%s\n", client_ip, client_port, buffer);
-		console_log(RED, "check\n");
-        http_request_t* request = http_request_decode(buffer);
+      http_request_t* request = http_request_decode(buffer);
 		
 		http_response_t* response = respond(request);
 		char* response_str = http_response_encode(response);
@@ -94,7 +93,6 @@ void* client_handler(void* client_void_ptr){
 		free(response_str);
 
 		if(request == NULL){
-            console_log(RED, "BREAKING\n");
 			break;
 		}
 		const char* keepalive_str = get_header_value(request, "Connection");
