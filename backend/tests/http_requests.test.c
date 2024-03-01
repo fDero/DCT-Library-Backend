@@ -32,10 +32,10 @@ TEST(HTTP, valid_request_with_two_headers) {
     ASSERT_NE(request, (http_request_t*)NULL);
     EXPECT_EQ(request->headers_num, 2);
     EXPECT_STREQ(request->host, ""); 
-    EXPECT_STREQ(request->header_names[0], "Host");
-    EXPECT_STREQ(request->header_names[1], "Lang");
-    EXPECT_STREQ(request->header_values[0], "www.somehost.com");
-    EXPECT_STREQ(request->header_values[1], "eng");
+    EXPECT_STREQ(request->headers[0].name, "Host");
+    EXPECT_STREQ(request->headers[1].name, "Lang");
+    EXPECT_STREQ(request->headers[0].value, "www.somehost.com");
+    EXPECT_STREQ(request->headers[1].value, "eng");
     EXPECT_STREQ(request->method, "GET");
     EXPECT_STREQ(request->path, "somedir/page");
     EXPECT_STREQ(request->version, "HTTP/1.1");
@@ -54,8 +54,8 @@ TEST(HTTP, valid_request_HTTP_1_0) {
     http_request_t* request = http_request_decode(request_str);
     ASSERT_NE(request, (http_request_t*)NULL);
     EXPECT_EQ(request->headers_num, 1);
-    EXPECT_STREQ(request->header_names[0], "Lang");
-    EXPECT_STREQ(request->header_values[0], "eng");
+    EXPECT_STREQ(request->headers[0].name, "Lang");
+    EXPECT_STREQ(request->headers[0].value, "eng");
     EXPECT_STREQ(request->method, "GET");
     EXPECT_STREQ(request->host, "http://www.somehost.com");
     EXPECT_STREQ(request->path, "somedir/page");
@@ -77,14 +77,14 @@ TEST(HTTP, valid_request_HTTP_1_0_with_query) {
     ASSERT_NE(request, (http_request_t*)NULL);
     
     EXPECT_EQ(request->query_params_num, 2);
-    EXPECT_STREQ(request->query_param_names[0],  "p");
-    EXPECT_STREQ(request->query_param_names[1],  "q");
-    EXPECT_STREQ(request->query_param_values[0], "1");
-    EXPECT_STREQ(request->query_param_values[1], "7");
+    EXPECT_STREQ(request->query_params[0].name,  "p");
+    EXPECT_STREQ(request->query_params[1].name,  "q");
+    EXPECT_STREQ(request->query_params[0].value, "1");
+    EXPECT_STREQ(request->query_params[1].value, "7");
     
     EXPECT_EQ(request->headers_num, 1);
-    EXPECT_STREQ(request->header_names[0], "Lang");
-    EXPECT_STREQ(request->header_values[0], "eng");
+    EXPECT_STREQ(request->headers[0].name, "Lang");
+    EXPECT_STREQ(request->headers[0].value, "eng");
     EXPECT_STREQ(request->method, "GET");
     EXPECT_STREQ(request->host, "http://www.somehost.com");
     EXPECT_STREQ(request->path, "somedir/page");
@@ -107,16 +107,16 @@ TEST(HTTP, valid_request_HTTP_1_1_with_query) {
     ASSERT_NE(request, (http_request_t*)NULL);
 
     EXPECT_EQ(request->query_params_num, 2);
-    EXPECT_STREQ(request->query_param_names[0],  "ppp");
-    EXPECT_STREQ(request->query_param_names[1],  "qqq");
-    EXPECT_STREQ(request->query_param_values[0], "123");
-    EXPECT_STREQ(request->query_param_values[1], "789");
+    EXPECT_STREQ(request->query_params[0].name,  "ppp");
+    EXPECT_STREQ(request->query_params[1].name,  "qqq");
+    EXPECT_STREQ(request->query_params[0].value, "123");
+    EXPECT_STREQ(request->query_params[1].value, "789");
     
     EXPECT_EQ(request->headers_num, 2);
-    EXPECT_STREQ(request->header_names[0], "Host");
-    EXPECT_STREQ(request->header_values[0], "www.somehost.com");
-    EXPECT_STREQ(request->header_names[1], "Lang");
-    EXPECT_STREQ(request->header_values[1], "eng");
+    EXPECT_STREQ(request->headers[0].name, "Host");
+    EXPECT_STREQ(request->headers[0].value, "www.somehost.com");
+    EXPECT_STREQ(request->headers[1].name, "Lang");
+    EXPECT_STREQ(request->headers[1].value, "eng");
     EXPECT_STREQ(request->method, "GET");
     EXPECT_STREQ(request->host, "");
     EXPECT_STREQ(request->path, "somedir/page");
@@ -270,10 +270,10 @@ TEST(HTTP, valid_request_no_payload) {
     ASSERT_NE(request, (http_request_t*)NULL);
     EXPECT_EQ(request->headers_num, 2);
     EXPECT_STREQ(request->host, ""); 
-    EXPECT_STREQ(request->header_names[0], "Host");
-    EXPECT_STREQ(request->header_names[1], "Lang");
-    EXPECT_STREQ(request->header_values[0], "www.somehost.com");
-    EXPECT_STREQ(request->header_values[1], "eng");
+    EXPECT_STREQ(request->headers[0].name, "Host");
+    EXPECT_STREQ(request->headers[1].name, "Lang");
+    EXPECT_STREQ(request->headers[0].value, "www.somehost.com");
+    EXPECT_STREQ(request->headers[1].value, "eng");
     EXPECT_STREQ(request->method, "GET");
     EXPECT_STREQ(request->path, "somedir/page");
     EXPECT_STREQ(request->version, "HTTP/1.1");

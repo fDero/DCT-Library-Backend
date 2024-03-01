@@ -4,6 +4,14 @@
 #include <ctype.h>
 #include <stdio.h>
 
+void http_request_destroy(http_request_t *http_request)
+{
+	free(http_request->headers);
+	free(http_request->query_params);
+	free(http_request->_source);
+	free(http_request);
+};
+
 const char* get_header_value(http_request_t* request, const char* header_name){
     for (int i = 0; i < request->headers_num; i++){
         if (strcmp(request->headers[i].name, header_name) == 0){

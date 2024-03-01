@@ -3,15 +3,6 @@
 
 extern pthread_key_t http_request_key;
 
-void http_request_destroy(http_request_t *http_request)
-{
-	free(http_request->version);
-	free(http_request->headers);
-	free(http_request->query_params);
-	free(http_request->_source);
-	free(http_request);
-};
-
 void http_request_init(http_request_t *request, const char *request_str)
 {
 	request->_origin_addr = request_str;
@@ -22,11 +13,11 @@ void http_request_init(http_request_t *request, const char *request_str)
 	request->host = NULL;
 	request->path = NULL;
 	request->_query_params_capacity = STARTING_QUERY_PARAMS_CAPACITY;
-	request->query_params = malloc(request->_query_params_capacity * sizeof(struct query_param));
+	request->query_params = (query_param_t*)malloc(request->_query_params_capacity * sizeof(struct query_param));
 	request->query_params_num = 0;
 	request->version = NULL;
 	request->_headers_capacity = STARTING_HEADERS_CAPACITY;
-	request->headers = malloc(request->_headers_capacity * sizeof(struct header_line));
+	request->headers = (header_line_t*)malloc(request->_headers_capacity * sizeof(struct header_line));
 	request->headers_num = 0;
 	request->payload = NULL;
 }
@@ -45,7 +36,7 @@ int http_request_add_query_param_name(http_request_t *request, char *name)
 	if (request->query_params_num >= request->_query_params_capacity)
 	{
 		request->_query_params_capacity *= QUERY_PARAMS_MULTIPLICATION_FACTOR;
-		request->query_params = realloc(request->query_params, request->_query_params_capacity);
+		request->query_params = (query_param_t*)realloc(request->query_params, request->_query_params_capacity);
 	}
 	request->query_params[request->query_params_num].name = name;
 	request->query_params_num++;
@@ -143,7 +134,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 int on_version(llhttp_t *parser, const char *start, size_t length)
 {
 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
-	char* version = (char*)malloc(sizeof(char) * strlen("HTTP/?.?"));
+	char* version = (char*)malloc(sizeof(char) * strlen("HTTP/?.?") + 8);
 	sprintf(version, "HTTP/%d.%d", parser->http_major, parser->http_minor);
 	request->version = version;
 	return 0;
@@ -154,7 +145,7 @@ int http_request_add_header_name(http_request_t *request, char *name)
 	if (request->headers_num >= request->_headers_capacity)
 	{
 		request->_headers_capacity *= HEADERS_MULTIPLICATION_FACTOR;
-		request->headers = realloc(request->headers, request->_headers_capacity);
+		request->headers = (header_line_t*)realloc(request->headers, request->_headers_capacity);
 	}
 	request->headers[request->headers_num].name = name;
 	request->headers_num++;
@@ -208,7 +199,7 @@ http_request_t *http_request_decode(const char *request_str)
 
 	llhttp_init(&parser, HTTP_REQUEST, &settings);
 
-	http_request_t *request = malloc(sizeof(http_request_t));
+	http_request_t *request = (http_request_t*)malloc(sizeof(http_request_t));
 	http_request_init(request, request_str);
 
 	pthread_setspecific(http_request_key, request);

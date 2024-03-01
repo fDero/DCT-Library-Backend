@@ -9,12 +9,12 @@
 char* sha256_hash_number(long long int num);
 
 bool insert_key_value_pair_into_cache(const char* key, const char* val){
-    redisReply* reply = redisCommand(cache_connection,"SETNX %s %s", key, val);
+    redisReply* reply = (redisReply*)redisCommand(cache_connection,"SETNX %s %s", key, val);
     bool outcome = (reply != NULL && reply->type == REDIS_REPLY_INTEGER);
     outcome &= (reply->integer == 1);
     freeReplyObject(reply);
     if (outcome){
-        reply = redisCommand(cache_connection,"EXPIRE %s %d", key, EXPIRATION_TIME_SECONDS);
+        reply = (redisReply*)redisCommand(cache_connection,"EXPIRE %s %d", key, EXPIRATION_TIME_SECONDS);
         outcome &= (reply != NULL && reply->type == REDIS_REPLY_INTEGER);
         outcome &= (reply->integer == 1);
         freeReplyObject(reply);
@@ -23,7 +23,7 @@ bool insert_key_value_pair_into_cache(const char* key, const char* val){
 }
 
 char* generate_random_key(){
-    redisReply* reply = redisCommand(cache_connection,"INCR keycounter");
+    redisReply* reply = (redisReply*)redisCommand(cache_connection,"INCR keycounter");
     assert(reply != NULL);
     assert(reply->type == REDIS_REPLY_INTEGER);
     long long int keynum = reply->integer;
