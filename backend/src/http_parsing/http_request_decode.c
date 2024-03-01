@@ -48,7 +48,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
 	char *source_url = request->_source + (start - request->_origin_addr);
 	source_url[length] = '\0';
-	char buffer[length + 16];
+	char buffer[length + 16] = "";
 	char *scheme = NULL;
 	char *host = NULL;
 	char *path = NULL;
