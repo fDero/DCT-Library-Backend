@@ -58,6 +58,7 @@ void start_server(){
 	loan.book_id = 2;
 	loan.starting_time = *string_to_timestamp("2024-04-02 00:00:00");
 	loan.ending_time = *string_to_timestamp("2024-04-14 00:00:00");
+	console_log(RED, "Inserting loan\n");
 	int id = insert_loan(connection, &loan, &error_code);
 	close_db_connection(connection);
 
