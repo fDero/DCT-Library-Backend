@@ -134,7 +134,6 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	curl_free(host);
 	curl_free(path);
 	curl_free(query);
-	console_log(NULL,"%s%svalid URL: %s%s\n",valid ? GREEN : RED, valid? "":"in", buffer, DEFAULT_COLOR);
 	return valid ? 0 : -1;
 }
 
@@ -185,7 +184,9 @@ int on_header_value(llhttp_t *parser, const char *start, size_t length)
 		strcat(buffer, header_value);
 		curl_valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
     curl_url_cleanup(curl);
-		if (curl_valid != CURLUE_OK) return -1;
+		if (curl_valid != CURLUE_OK) {
+			return -1;
+		};
 	}
 	return 0;
 }
@@ -228,7 +229,6 @@ http_request_t *http_request_decode(const char *request_str)
 	enum llhttp_errno err = llhttp_execute(&parser, request_str, request_len);
 	pthread_setspecific(http_request_key, NULL);
 	
-	console_log(YELLOW, "err: %d\n", err);
 	if ((err != HPE_OK && err != HPE_INVALID_METHOD) || 
 	    (err == HPE_INVALID_METHOD && request->headers_num == 0))
 	{

@@ -48,16 +48,19 @@ TEST(HTTP, valid_request_with_two_headers) {
 TEST(HTTP, valid_request_HTTP_1_0) {
     char request_str[2048] =
         "POST http://www.somehost.com/somedir/page HTTP/1.0\r\n"
-        "Accept-Language: eng\r\n"
+        "Accept-Language: en\r\n"
+				"Content-Length: 26\r\n"
         "\r\n"
 				"my really beutiful payload";
 
     http_request_t* request = http_request_decode(request_str);
     ASSERT_NE(request, (http_request_t*)NULL);
-    EXPECT_EQ(request->headers_num, 1);
+    EXPECT_EQ(request->headers_num, 2);
     EXPECT_STREQ(request->headers[0].name, "Accept-Language");
-    EXPECT_STREQ(request->headers[0].value, "eng");
-    EXPECT_STREQ(request->method, "GET");
+    EXPECT_STREQ(request->headers[0].value, "en");
+    EXPECT_STREQ(request->headers[1].name, "Content-Length");
+    EXPECT_STREQ(request->headers[1].value, "26");
+    EXPECT_STREQ(request->method, "POST");
     EXPECT_STREQ(request->host, "www.somehost.com");
     EXPECT_STREQ(request->path, "somedir/page");
     EXPECT_STREQ(request->version, "HTTP/1.0");
