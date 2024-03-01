@@ -438,3 +438,18 @@ TEST(HTTP, invalid_request_no_value_for_header3) {
     http_request_t* request = http_request_decode(request_str);
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
+
+TEST(HTTP, lorem_ipsum){
+    char lorem_ipsum_str[2048] = 
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+        "sed do eiusmod tempor incididunt ut labore et dolore magna "
+        "aliqua. Ut enim ad minim veniam, quis nostrud exercitation "
+        "ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+        "Duis aute irure dolor in reprehenderit in voluptate velit "
+        "esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+        "occaecat cupidatat non proident, sunt in culpa qui officia "
+        "deserunt mollit anim id est laborum."
+    ;
+    http_request_t* request = http_request_decode(lorem_ipsum_str);
+    ASSERT_EQ(request, (http_request_t*)NULL);
+}
