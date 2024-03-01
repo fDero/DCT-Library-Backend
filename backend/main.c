@@ -54,11 +54,15 @@ void start_server(){
 	db_conn_t* connection = open_db_connection();
 	char* error_code = NULL;
 	loan_t loan;
-	loan.account_id = 2;
-	loan.book_id = 2;
+	loan.account_id = 3;
+	loan.book_id = 3;
 	loan.starting_time = *string_to_timestamp("2024-04-02 00:00:00");
 	loan.ending_time = *string_to_timestamp("2024-04-14 00:00:00");
 	int id = insert_loan(connection, &loan, &error_code);
+
+	console_log(RED, "Error code: %s\n", error_code);
+	console_log(RED, "Loan id: %d\n", id);
+
 	close_db_connection(connection);
 
 	console_log(GREEN, "Initiating server routine\n");

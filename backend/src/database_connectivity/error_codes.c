@@ -46,18 +46,31 @@ int insert_loan(db_conn_t* connection, loan_t* loan, char** error_code){
 
     sprintf(
         sql_command_string, 
-        "INSERT INTO Loan(starting_time,ending_time,account_id,book_id) VALUES('%s', '%s', %d, %d)", 
+        "INSERT INTO Loan(starting_time,ending_time,account_id,book_id) "
+        "VALUES('%s', '%s', %d, %d) RETURNING Loan.loan_id;", 
         starting_time, ending_time, loan->account_id, loan->book_id
     );
+
+    console_log(YELLOW, "SQL: %s\n", sql_command_string);
+
     resultset_t* resultset = perform_query(connection, sql_command_string);
     char* out_error_code = get_error_code(resultset);
-    if (error_code != NULL){
-        alloc_and_strcpy(error_code, out_error_code);
-        PQclear(resultset);
+
+    console_log(YELLOW, "Error code: %s\n", out_error_code);
+
+    if (out_error_code != NULL || PQntuples(resultset) <= 0){
+        if (out_error_code != NULL){
+            console_log(YELLOW, "Setting error code\n");
+            alloc_and_strcpy(error_code, out_error_code);
+        }
+        if (resultset != NULL) {
+            console_log(YELLOW, "Clearing resultset\n");
+            PQclear(resultset);
+        }
         return -1;
     }
     else {
-        assert (PQntuples(resultset) > 0);
+        console_log(YELLOW, "Getting loan id\n");
         int id = atoi(PQgetvalue(resultset, 0, 0));
         loan->loan_id = id;
         PQclear(resultset);

@@ -11,7 +11,6 @@
 resultset_t* perform_query(db_conn_t* connection, const char* query_string)
 {
 	resultset_t* resultset = PQexec(connection, query_string);
-	assert(PQresultStatus(resultset) == PGRES_TUPLES_OK);
 	return resultset;
 }
 

@@ -14,8 +14,8 @@ INSERT INTO Book(title,author,publisher, genres,release_date,total_copies, book_
 	('Karamazov Brothers','F. Dostoevskij','The Russian Messenger', 'Fiction,Novel,Mystery,Historical fiction,Literary fiction','1980-11-01 00:00:00', 4, 3);
 
 
-INSERT INTO Loan(starting_time, ending_time, account_id, book_id, loan_id) VALUES
-	('2024-04-02 00:00:00','2024-04-14 00:00:00', 6, 1, 1),
-	('2024-04-07 00:00:00','2024-04-14 00:00:00', 3, 2, 2),
-	('2024-04-09 00:00:00','2024-04-14 00:00:00', 4, 1, 3),
-	('2021-04-02 00:00:00','2021-04-14 00:00:00', 6, 1, 4);
+INSERT INTO Loan(starting_time, ending_time, account_id, book_id) VALUES
+	('2024-04-02 00:00:00','2024-04-14 00:00:00', 6, 1),
+	('2024-04-07 00:00:00','2024-04-14 00:00:00', 3, 2),
+	('2024-04-09 00:00:00','2024-04-14 00:00:00', 4, 1),
+	('2021-04-02 00:00:00','2021-04-14 00:00:00', 6, 1);
