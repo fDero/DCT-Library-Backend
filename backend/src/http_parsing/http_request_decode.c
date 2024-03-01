@@ -53,29 +53,33 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	char *host = NULL;
 	char *path = NULL;
 	char *query = NULL;
-	CURLUcode valid;
+	CURLUcode curl_valid;
+	int valid = 1;
 	CURLU *curl = curl_url();
+	char* contains_scheme = strstr(source_url, "://");
 
-	if (strstr(source_url, "://") == NULL)
+	if (contains_scheme == NULL)
 	{
 		strcpy(buffer, "http://A");
 		strcat(buffer, source_url);
-		valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
+		curl_valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
 	}
 	else
 	{
-		valid = curl_url_set(curl, CURLUPART_URL, source_url, 0);
+		curl_valid = curl_url_set(curl, CURLUPART_URL, source_url, 0);
 	}
 
-	if (valid != CURLUE_OK)
+	if (curl_valid != CURLUE_OK)
 	{
 		curl_url_cleanup(curl);
 		return -1;
 	}
 
-	curl_url_get(curl, CURLUPART_SCHEME, &scheme, CURLU_URLDECODE);
-	source_url[strlen(scheme)] = '\0';
-	source_url += strlen(scheme) + 3;
+	if(contains_scheme != NULL){
+		curl_url_get(curl, CURLUPART_SCHEME, &scheme, CURLU_URLDECODE);
+		source_url[strlen(scheme)] = '\0';
+		source_url += strlen(scheme) + 3;
+	}
 
 	curl_url_get(curl, CURLUPART_HOST, &host, CURLU_URLDECODE);
 
@@ -96,10 +100,13 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	{
 		CURL *curl_easy = curl_easy_init();
 		size_t query_length = strlen(query);
+		int names_num = 0;
+		int values_num = 0;
 		for (int i = 0, j = 0; j < query_length + 1; j++)
 		{
 			if (query[j] == '=')
 			{
+				if(names_num != values_num){valid = 0; break;}
 				int name_length;
 				char *name = curl_easy_unescape(curl_easy, query + i, j - i, &name_length);
 				strncpy(source_url, name, name_length);
@@ -108,9 +115,11 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 				source_url += name_length + 1;
 				i = j + 1;
 				curl_free(name);
+				names_num++;
 			}
 			else if (query[j] == '&' || query[j] == '\0')
 			{
+				if(values_num != names_num - 1){valid = 0; break;}
 				int value_length;
 				char *value = curl_easy_unescape(curl_easy, query + i, j - i, &value_length);
 				strncpy(source_url, value, value_length);
@@ -119,6 +128,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 				source_url += value_length + 1;
 				i = j + 1;
 				curl_free(value);
+				values_num++;
 			}
 		}
 		curl_easy_cleanup(curl_easy);
@@ -128,7 +138,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	curl_free(host);
 	curl_free(path);
 	curl_free(query);
-	return 0;
+	return valid ? 0 : -1;
 }
 
 int on_version(llhttp_t *parser, const char *start, size_t length)
@@ -185,6 +195,9 @@ int on_body(llhttp_t *parser, const char *start, size_t length)
 
 http_request_t *http_request_decode(const char *request_str)
 {
+	if(request_str == NULL || strlen(request_str) == 0)
+		return NULL;
+
 	llhttp_t parser;
 	llhttp_settings_t settings;
 
@@ -219,6 +232,11 @@ http_request_t *http_request_decode(const char *request_str)
 	if(err == HPE_INVALID_METHOD && request->headers_num > 0){
 		const char* last_header = request->headers[request->headers_num - 1].value;
 		request->payload = last_header + strlen(last_header) + 4;
+	}
+
+	if(request->host == NULL)
+	{
+		request->host = request->path - 1;
 	}
 
 	if(request->payload==NULL)

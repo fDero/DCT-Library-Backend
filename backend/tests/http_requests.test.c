@@ -6,13 +6,14 @@
 TEST(HTTP, valid_request_with_no_headers) {
     char request_str[2048] =
         "GET /somedir/page HTTP/1.1\r\n"
+				"Content-Length: 26\r\n"
         "\r\n"
         "my really beutiful payload\0";
 
     http_request_t* request = http_request_decode(request_str);
     ASSERT_NE(request, (http_request_t*)NULL);
     EXPECT_STREQ(request->host, "");
-    EXPECT_EQ(request->headers_num, 0);
+    EXPECT_EQ(request->headers_num, 1);
     EXPECT_STREQ(request->method, "GET");
     EXPECT_STREQ(request->path, "somedir/page");
     EXPECT_STREQ(request->version, "HTTP/1.1");
@@ -31,7 +32,7 @@ TEST(HTTP, valid_request_with_two_headers) {
     http_request_t* request = http_request_decode(request_str);
     ASSERT_NE(request, (http_request_t*)NULL);
     EXPECT_EQ(request->headers_num, 2);
-    EXPECT_STREQ(request->host, ""); 
+    EXPECT_STREQ(request->host, "www.somehost.com"); 
     EXPECT_STREQ(request->headers[0].name, "Host");
     EXPECT_STREQ(request->headers[1].name, "Lang");
     EXPECT_STREQ(request->headers[0].value, "www.somehost.com");
