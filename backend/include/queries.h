@@ -48,4 +48,6 @@ loan_array_t*    get_loans_by_account_id(db_conn_t* connection, int id);
 loan_array_t*    get_loans_by_book_id(db_conn_t* connection, int id);
 loan_array_t*    get_expired_loans_by_account_id(db_conn_t* connection, int id);
 
+int insert_loan(db_conn_t* connection, loan_t* loan, char** error_code);
+
 #endif

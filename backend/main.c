@@ -40,6 +40,27 @@ void start_server(){
 	cache_connection_init();
 	console_log(GREEN, "Initiating DB connection\n");
 	db_connection_init();
+	init_db_global_variables();
+
+	for (int i = 0; i < global_db_variables_size; i++) {
+		printf(
+			"global db var(%s = %s \\ %d) \n", 
+			global_db_variables[i].name, 
+			global_db_variables[i].value_string,
+			global_db_variables[i].value_int
+		);
+	}
+
+	db_conn_t* connection = open_db_connection();
+	char* error_code = NULL;
+	loan_t loan;
+	loan.account_id = 2;
+	loan.book_id = 2;
+	loan.starting_time = *string_to_timestamp("2024-04-02 00:00:00");
+	loan.ending_time = *string_to_timestamp("2024-04-14 00:00:00");
+	int id = insert_loan(connection, &loan, &error_code);
+	close_db_connection(connection);
+
 	console_log(GREEN, "Initiating server routine\n");
 	listen_and_serve();
 }
