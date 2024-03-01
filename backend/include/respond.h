@@ -21,5 +21,6 @@ http_response_t* response_method_not_allowed(http_request_t* request);
 
 http_response_t* response_get_books(http_request_t* request);
 http_response_t* response_get_loans(http_request_t* request);
+http_response_t* response_get_expired_loans(http_request_t* request);
 
 #endif

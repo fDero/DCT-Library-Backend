@@ -7,8 +7,8 @@ CREATE TABLE Account (
 	password         VARCHAR(32) NOT NULL
 );
 
-CREATE TYPE genre_enum AS ENUM 
-('Action fiction','Adventure fiction','Autobiography','Biography','Children''s literature',
+CREATE TYPE genre_enum AS ENUM (
+	'Action fiction','Adventure fiction','Autobiography','Biography','Children''s literature',
 	'Comedy','Coming-of-age story','Contemporary literature','Contemporary romance','Crime fiction',
 	'Detective fiction','Education','Essay','Fairy tale','Fantasy','Fantasy fiction','Fiction',
 	'Genre fiction','Graphic novel','Historical fiction','Historical fantasy','Historical romance',
@@ -16,7 +16,8 @@ CREATE TYPE genre_enum AS ENUM
 	'Memoir','Mystery','Narrative','New adult fiction','Non-fiction','Novel','Philosophy','Poetry',
 	'Romance novel','Satire','Science','Science fiction','Self-help book','Short story','Social science',
 	'Speculative fiction','Spirituality','Thriller','Travel literature','True crime','Urban fiction',
-	'Western fiction','Women''s fiction','Young adult literature');
+	'Western fiction','Women''s fiction','Young adult literature'
+);
 
 CREATE TABLE Book (
 	book_id          SERIAL       PRIMARY KEY,

@@ -66,3 +66,11 @@ loan_array_t* get_loans_by_book_id(db_conn_t* connection, int id)
 	sprintf(buffer, "SELECT * FROM loans_by_book_id(%d)", id);
 	return perform_loan_array_query(connection, buffer);
 }
+
+loan_array_t* get_expired_loans_by_account_id(db_conn_t* connection, int id)
+{
+	char buffer[QUERY_STRING_MAX_LENGTH];
+	sprintf(buffer, "SELECT * FROM expired_loans_by_account_id(%d)", id);
+	return perform_loan_array_query(connection, buffer);
+}
+

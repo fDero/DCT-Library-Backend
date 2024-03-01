@@ -419,11 +419,11 @@ CREATE OR REPLACE FUNCTION loan_by_id (id_in loan.loan_id%type)
 	)
 	AS $$
 		SELECT
-		*
+			*
 		FROM
-		loan
+			loan
 		WHERE
-		loan_id = id_in
+			loan_id = id_in
 $$
 LANGUAGE SQL;
 
@@ -433,11 +433,11 @@ CREATE OR REPLACE FUNCTION loans_by_account_id (id_in account.account_id%type)
 	)
 	AS $$
 		SELECT
-		*
+			*
 		FROM
-		loan
+			loan
 		WHERE
-		account_id = id_in
+			account_id = id_in
 $$
 LANGUAGE SQL;
 
@@ -447,10 +447,25 @@ CREATE OR REPLACE FUNCTION loans_by_book_id (id_in book.book_id%type)
 	)
 	AS $$
 		SELECT
-		*
+			*
 		FROM
-		loan
+			loan
 		WHERE
-		book_id = id_in
+			book_id = id_in
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION expired_loans_by_account_id(account_id_in account.account_id%type)
+	RETURNS TABLE (
+		LIKE Loan
+	)
+	AS $$
+	SELECT
+		*
+	FROM
+		Loan
+	WHERE
+		Loan.account_id = account_id_in AND
+		Loan.ending_time < CURRENT_TIMESTAMP
 $$
 LANGUAGE SQL;

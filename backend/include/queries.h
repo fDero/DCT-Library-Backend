@@ -46,5 +46,6 @@ loan_array_t*    get_loans(db_conn_t* connection, int limit);
 loan_t*          get_loan_by_id(db_conn_t* connection, int id);
 loan_array_t*    get_loans_by_account_id(db_conn_t* connection, int id);
 loan_array_t*    get_loans_by_book_id(db_conn_t* connection, int id);
+loan_array_t*    get_expired_loans_by_account_id(db_conn_t* connection, int id);
 
 #endif

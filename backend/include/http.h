@@ -11,6 +11,8 @@
 #include "curl/urlapi.h"
 
 #define HTTP_RESPONSE_STARTING_HEADER_CAPACITY 8
+#define CHECK_STRICT 1
+#define CHECK_LOSE 0
 
 extern pthread_key_t http_request_key;
 
@@ -83,5 +85,12 @@ void http_response_set_status(http_response_t* response, const char* status);
 void http_response_set_phrase(http_response_t* response, const char* phrase);
 void http_response_add_header(http_response_t* response, const char* name, const char* value);
 void http_response_set_payload(http_response_t* response, const char* payload);
+
+bool check_query_params(
+	char** expected_query_param_names, 
+	int expected_query_param_num, 
+	http_request_t* request,
+	bool check_strict
+);
 
 #endif

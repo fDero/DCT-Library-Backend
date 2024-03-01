@@ -95,3 +95,29 @@ http_response_t* response_get_loans(http_request_t* request){
 	free(payload);
 	return response;
 }
+
+http_response_t* response_get_expired_loans(http_request_t* request){
+	
+	char* expected_query_param_names[] = {"account-id"};
+	if (!check_query_params(expected_query_param_names, 1, request, CHECK_STRICT)){
+		return response_bad_request(request);
+	}
+
+	int account_id = atoi(get_query_param_value(request, "account-id"));
+
+	http_response_t* response = basic_response(request);
+	http_response_set_status(response, "200");
+	http_response_set_phrase(response, "OK");
+	db_conn_t* connection = (db_conn_t*) pthread_getspecific(db_conn_key);
+	loan_array_t* loans = get_expired_loans_by_account_id(connection, account_id);
+	
+	char* payload = loan_array_to_json_string(loans);
+	http_response_set_payload(response, payload);
+	http_response_add_header(response, "Content-Type", "application/json");
+	char buff[20];
+	sprintf(buff, "%lu", strlen(payload));
+	http_response_add_header(response, "Content-Length", buff);
+	loan_array_destroy(loans);
+	free(payload);
+	return response;
+}
