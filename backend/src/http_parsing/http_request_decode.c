@@ -102,7 +102,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 		{
 			if (query[j] == '=')
 			{
-				if(names_num != values_num){valid = 0; break;}
+				if(names_num != values_num || i == j){valid = 0; break;}
 				int name_length;
 				char *name = curl_easy_unescape(curl_easy, query + i, j - i, &name_length);
 				strncpy(source_url, name, name_length);
@@ -134,6 +134,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	curl_free(host);
 	curl_free(path);
 	curl_free(query);
+	console_log(NULL,"%s%svalid URL: %s%s\n",valid ? GREEN : RED, valid? "":"in", buffer, DEFAULT_COLOR);
 	return valid ? 0 : -1;
 }
 
@@ -218,13 +219,13 @@ http_request_t *http_request_decode(const char *request_str)
 	enum llhttp_errno err = llhttp_execute(&parser, request_str, request_len);
 	pthread_setspecific(http_request_key, NULL);
 	
+	console_log(YELLOW, "err: %d\n", err);
 	if ((err != HPE_OK && err != HPE_INVALID_METHOD) || 
 	    (err == HPE_INVALID_METHOD && request->headers_num == 0))
 	{
 		http_request_destroy(request);
 		return NULL;
 	}
-
 	if(err == HPE_INVALID_METHOD && request->headers_num > 0){
 		const char* last_header = request->headers[request->headers_num - 1].value;
 		request->payload = last_header + strlen(last_header) + 4;
