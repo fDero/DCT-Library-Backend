@@ -177,6 +177,15 @@ int on_header_value(llhttp_t *parser, const char *start, size_t length)
 	if (request->host == NULL && strcmp(request->headers[request->headers_num - 1].name, "Host") == 0)
 	{
 		request->host = header_value;
+		char buffer[length + 8] = "";
+
+		CURLUcode curl_valid;
+		CURLU *curl = curl_url();
+		if (strstr(header_value, "://") == NULL) strcpy(buffer, "http://");
+		strcat(buffer, header_value);
+		curl_valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
+    curl_url_cleanup(curl);
+		if (curl_valid != CURLUE_OK) return -1;
 	}
 	return 0;
 }
