@@ -18,7 +18,7 @@ services:
 
   backend:
     image: lso_backend:1
-    command: sh -c "dockerize -wait tcp://database:5432 -timeout 60s sh build_and_run.sh release"
+    command: sh -c "dockerize -wait tcp://database:5432 -timeout 120s sh build_and_run.sh release"
     environment:
       REDISHOST: 'redis'
       REDISPORT: '6379'

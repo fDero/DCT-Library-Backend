@@ -47,3 +47,6 @@ backend-build-test-local-unix:
 client-local:
 	gcc frontend/*.c -o frontend/client
 	./frontend/client
+
+database-console:
+	docker-compose -f docker-compose-release.yaml exec database psql -U postgres

@@ -25,7 +25,7 @@ void extract_account(resultset_t* resultset, int row, account_t* account)
 }
 
 void extract_book(resultset_t* resultset, int row, book_t* book)
-{	
+{
 	book->book_id = atoi(PQgetvalue(resultset, row, 0));
 	alloc_and_strcpy(&(book->title), PQgetvalue(resultset, row, 1));
 	alloc_and_strcpy(&(book->author), PQgetvalue(resultset, row, 2));
