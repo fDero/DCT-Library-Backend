@@ -12,9 +12,21 @@ $(printf ${LOGO_COLOR})  \ \  \_\\\\ \ \  \____   \ \  \       \ \  \____\ \  \ 
 $(printf ${LOGO_COLOR})   \ \_______\ \_______\  \ \__\       \ \_______\ \__\ \_______\ \__\\\\ _\\\\ \__\ \__\ \__\\\\ _\ __/  / /    
 $(printf ${LOGO_COLOR})    \|_______|\|_______|   \|__|        \|_______|\|__|\|_______|\|__|\|__|\|__|\|__|\|__|\|__|\___/ /     
 $(printf ${LOGO_COLOR})                                                                                              \|___|/      
-                                                                                                           
-                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                                                 
 EOF
+
+if [ "$1" = "test" ]; then
+	TEST_COLOR="\033[32m"
+	cat << EOF
+$(printf ${TEST_COLOR})  _____ ___ ___ _____ ___ 
+$(printf ${TEST_COLOR}) |_   _| __/ __|_   _/ __|
+$(printf ${TEST_COLOR})   | | | _|\__ \ | | \__ \\
+$(printf ${TEST_COLOR})   |_| |___|___/ |_| |___/                         
+                                                                 
+EOF
+fi
+
+stdbuf -o0 printf "\x1b[0m"
 
 PG="-lpq -lssl -lcrypto -pthread"
 GTEST="-lgtest -lgtest_main"
