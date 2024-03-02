@@ -77,6 +77,7 @@ int parse_query(http_request_t* request, char* source_url, char* query){
 				values_num++;
 			}
 		}
+	curl_easy_cleanup(curl_easy);
 	return 1;
 }
 
