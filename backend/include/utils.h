@@ -22,7 +22,7 @@ extern const bool COLORED_OUTPUT_ENABLED;
 
 typedef struct tm timestamp_t;
 
-int console_log(const char* color, const char* str, ...);
+int log_to_console(const char* color, const char* str, ...);
 
 char* get_current_http_time();
 

@@ -11,7 +11,7 @@
 
 const bool COLORED_OUTPUT_ENABLED = true;
 
-int console_log(const char* color, const char* str, ...) {
+int log_to_console(const char* color, const char* str, ...) {
     va_list arguments;
     va_start(arguments, str);
 		if (COLORED_OUTPUT_ENABLED && color != NULL) {

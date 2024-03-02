@@ -116,7 +116,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 			}
 			else if (query[j] == '&' || query[j] == '\0')
 			{
-				if(values_num != names_num - 1){valid = 0; break;}
+				if(values_num != names_num - 1 || i == j){valid = 0; break;}
 				int value_length;
 				char *value = curl_easy_unescape(curl_easy, query + i, j - i, &value_length);
 				strncpy(source_url, value, value_length);
