@@ -43,6 +43,43 @@ int http_request_add_query_param_name(http_request_t *request, char *name)
 	return 0;
 }
 
+int parse_query(http_request_t* request, char* source_url, char* query){
+	CURL *curl_easy = curl_easy_init();
+	size_t query_length = strlen(query);
+	int names_num = 0;
+	int values_num = 0;
+	for (int i = 0, j = 0; j < query_length + 1; j++)
+		{
+			if (query[j] == '=')
+			{
+				if(names_num != values_num || i == j){curl_easy_cleanup(curl_easy); return 0;}
+				int name_length;
+				char *name = curl_easy_unescape(curl_easy, query + i, j - i, &name_length);
+				strncpy(source_url, name, name_length);
+				source_url[name_length] = '\0';
+				http_request_add_query_param_name(request, source_url);
+				source_url += name_length + 1;
+				i = j + 1;
+				curl_free(name);
+				names_num++;
+			}
+			else if (query[j] == '&' || query[j] == '\0')
+			{
+				if(values_num != names_num - 1 || i == j){curl_easy_cleanup(curl_easy); return 0;}
+				int value_length;
+				char *value = curl_easy_unescape(curl_easy, query + i, j - i, &value_length);
+				strncpy(source_url, value, value_length);
+				source_url[value_length] = '\0';
+				request->query_params[request->query_params_num - 1].value = source_url;
+				source_url += value_length + 1;
+				i = j + 1;
+				curl_free(value);
+				values_num++;
+			}
+		}
+	return 1;
+}
+
 int on_url(llhttp_t *parser, const char *start, size_t length)
 {
 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
@@ -55,7 +92,6 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	char *path = NULL;
 	char *query = NULL;
 	CURLUcode curl_valid;
-	int valid = 1;
 	CURLU *curl = curl_url();
 	char* contains_scheme = strstr(source_url, "://");
 	if (contains_scheme == NULL)
@@ -92,50 +128,18 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 	strcpy(source_url, path + 1);
 	source_url[strlen(path) - 1] = '\0';
 	source_url += strlen(path);
-
+	
+	int valid_query = 1;
 	if (curl_url_get(curl, CURLUPART_QUERY, &query, 0) == CURLUE_OK)
 	{
-		CURL *curl_easy = curl_easy_init();
-		size_t query_length = strlen(query);
-		int names_num = 0;
-		int values_num = 0;
-		for (int i = 0, j = 0; j < query_length + 1; j++)
-		{
-			if (query[j] == '=')
-			{
-				if(names_num != values_num || i == j){valid = 0; break;}
-				int name_length;
-				char *name = curl_easy_unescape(curl_easy, query + i, j - i, &name_length);
-				strncpy(source_url, name, name_length);
-				source_url[name_length] = '\0';
-				http_request_add_query_param_name(request, source_url);
-				source_url += name_length + 1;
-				i = j + 1;
-				curl_free(name);
-				names_num++;
-			}
-			else if (query[j] == '&' || query[j] == '\0')
-			{
-				if(values_num != names_num - 1 || i == j){valid = 0; break;}
-				int value_length;
-				char *value = curl_easy_unescape(curl_easy, query + i, j - i, &value_length);
-				strncpy(source_url, value, value_length);
-				source_url[value_length] = '\0';
-				request->query_params[request->query_params_num - 1].value = source_url;
-				source_url += value_length + 1;
-				i = j + 1;
-				curl_free(value);
-				values_num++;
-			}
-		}
-		curl_easy_cleanup(curl_easy);
+		valid_query = parse_query(request, source_url, query);
 	}
 	curl_url_cleanup(curl);
 	curl_free(scheme);
 	curl_free(host);
 	curl_free(path);
 	curl_free(query);
-	return valid ? 0 : -1;
+	return valid_query ? 0 : -1;
 }
 
 int on_version(llhttp_t *parser, const char *start, size_t length)
