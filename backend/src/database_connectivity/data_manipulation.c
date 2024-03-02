@@ -18,9 +18,9 @@ int insert_loan(db_conn_t* connection, loan_t* loan, char** error_code){
 
     sprintf(
         sql_command_string, 
-        "INSERT INTO Loan(starting_time,ending_time,account_id,book_id) "
-        "VALUES('%s', '%s', %d, %d) RETURNING Loan.loan_id;", 
-        starting_time, ending_time, loan->account_id, loan->book_id
+        "INSERT INTO Loan(account_id,book_id) "
+        "VALUES(%d, %d) RETURNING *;", 
+        loan->account_id, loan->book_id
     );
 
     resultset_t* resultset = perform_query(connection, sql_command_string);

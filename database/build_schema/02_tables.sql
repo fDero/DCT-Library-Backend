@@ -31,8 +31,9 @@ CREATE TABLE Book (
 
 CREATE TABLE Loan (
 	loan_id       SERIAL    PRIMARY KEY,
-	starting_time TIMESTAMP NOT NULL,
-	ending_time   TIMESTAMP NOT NULL,
+	starting_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	ending_time   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP +
+		INTERVAL (get_global('loan_duration') || ' days'),
 	account_id    INT       NOT NULL,
 	book_id       INT       NOT NULL,
 
