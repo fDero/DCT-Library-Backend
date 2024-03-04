@@ -2,7 +2,6 @@
 #define RESPOND_H
 
 #include "http.h"
-#include "authentication.h"
 #include "queries.h"
 #include "pthread.h"
 #include "json.h"
