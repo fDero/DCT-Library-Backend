@@ -1,4 +1,5 @@
 #include "db_utils.h"
+#include "utils.h"
 
 char db_conn_info[1024];
 

@@ -11,8 +11,8 @@
 #include "curl/urlapi.h"
 
 #define HTTP_RESPONSE_STARTING_HEADER_CAPACITY 8
-#define CHECK_STRICT 1
-#define CHECK_LOSE 0
+#define HTTP_CHECK_STRICT 1
+#define HTTP_CHECK_LOSE 0
 
 extern pthread_key_t http_request_key;
 
@@ -63,7 +63,7 @@ struct http_response {
     char ** header_names;
     char ** header_values;
     int headers_num;
-		int header_capacity;
+    int header_capacity;
     char* payload;
 };
 
@@ -78,7 +78,7 @@ const char* get_header_value(http_request_t* request, const char* header_name);
 const char* get_query_param_value(http_request_t* request, const char* query_param_name);
 
 void http_response_init(http_response_t* response);
-char* http_response_encode(http_response_t* response);
+char* http_response_encode(http_response_t* response, size_t* size);
 void http_response_destroy(http_response_t* response);
 void http_response_set_version(http_response_t* response, const char* version);
 void http_response_set_status(http_response_t* response, const char* status);
@@ -86,11 +86,13 @@ void http_response_set_phrase(http_response_t* response, const char* phrase);
 void http_response_add_header(http_response_t* response, const char* name, const char* value);
 void http_response_set_payload(http_response_t* response, const char* payload);
 
-bool check_query_params(
-	char** expected_query_param_names, 
-	int expected_query_param_num, 
+bool http_request_validate_query_params(
 	http_request_t* request,
-	bool check_strict
+	char const ** expected_query_param_names, 
+	int expected_query_param_num, 
+	bool check_type
 );
+bool http_request_contains_query(http_request_t* request);
+bool http_request_contains_payload(http_request_t* request);
 
 #endif

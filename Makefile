@@ -1,7 +1,7 @@
 ifdef OS
    RM := rmdir /s /q
 else
-   RM := rm -f
+   RM := rm -rf
 endif
 
 
@@ -26,27 +26,20 @@ test:
 	docker-compose -f docker-compose-test.yaml up
 
 test-nodb:
-	docker compose -f docker-compose-test.yaml run backend_test sh build_and_run.sh test --nodb -fsanitize=address
-
-test-nodb-nofsanitize:
 	docker compose -f docker-compose-test.yaml run backend_test sh build_and_run.sh test --nodb
 
 down:
 	docker-compose -f docker-compose-release.yaml down -v --remove-orphans
 	docker-compose -f docker-compose-test.yaml down -v --remove-orphans
 
-backend-build-release-local-unix:
-	gcc backend/*.c backend/src/*.c -o backend/server \
-	${COMPILER_FLAGS} ${CJSON} ${HTTP}
-
-backend-build-test-local-unix:
-	g++ ${C_TO_CPP_COMPATIBILITY} backend/*/*.c \
-	 -o backend/server_test \
-	${COMPILER_FLAGS} ${GTEST_FLAGS} ${CJSON} ${HTTP}
-
-client-local:
-	gcc frontend/*.c -o frontend/client
-	./frontend/client
-
 database-console:
-	docker-compose -f docker-compose-release.yaml exec database psql -U postgres
+	docker-compose -f docker-compose-release.yaml exec database psql -U postgres -d lsodct
+
+build-client-docker-image:
+	docker build -t lso_client:1.0 frontend/LsoClient
+
+build-client:
+	cd frontend/LsoClient && mvn package
+
+start-client:
+	java -jar frontend/LsoClient/target/LSOclient-1.0-SNAPSHOT-shaded.jar

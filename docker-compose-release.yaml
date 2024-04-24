@@ -1,42 +1,21 @@
-version: '3.3'
+version: "3.3"
 
 services:
   database:
     image: postgres:13
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: milleteschi
-      POSTGRES_DB: lsodct
+      MAX_LOANS_PER_USER: 5
+      MOCK_DATA: "true"
+      TEST: "false"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "milleteschi"
+      POSTGRES_DB: "lsodct"
     ports:
-      - '5432:5432'
-    command: ['postgres', '-p', '5432']
+      - "5432:5432"
+    command: ["postgres", "-p", "5432"]
     volumes:
       - ./postgres_volume:/var/lib/postgresql/data
-      - ./database/build_schema:/docker-entrypoint-initdb.d:ro
-    networks:
-      - lso_network
-
-  backend:
-    image: lso_backend:1
-    command: sh -c "dockerize -wait tcp://database:5432 -timeout 120s sh build_and_run.sh release"
-    environment:
-      REDISHOST: 'redis'
-      REDISPORT: '6379'
-      SERVER: 'LSO-Backend/1.0.0'
-      SERVER_PORT: 8080
-      SERVER_MAX_CONNECTION: 100
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: milleteschi
-      POSTGRES_DB: lsodct
-      POSTGRES_PORT: 5432
-      POSTGRES_HOST: database
-    volumes:
-      - './backend:/cfiles'
-    working_dir: '/cfiles'
-    depends_on:
-      - database
-    ports:
-      - '8080:8080'
+      - ./database:/docker-entrypoint-initdb.d:ro
     networks:
       - lso_network
 
@@ -45,6 +24,45 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - lso_network
+
+  backend:
+    image: lso_backend:1
+    command: sh -c "dockerize -wait tcp://database:5432 -wait tcp://redis:6379 -timeout 120s sh build_and_run.sh release"
+    environment:
+      SERVER: "LSO-Backend/1.0.0"
+      CLIENT_CONNECTION_TIMEOUT: 60
+      FSANITIZE_ENABLED: "false"
+      DEBUG_ENABLED: "false"
+      JWT_ISS: "DCT"
+      JWT_AUD: "User"
+      JWT_RENEWAL:     0.5     # 50% of the total duration
+      JWT_EXP_BULLET:  30      # 30 seconds
+      JWT_EXP_BLITZ:   900     # 15 minutes
+      JWT_EXP_SHORT:   3600    # 1 hour
+      JWT_EXP_MEDIUM:  86400   # 1 day
+      JWT_EXP_LONG:    604800  # 1 week
+      JWT_EXP_DEFAULT: 3600    # 1 hour
+      PRIVATE_KEY_FILE: "/auth_keys/private_key.pem"
+      PUBLIC_KEY_FILE: "/auth_keys/public_key.pem"
+      REDISHOST: "redis"
+      REDISPORT: "6379"
+      SERVER_PORT: "8080"
+      SERVER_MAX_CONNECTION: 10000
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "milleteschi"
+      POSTGRES_DB: "lsodct"
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: "database"
+    volumes:
+      - "./backend:/server"
+    working_dir: "/server"
+    depends_on:
+      - database
+      - redis
+    ports:
+      - "8080:8080"
     networks:
       - lso_network
 

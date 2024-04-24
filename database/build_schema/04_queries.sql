@@ -1,3 +1,19 @@
+CREATE OR REPLACE FUNCTION insert_account(name_in account.name%type, surname_in account.surname%type, email_in account.email%type, password_in password.password_hash%type, salt_in password.password_salt%type)
+  RETURNS account.account_id%type
+    AS $$
+    DECLARE
+        new_id account.account_id%type;
+    BEGIN
+        INSERT INTO account(name, surname, email) VALUES(name_in, surname_in, email_in) RETURNING account_id INTO new_id;
+        INSERT INTO password(account_id, password_hash, password_salt) VALUES(new_id, password_in, salt_in);
+        RETURN new_id;
+    EXCEPTION
+        WHEN unique_violation THEN
+            RAISE EXCEPTION 'Email exists' USING ERRCODE = get_global('account_email_exists');
+    END;
+$$
+LANGUAGE PLPGSQL;
+
 CREATE OR REPLACE FUNCTION num_loans_for_account(ID_in account.account_id%type)
   RETURNS INT
 	AS $$
@@ -124,6 +140,50 @@ CREATE OR REPLACE FUNCTION account_by_loan_id (id_in loan.loan_id%type)
 		L.loan_id = id_in
 $$
 LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION books_by_data_match (ids_in integer[], title_in book.title%type, author_in book.author%type, publisher_in book.publisher%type, genres_in book.genres%type, release_date_in book.release_date%type, limit_val int)
+	RETURNS TABLE (
+		LIKE book
+	)
+	AS $$
+	DECLARE
+		query_string text;
+	BEGIN
+		query_string := 'SELECT * FROM book WHERE TRUE';
+
+		IF array_length(ids_in, 1) > 0 THEN
+			query_string := query_string || ' AND book_id = ANY(' || quote_literal(ids_in) || ')';
+		END IF;
+
+		IF title_in != '' THEN
+			query_string := query_string || ' AND title LIKE ' || quote_literal(title_in || '%');
+		END IF;
+
+		IF author_in != '' THEN
+			query_string := query_string || ' AND author LIKE ' || quote_literal(author_in || '%');
+		END IF;
+
+		IF publisher_in != '' THEN
+			query_string := query_string || ' AND publisher LIKE ' || quote_literal(publisher_in || '%');
+		END IF;
+
+		IF genres_in  != '' THEN
+			query_string := query_string || ' AND TRIM(BOTH '','' FROM ' || quote_literal(genres_in) || ') <> '''' AND string_to_array(' || quote_literal(genres_in) || ', '','') ' || ' <@ string_to_array(genres, '','')';
+		END IF;
+
+		IF release_date_in IS NOT NULL THEN
+			query_string := query_string || ' AND release_date = ' || quote_literal(release_date_in);
+		END IF;
+
+		IF limit_val IS NOT NULL THEN
+			query_string := query_string || ' LIMIT ' || limit_val;
+		END IF;
+
+		RETURN QUERY EXECUTE query_string;
+	END;
+$$
+LANGUAGE PLPGSQL;
+
 
 CREATE OR REPLACE FUNCTION books_by_ids (ids_in integer[])
 	RETURNS TABLE (
@@ -469,3 +529,41 @@ CREATE OR REPLACE FUNCTION expired_loans_by_account_id(account_id_in account.acc
 		Loan.ending_time < CURRENT_TIMESTAMP
 $$
 LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION extract_account_salt(in_email Account.email%type)
+  RETURNS Password.password_salt%type
+	AS $$
+	DECLARE
+		salt Password.password_salt%type;
+	BEGIN
+		SELECT Password.password_salt INTO salt 
+		FROM Password, Account 
+		WHERE Account.email = in_email AND Password.account_id = Account.account_id; 
+
+		RETURN salt;
+	END
+$$
+LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION validate_account(in_email Account.email%type, in_password Password.password_hash%type)
+  RETURNS Account.account_id%type
+	AS $$
+	DECLARE
+		selected_account Password%rowtype;
+	BEGIN
+		SELECT Password.account_id, Password.password_hash INTO selected_account 
+		FROM Account, Password 
+		WHERE Account.email = in_email AND Account.account_id = Password.account_id;
+
+		IF (selected_account IS NULL) THEN
+			RETURN get_global('account_id_not_found');
+		END IF; 
+
+		IF (selected_account.password_hash = in_password) THEN
+			RETURN selected_account.account_id;
+		END IF;
+		
+		RETURN get_global('account_password_mismatch');
+	END
+$$
+LANGUAGE PLPGSQL;

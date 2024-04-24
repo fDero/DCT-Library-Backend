@@ -70,41 +70,23 @@ book_array_t* get_books_by_release_date(db_conn_t* connection,
     return perform_book_array_query(connection, buffer);
 }
 
-book_array_t* get_books_by_data_match(db_conn_t* connection, const char* title,
+book_array_t* get_books_by_data_match(db_conn_t* connection, const char* ids, const char* title,
                                       const char* author, const char* publisher,
                                       const char* genres,
-                                      const timestamp_t* release_date,
-																			int limit) {
-    char buffer[800];
-    char query_string[1000] = "SELECT * FROM Book WHERE ";
-    if (title != NULL) {
-        sprintf(buffer, "title = '%s' AND ", title);
-        strcat(query_string, buffer);
-    }
-    if (author != NULL) {
-        sprintf(buffer, "author = '%s' AND ", author);
-        strcat(query_string, buffer);
-    }
-    if (publisher != NULL) {
-        sprintf(buffer, "publisher = '%s' AND ", publisher);
-        strcat(query_string, buffer);
-    }
-    if (genres != NULL) {
-        sprintf(buffer,
-                "TRIM(BOTH ',' FROM '%s') <> '' AND string_to_array('%s', ',') "
-                "<@ string_to_array(genres, ',') AND ",
-                genres, genres);
-        strcat(query_string, buffer);
-    }
-    if (release_date != NULL) {
-        char release_date_str[30];
-        timestamp_to_string(release_date_str, 30, release_date);
-        sprintf(buffer, "release_date = '%s' AND ", release_date_str);
-        strcat(query_string, buffer);
-    }
-    strcat(query_string, " TRUE");
-		if(limit!=DB_GET_ALL){
-			sprintf(query_string + strlen(query_string), " LIMIT %d", limit);
-		}
-    return perform_book_array_query(connection, query_string);
+                                      const char* release_date,
+									  int limit) {
+    char buffer[QUERY_STRING_MAX_LENGTH];
+	char limit_buffer[30];
+	char timestamp_buffer[release_date ? strlen(release_date) + 3 : 5];
+	sprintf(timestamp_buffer, release_date ? "'%s'" : "null", release_date);
+	sprintf(limit_buffer, "%d", limit);
+	sprintf(buffer, "SELECT * FROM books_by_data_match(ARRAY[%s]::integer[], '%s', '%s', '%s', '%s', %s, %s)",
+	ids ? ids : "",
+	title ? title : "",
+	author ? author : "",
+	publisher ? publisher : "",
+	genres ? genres : "",
+	timestamp_buffer,
+	limit != DB_GET_ALL ? limit_buffer : "null");
+    return perform_book_array_query(connection, buffer);
 }

@@ -12,7 +12,6 @@ struct account
     char* name;
     char* surname;
     char* email;
-    char* password;
 };
 
 struct book
@@ -41,25 +40,32 @@ typedef struct loan loan_t;
 
 struct account_array
 {
-    account_t *storage;
+    account_t* storage;
     size_t size;
 };
 
 struct book_array
 {
-    book_t *storage;
+    book_t* storage;
     size_t size;
 };
 
 struct loan_array
 {
-    loan_t *storage;
+    loan_t* storage;
     size_t size;
+};
+
+struct int_array
+{
+	int* storage;
+	size_t size;
 };
 
 typedef struct account_array account_array_t;
 typedef struct book_array book_array_t;
 typedef struct loan_array loan_array_t;
+typedef struct int_array int_array_t;
 
 void account_init(account_t *account, int id, const char *name, const char *surname, const char *email, const char* password);
 void book_init(book_t *book, int id, const char *title, const char *author, const char *publisher, const char* genres, const timestamp_t* release_date, int total_copies);
@@ -76,5 +82,6 @@ void loan_array_init(loan_array_t *array, size_t size);
 void account_array_destroy(account_array_t *array);
 void book_array_destroy(book_array_t *array);
 void loan_array_destroy(loan_array_t *array);
+void int_array_destroy(int_array_t *array);
 
 #endif

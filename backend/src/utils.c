@@ -6,33 +6,71 @@
 #endif
 
 #include <stdio.h>
-
+#include <pthread.h>
 #include "utils.h"
 
+pthread_mutex_t log_mutex = PTHREAD_MUTEX_INITIALIZER;
+char* server = NULL;
+
 const bool COLORED_OUTPUT_ENABLED = true;
+
+void init_env(){
+	char server_env [50];
+	strcpy(server_env, getenv("SERVER"));
+	server = (char*)malloc(sizeof(char) * strlen(server_env) + 1);
+	strcpy(server, server_env);
+}
+
+void read_file(char* path, char** out_string){
+	int file_length;
+	FILE *file = fopen(path, "rb");
+	if (file == NULL){
+        *out_string = NULL;
+        return;
+    }
+	fseek(file, 0, SEEK_END);
+	file_length = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	*out_string = (char*)malloc(file_length + 1);
+	fread(*out_string, 1, file_length, file);
+	(*out_string)[file_length] = '\0';
+	fclose(file);
+}
 
 int log_to_console(const char* color, const char* str, ...) {
     va_list arguments;
     va_start(arguments, str);
-		if (COLORED_OUTPUT_ENABLED && color != NULL) {
-			printf("%s", color);
-		}
+	pthread_mutex_lock(&log_mutex);
+	
+	if (COLORED_OUTPUT_ENABLED && color != NULL) {
+		printf("%s", color);
+		fflush(stdout);
+	}
+
+	char* time_str = get_current_time("%Y-%m-%d %H:%M:%S");
+	printf("%s: ", time_str);
+	free(time_str);
+	fflush(stdout);
+	
     int ret = vprintf(str, arguments);
+	fflush(stdout);
+
     va_end(arguments);
-		if (COLORED_OUTPUT_ENABLED && color != NULL) {
-			printf("%s", DEFAULT_COLOR);
-		}
+	if (COLORED_OUTPUT_ENABLED && color != NULL) {
+		printf("%s", DEFAULT_COLOR);
 		fflush(stdout);
-		fflush(stdout);
-		return ret;
+	}
+
+	pthread_mutex_unlock(&log_mutex);
+	return ret;
 }
 
-char* get_current_http_time(){
-		time_t now = time(NULL);
-		timestamp_t* now_timestamp = gmtime(&now);
-		char* time_str = (char*)malloc(sizeof(char) * 40);
-		strftime(time_str, 40, "%a, %d %b %Y %H:%M:%S %Z", now_timestamp);
-		return time_str;
+char* get_current_time(const char* format){
+	time_t now = time(NULL);
+	timestamp_t* now_timestamp = gmtime(&now);
+	char* time_str = (char*)malloc(sizeof(char) * 40);
+	strftime(time_str, 40, format, now_timestamp);
+	return time_str;
 }
 
 bool is_blank_char(char c){
@@ -71,7 +109,6 @@ void alloc_and_arrcopy(char*** dest, char** src, int size){
     }
 }
 
-
 void advance_to_next_target(char* string, int* current_char_index, char target) {
     char current = string[*current_char_index];
     while (current != '\0' && current != target) {
@@ -91,18 +128,6 @@ void advance_to_next_targets(char* string, int* current_char_index, const char* 
         (*current_char_index) += 1;
         current = string[*current_char_index];
     }
-}
-
-void advance_to_next_whitespace(char* string, int* current_char_index) {
-    //advance_to_next_target(string, current_char_index, ' ');
-}
-
-void advance_to_next_carriage_return(char* string, int* current_char_index) {
-    //advance_to_next_target(string, current_char_index, '\r');
-}
-
-void advance_to_next_newline(char* string, int* current_char_index) {
-    //advance_to_next_target(string, current_char_index, '\n');
 }
 
 void skip_string_terminating_with_target(

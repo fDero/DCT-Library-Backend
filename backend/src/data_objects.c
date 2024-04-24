@@ -9,7 +9,6 @@ void account_init(
     alloc_and_strcpy(&(account->name), name);
     alloc_and_strcpy(&(account->surname), surname);
     alloc_and_strcpy(&(account->email), email);
-    alloc_and_strcpy(&(account->password), password);
 }
 
 void book_init(
@@ -42,7 +41,6 @@ void account_destroy(account_t *account) {
     free(account->name);
     free(account->surname);
     free(account->email);
-    free(account->password);
     free(account);
 }
 
@@ -75,7 +73,6 @@ void loan_array_init(loan_array_t *array, size_t size) {
 void account_array_destroy(account_array_t *array) {
 	if (array == NULL) return;
     for (int i = 0; i < array->size; i++) {
-        free(array->storage[i].password);
         free(array->storage[i].name);
         free(array->storage[i].surname);
         free(array->storage[i].email);
@@ -85,7 +82,7 @@ void account_array_destroy(account_array_t *array) {
 }
 
 void book_array_destroy(book_array_t *array) {
-		if (array == NULL) return;
+	if (array == NULL) return;
     for (int i = 0; i < array->size; i++) {
         free(array->storage[i].title);
         free(array->storage[i].author);
@@ -97,7 +94,13 @@ void book_array_destroy(book_array_t *array) {
 }
 
 void loan_array_destroy(loan_array_t *array) {
-		if (array == NULL) return;
+	if (array == NULL) return;
+    free(array->storage);
+    free(array);
+}
+
+void int_array_destroy(int_array_t *array){
+    if (array == NULL) return;
     free(array->storage);
     free(array);
 }

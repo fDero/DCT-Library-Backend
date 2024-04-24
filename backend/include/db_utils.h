@@ -31,5 +31,6 @@ void init_db_global_variables();
 char* get_error_code(resultset_t* res);
 
 resultset_t* perform_query(db_conn_t* connection, const char* query_string);
+const char* error_phrase(const char* error_code);
 
 #endif

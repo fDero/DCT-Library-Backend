@@ -1,7 +1,9 @@
+
 #include "http.h"
 #include "pthread.h"
+#include <stdbool.h>
 
-extern pthread_key_t http_request_key;
+pthread_key_t http_request_key;
 
 void http_request_init(http_request_t *request, const char *request_str)
 {
@@ -146,7 +148,7 @@ int on_url(llhttp_t *parser, const char *start, size_t length)
 int on_version(llhttp_t *parser, const char *start, size_t length)
 {
 	http_request_t *request = (http_request_t *)pthread_getspecific(http_request_key);
-	char* version = (char*)malloc(sizeof(char) * strlen("HTTP/?.?") + 8);
+	char* version = (char*)malloc(sizeof(char) * 16);
 	sprintf(version, "HTTP/%d.%d", parser->http_major, parser->http_minor);
 	request->version = version;
 	return 0;
@@ -160,6 +162,7 @@ int http_request_add_header_name(http_request_t *request, char *name)
 		request->headers = (header_line_t*)realloc(request->headers, request->_headers_capacity);
 	}
 	request->headers[request->headers_num].name = name;
+	request->headers[request->headers_num].value = NULL;
 	request->headers_num++;
 	return 0;
 }
@@ -190,7 +193,7 @@ int on_header_value(llhttp_t *parser, const char *start, size_t length)
 		if (strstr(header_value, "://") == NULL) strcpy(buffer, "http://");
 		strcat(buffer, header_value);
 		curl_valid = curl_url_set(curl, CURLUPART_URL, buffer, 0);
-    curl_url_cleanup(curl);
+    	curl_url_cleanup(curl);
 		if (curl_valid != CURLUE_OK) {
 			return -1;
 		};
@@ -235,10 +238,10 @@ http_request_t *http_request_decode(const char *request_str)
 
 	enum llhttp_errno err = llhttp_execute(&parser, request_str, request_len);
 	pthread_setspecific(http_request_key, NULL);
-	
-	if ((err != HPE_OK && err != HPE_INVALID_METHOD) || 
-	    (err == HPE_INVALID_METHOD && request->headers_num == 0))
-	{
+
+	bool critical_error = (err != HPE_OK && err != HPE_INVALID_METHOD);
+	bool payload_error = (err == HPE_INVALID_METHOD && request->headers_num == 0);
+	if (critical_error || payload_error){
 		http_request_destroy(request);
 		return NULL;
 	}
@@ -252,8 +255,9 @@ http_request_t *http_request_decode(const char *request_str)
 		request->host = request->path - 1;
 	}
 
-	if(request->payload==NULL)
-	request->payload = request->method + strlen(request->method);
+	if(request->payload==NULL){
+		request->payload = request->method + strlen(request->method);
+	}
 
 	return request;
 }

@@ -20,8 +20,6 @@ void extract_account(resultset_t* resultset, int row, account_t* account)
 	alloc_and_strcpy(&(account->name), PQgetvalue(resultset, row, 1));
 	alloc_and_strcpy(&(account->surname), PQgetvalue(resultset, row, 2));
 	alloc_and_strcpy(&(account->email), PQgetvalue(resultset, row, 3));
-	alloc_and_strcpy(&(account->password), PQgetvalue(resultset, row, 4));
-	//account_integrity_check(account);
 }
 
 void extract_book(resultset_t* resultset, int row, book_t* book)
@@ -35,7 +33,6 @@ void extract_book(resultset_t* resultset, int row, book_t* book)
 	book->release_date = *release_date;
 	free(release_date);
 	book->total_copies = atoi(PQgetvalue(resultset, row, 6));
-	//book_integrity_check(book);
 }
 
 void extract_loan(resultset_t* resultset, int row, loan_t* loan)
@@ -49,7 +46,6 @@ void extract_loan(resultset_t* resultset, int row, loan_t* loan)
 	free(ending_time);
 	loan->account_id = atoi(PQgetvalue(resultset, row, 3));
 	loan->book_id = atoi(PQgetvalue(resultset, row, 4));
-	//loan_integrity_check(loan);
 }
 
 account_array_t* perform_account_array_query(db_conn_t* connection, const char* query_string)
@@ -57,7 +53,7 @@ account_array_t* perform_account_array_query(db_conn_t* connection, const char* 
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
-	assert(col_count == 5);
+	assert(col_count == 4);
 	if(row_count == 0){
 		PQclear(resultset);
 		return NULL;
@@ -117,7 +113,7 @@ account_t* perform_account_query(db_conn_t* connection, const char* query_string
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
-	assert(col_count == 5);
+	assert(col_count == 4);
 	if(row_count == 0){
 		PQclear(resultset);
 		return NULL;
@@ -161,4 +157,35 @@ loan_t* perform_loan_query(db_conn_t* connection, const char* query_string)
 	extract_loan(resultset, 0, output);
 	PQclear(resultset);
 	return output;
+}
+
+int perform_int_query(db_conn_t* connection, const char* query_string){
+	resultset_t* resultset = perform_query(connection, query_string);
+	int row_count = PQntuples(resultset);
+	int col_count = PQnfields(resultset);
+	assert(col_count == 1);
+	if(row_count == 0){
+		PQclear(resultset);
+		return -1;
+	}
+	assert(row_count == 1);
+	int id = atoi(PQgetvalue(resultset, 0, 0));
+	PQclear(resultset);
+	return id;
+}
+
+char* perform_string_query(db_conn_t* connection, const char* query_string){
+	resultset_t* resultset = perform_query(connection, query_string);
+	int row_count = PQntuples(resultset);
+	int col_count = PQnfields(resultset);
+	assert(col_count == 1);
+	if(row_count == 0){
+		PQclear(resultset);
+		return NULL;
+	}
+	assert(row_count == 1);
+	char* string = NULL;
+	alloc_and_strcpy(&string, PQgetvalue(resultset, 0, 0));
+	PQclear(resultset);
+	return string;
 }

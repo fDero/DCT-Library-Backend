@@ -3,20 +3,28 @@ CREATE TABLE Account (
 	account_id       SERIAL      PRIMARY KEY,
 	name             VARCHAR(30) NOT NULL,
 	surname          VARCHAR(40) NOT NULL,
-	email            VARCHAR(50) NOT NULL UNIQUE,
-	password         VARCHAR(32) NOT NULL
+	email            VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE Password (
+	account_id	   INT NOT NULL UNIQUE,
+	password_hash  VARCHAR(32) NOT NULL,
+	password_salt  VARCHAR(32) NOT NULL,
+
+	FOREIGN KEY (account_id) 
+	REFERENCES Account(account_id)
 );
 
 CREATE TYPE genre_enum AS ENUM (
-	'Action fiction','Adventure fiction','Autobiography','Biography','Children''s literature',
+	'Action fiction','Adventure fiction','Autobiography','Biography', 'Classic',
 	'Comedy','Coming-of-age story','Contemporary literature','Contemporary romance','Crime fiction',
 	'Detective fiction','Education','Essay','Fairy tale','Fantasy','Fantasy fiction','Fiction',
 	'Genre fiction','Graphic novel','Historical fiction','Historical fantasy','Historical romance',
-	'History','Horror fiction','Humor','Literary fiction','Literary realism','Magical Realism',
-	'Memoir','Mystery','Narrative','New adult fiction','Non-fiction','Novel','Philosophy','Poetry',
+	'History','Horror fiction','Humor','Legal drama','Literary fiction','Literary realism','Magical Realism',
+	'Memoir','Mystery','Narrative','New adult fiction','Non-fiction','Novel','Philosophy','Poetry', 'Romance',
 	'Romance novel','Satire','Science','Science fiction','Self-help book','Short story','Social science',
-	'Speculative fiction','Spirituality','Thriller','Travel literature','True crime','Urban fiction',
-	'Western fiction','Women''s fiction','Young adult literature'
+	'Speculative fiction','Spirituality','Thriller','Tragedy','Travel literature','True crime','Urban fiction',
+	'Western fiction','Young adult literature'
 );
 
 CREATE TABLE Book (

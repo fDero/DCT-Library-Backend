@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
+extern char* server;
+
 extern const bool COLORED_OUTPUT_ENABLED;
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -22,9 +24,13 @@ extern const bool COLORED_OUTPUT_ENABLED;
 
 typedef struct tm timestamp_t;
 
+void init_env();
+
+void read_file(char* path, char** out_string);
+
 int log_to_console(const char* color, const char* str, ...);
 
-char* get_current_http_time();
+char* get_current_time(const char* format);
 
 void alloc_and_strcpy(char* *destination, const char* source);
 
@@ -36,38 +42,6 @@ timestamp_t* string_to_timestamp(const char* str);
 
 bool timestamp_equal(const timestamp_t* ts1, const timestamp_t* ts2);
 
-void advance_to_next_targets(char* string, int* current_char_index, const char* targets, int len);
-
-void advance_to_next_target(char* string, int* current_char_index, char target);
-
-void advance_to_next_whitespace(char* string, int* current_char_index);
-
-void advance_to_next_carriage_return(char* string, int* current_char_index);
-
-void advance_to_next_newline(char* string, int* current_char_index);
-
-void skip_string_terminating_with_target(
-    char* string, int* current_char_index,
-    int len, char target, bool* correct
-);
-
-void skip_string_terminating_with_target_safe(
-    char* string, int* current_char_index, int len,
-    char target, const char* targets, bool* correct
-);
-
-void skip_character_safe(
-    char* string, int* current_char_index, int len,
-    char target, const char* avoid, bool* correct
-);
-
-void skip_hostname(
-    char* string, int* current_char_index,
-    int len, bool* correct
-);
-
 bool is_blank_char(char c);
-
-char* sha256_hash_string(const char* string);
 
 #endif

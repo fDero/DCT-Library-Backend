@@ -45,3 +45,19 @@ loan_t* loan_from_json(json_t* json) {
     }
     return extracted_loan;
 }
+
+int_array_t* int_array_from_json(json_t* json){
+    if (!json_is_array(json)) return NULL;
+    int_array_t* int_array = (int_array_t*)malloc(sizeof(int_array_t));
+    int_array->size = json_array_size(json);
+    int_array->storage = (int*)malloc(sizeof(int)*int_array->size);
+    for (int i = 0; i < int_array->size; i++){
+        json_t* value = json_array_get(json, i);
+        if (!json_is_integer(value)) {
+			int_array_destroy(int_array);
+			return NULL;
+		}
+        int_array->storage[i] = json_integer_value(value);
+    }
+    return int_array;
+}

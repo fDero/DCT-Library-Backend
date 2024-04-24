@@ -13,8 +13,9 @@
 #include "respond.h"
 #include <stdbool.h>
 
-#define BUFFERSIZE 2048
+#define BUFFERSIZE 8192
 
+int connection_timeout = 0;
 int server_port = -1;
 int server_max_connections = -1;
 int server_socket = -1;
@@ -42,7 +43,7 @@ client_t* accept_connection(){
 	client->socket = accept(server_socket, &client->address, &client->addrlen);
 	assert(client->socket > 0);
 	struct timeval timeout;
-    timeout.tv_sec = 60;
+    timeout.tv_sec = connection_timeout;
     timeout.tv_usec = 0;
 	setsockopt(client->socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0;
 	return client;
@@ -77,43 +78,45 @@ void* client_handler(void* client_void_ptr){
     client_t* client = (client_t*) client_void_ptr;
 	char* client_ip = get_client_ip(client);
 	int client_port = get_client_port(client);
+	pthread_t tid = pthread_self();
 	pthread_setspecific(db_conn_key, (void*)open_db_connection());
+    pthread_setspecific(cache_connection_key, (void*)open_cache_connection());
     char buffer[BUFFERSIZE];
+    int read_bytes = 0;
 
-    while(read(client->socket, buffer, BUFFERSIZE) > 0){
-    	buffer[BUFFERSIZE - 1] = '\0';
-    	log_to_console(YELLOW, "Request received from a client (%s:%d):\n%s\n", client_ip, client_port, buffer);
-      http_request_t* request = http_request_decode(buffer);
-		
+    while((read_bytes = read(client->socket, buffer, BUFFERSIZE - 1)) > 0){
+        buffer[read_bytes] = '\0';
+    	log_to_console(YELLOW, "Request received from a client (%sclient=%s:%d%s -> %sthread=%lu%s):\n%s\n", MAGENTA, client_ip, client_port, YELLOW, BLUE, tid, YELLOW, buffer);
+        
+        http_request_t* request = http_request_decode(buffer);
 		http_response_t* response = respond(request);
-		char* response_str = http_response_encode(response);
-    	send(client->socket, response_str, strlen(response_str), MSG_EOR);
-    	log_to_console(YELLOW, "Response sent to the client (%s:%d):\n%s\n", client_ip, client_port, response_str);
-		
+		size_t response_size = 0;
+		char* response_str = http_response_encode(response, &response_size);
+    	send(client->socket, response_str, response_size, MSG_EOR);	
+    	log_to_console(YELLOW, "Response sent to the client (%sthread=%lu%s -> %sclient=%s:%d%s):\n%s\n", BLUE, tid, YELLOW, MAGENTA, client_ip, client_port, YELLOW,response_str);
+	
+        http_response_destroy(response);
 		free(response_str);
-
-		if(request == NULL){
-			break;
-		}
-		const char* keepalive_str = get_header_value(request, "Connection");
-		if(keepalive_str == NULL || strcmp(keepalive_str, "keep-alive") != 0){
-			log_to_console(RED, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
+		if (request != NULL){
+        	const char* keepalive = get_header_value(request, "Connection");
 			http_request_destroy(request);
-			break;
+			if(keepalive == NULL || strcmp(keepalive, "keep-alive") != 0){
+				break;
+			}
 		}
-
-		http_request_destroy(request);
 	}
-  log_to_console(GREEN, "Closing the connection to the client (%s:%d)\n", client_ip, client_port);
-  close(client->socket);
+	log_to_console(RED, "Closing the connection to the client (%sclient=%s:%d%s ; %sthread=%lu%s)\n", MAGENTA, client_ip, client_port, RED, BLUE, tid, RED);
+    shutdown(client->socket, SHUT_RDWR);
+    close(client->socket);
 	free(client);
 	free(client_ip);
-  pthread_exit(0);
+    pthread_exit(0);
 }
 
-void listen_and_serve(){
-  server_port = atoi(getenv("SERVER_PORT"));
-  server_max_connections = atoi(getenv("SERVER_MAX_CONNECTION"));
+void listen_and_serve(const bool debug_mode){
+    server_port = atoi(getenv("SERVER_PORT"));
+    server_max_connections = atoi(getenv("SERVER_MAX_CONNECTION"));
+    connection_timeout = atoi(getenv("CLIENT_CONNECTION_TIMEOUT"));
 	assert (server_port > 0);
 	assert (server_max_connections > 0);
 	log_to_console(GREEN, "Creating a socket for the server\n");
@@ -126,7 +129,11 @@ void listen_and_serve(){
 
 	while(1){
 		log_to_console(GREEN, "Waiting to accept a connection\n");
-    client_t* client_ptr = accept_connection();
+    	client_t* client_ptr = accept_connection();
+        if(debug_mode){
+            client_handler(client_ptr);
+            return;
+        }
 		pthread_t client_handler_thread;
 		pthread_create(&client_handler_thread, NULL, client_handler, client_ptr);
 		pthread_detach(client_handler_thread);

@@ -5,4 +5,40 @@ backend/server_test
 .vscode
 workspace_scripts
 a.out
-frontend/client
+client
+*.pem
+.idea
+
+# Contenuto di LsoClient .gitignore con percorsi aggiornati
+frontend/LsoClient/target/
+!frontend/LsoClient/.mvn/wrapper/maven-wrapper.jar
+!frontend/LsoClient/**/src/main/**/target/
+!frontend/LsoClient/**/src/test/**/target/
+
+### IntelliJ IDEA ###
+frontend/LsoClient/.idea/modules.xml
+frontend/LsoClient/.idea/jarRepositories.xml
+frontend/LsoClient/.idea/compiler.xml
+frontend/LsoClient/.idea/libraries/
+frontend/LsoClient/*.iws
+frontend/LsoClient/*.iml
+frontend/LsoClient/*.ipr
+
+### Eclipse ###
+frontend/LsoClient/.apt_generated
+frontend/LsoClient/.classpath
+frontend/LsoClient/.factorypath
+frontend/LsoClient/.project
+frontend/LsoClient/.settings
+frontend/LsoClient/.springBeans
+frontend/LsoClient/.sts4-cache
+
+### NetBeans ###
+frontend/LsoClient/nbproject/private/
+frontend/LsoClient/nbbuild/
+frontend/LsoClient/dist/
+frontend/LsoClient/nbdist/
+frontend/LsoClient/.nb-gradle/
+frontend/LsoClient/build/
+!frontend/LsoClient/**/src/main/**/build/
+!frontend/LsoClient/**/src/test/**/build/

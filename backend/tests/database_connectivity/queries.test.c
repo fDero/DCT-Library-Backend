@@ -505,11 +505,9 @@ TEST_F(Database, get_books_by_release_date_3) {
 //////////////////////////////////////////////////////////////////////////////
 
 TEST_F(Database, get_books_by_data_match_1) {
-    timestamp_t* ts = string_to_timestamp("2008-09-14 00:00:00");
     book_array_t* books = get_books_by_data_match(
-        conn, "The Hunger Games", "Suzanne Collins", "Scholastic Press",
-        "Adventure fiction,Science fiction", ts, 100);
-		free(ts);
+        conn, NULL, "The Hunger Games", "Suzanne Collins", "Scholastic Press",
+        "Adventure fiction,Science fiction", "2008-09-14 00:00:00", 100);
     ASSERT_NOT_NULLPTR(books);
     EXPECT_EQ(books->size, 1);
     EXPECT_TRUE(contains_book(books, db_book_6));
@@ -518,14 +516,14 @@ TEST_F(Database, get_books_by_data_match_1) {
 
 TEST_F(Database, get_books_by_data_match_2) {
     book_array_t* books = get_books_by_data_match(
-        conn, "Harry Potter", NULL, "The Russian Messenger", NULL, NULL, 100);
+        conn, NULL, "Harry Potter", NULL, "The Russian Messenger", NULL, NULL, 100);
     EXPECT_NULLPTR(books);
     if (books != NULL) book_array_destroy(books);
 }
 
 TEST_F(Database, get_books_by_data_match_3) {
     book_array_t* books =
-        get_books_by_data_match(conn, NULL, NULL, NULL, NULL, NULL, 100);
+        get_books_by_data_match(conn, NULL , NULL, NULL, NULL, NULL, NULL, 100);
     ASSERT_NOT_NULLPTR(books);
     EXPECT_EQ(books->size, 6);
     if (books != NULL) book_array_destroy(books);

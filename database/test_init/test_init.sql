@@ -3,13 +3,22 @@ delete from pastloan cascade;
 delete from account cascade;
 delete from book cascade;
 
-INSERT INTO Account(name,surname,email, account_id, password) VALUES
-	('John',    'Smith',    'john.smith@example.com'       , 1, 'ABCDEFGH'),
-	('Emma',    'Johnson',  'emma.johnson@example.com'     , 2, 'ABCDEFGH'),
-	('William', 'Brown',    'william.brown@example.com'    , 3, 'ABCDEFGH'),
-	('Olivia',  'Williams', 'olivia.williams@example.com'  , 4, 'ABCDEFGH'),
-	('James',   'Jones',    'james.jones@example.com'      , 5, 'ABCDEFGH'),
-	('Sophia',  'Davis',    'sophia.davis@example.com'     , 6, 'ABCDEFGH');
+INSERT INTO Account(name,surname,email) VALUES
+	('John',    'Smith',    'john.smith@example.com'     ),
+	('Emma',    'Johnson',  'emma.johnson@example.com'   ),
+	('William', 'Brown',    'william.brown@example.com'  ),
+	('Olivia',  'Williams', 'olivia.williams@example.com'),
+	('James',   'Jones',    'james.jones@example.com'    ),
+	('Sophia',  'Davis',    'sophia.davis@example.com'   );
+
+
+INSERT INTO Password (account_id, password_hash, password_salt) VALUES 
+	(1, 'Q<3z^5J|0QMHKh>IMPk3@}P=|yx`k9g]', '2EwktavImkW7s0jSoJrI0YKqeS1y42pR'),
+	(2, 'IU=};5AMf4gvJsphEpD=cDX_`h40W5oT', 'bElHgqeGDyl2zPKEe0t9XDRgom9iGpla'),
+	(3, '5zqig;301W[>QBXg?r=D<W[S`:SpdoBu', '4gBLdGm4aXNTrHy2Jx20etMvvfhPrYXv'),
+	(4, 'q@EvQ<Ng1IOfSA]ZoC8<UGDccP2DT2ky', 'GRPXUkAgBa4hD6zoeTKbL8M53d49527a'),
+	(5, 'l:Esws<nLmurM_Ne}zt`jCC7k]X75{4D', 'qzxWCdkIiO1omJV4gIWLnUrx9M9chuvE'),
+	(6, 'R2=VJwANkNaEVp4x}E3S>Eepa^EiGP[V', 'vwUebiufy3mYQ7t0cTH8xr8Dxzo08Plp');
 
 
 INSERT INTO Book(title,author,publisher,genres,release_date,total_copies, book_id) VALUES
