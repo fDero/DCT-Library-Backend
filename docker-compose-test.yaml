@@ -54,7 +54,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_HOST: "database_test"
     volumes:
-      - "./backend:/server"
+      - "./server:/server"
     working_dir: "/server"
     depends_on:
       - database_test
