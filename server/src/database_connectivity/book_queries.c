@@ -46,8 +46,7 @@ book_array_t* get_books_by_author(db_conn_t* connection, const char* author) {
     return perform_book_array_query(connection, buffer);
 }
 
-book_array_t* get_books_by_publisher(db_conn_t* connection,
-                                     const char* publisher) {
+book_array_t* get_books_by_publisher(db_conn_t* connection, const char* publisher) {
     char buffer[QUERY_STRING_MAX_LENGTH];
     sprintf(buffer, "SELECT * FROM books_by_publisher('%s')", publisher);
     return perform_book_array_query(connection, buffer);
@@ -59,8 +58,7 @@ book_array_t* get_books_by_genres(db_conn_t* connection, const char* genres) {
     return perform_book_array_query(connection, buffer);
 }
 
-book_array_t* get_books_by_release_date(db_conn_t* connection,
-                                        const timestamp_t* release_date) {
+book_array_t* get_books_by_release_date(db_conn_t* connection, const timestamp_t* release_date) {
     char string_timestamp[STRING_TIMESTAMP_MAX_LENGTH] = "";
     timestamp_to_string(string_timestamp, STRING_TIMESTAMP_MAX_LENGTH,
                         release_date);
@@ -70,11 +68,11 @@ book_array_t* get_books_by_release_date(db_conn_t* connection,
     return perform_book_array_query(connection, buffer);
 }
 
-book_array_t* get_books_by_data_match(db_conn_t* connection, const char* ids, const char* title,
-                                      const char* author, const char* publisher,
-                                      const char* genres,
-                                      const char* release_date,
-									  int limit) {
+book_array_t* get_books_by_data_match(
+    db_conn_t* connection, const char* ids, const char* title,
+    const char* author, const char* publisher,
+    const char* genres, const char* release_date, int limit
+) {
     char buffer[QUERY_STRING_MAX_LENGTH];
 	char limit_buffer[30];
 	char timestamp_buffer[release_date ? strlen(release_date) + 3 : 5];

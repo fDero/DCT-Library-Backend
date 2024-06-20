@@ -56,7 +56,8 @@ bool             delete_loan(db_conn_t* connection, int loan_id, int account_id)
 int              insert_account(
                     db_conn_t* connection, const char* name, const char* surname,
                     const char* email, const char* hashed_password, const char* salt,
-                    char** error_code);
+                    char** error_code
+                    );
 
 int              validate_account(db_conn_t* connection, const char* email, const char* password);
 char*            get_password_salt(db_conn_t* connection, const char* email);

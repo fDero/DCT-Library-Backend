@@ -21,14 +21,12 @@ extern pthread_key_t http_request_key;
 #define HEADERS_MULTIPLICATION_FACTOR 2
 #define QUERY_PARAMS_MULTIPLICATION_FACTOR 2
 
-struct header_line
-{
+struct header_line {
 	char const *name;
 	char const *value;
 };
 
-struct query_param
-{
+struct query_param {
 	char const *name;
 	char const *value;
 };
@@ -36,8 +34,7 @@ struct query_param
 typedef struct header_line header_line_t;
 typedef struct query_param query_param_t;
 
-struct http_request
-{
+struct http_request {
 	char const *_origin_addr;
 	char *_source;
 	size_t _headers_capacity;

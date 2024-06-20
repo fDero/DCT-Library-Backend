@@ -7,11 +7,12 @@ pthread_key_t db_conn_key;
 
 void db_connection_init() {
     sprintf(db_conn_info,
-            "dbname = %s user = %s password = %s host = %s port = %s",
-            getenv("POSTGRES_DB"), getenv("POSTGRES_USER"),
-            getenv("POSTGRES_PASSWORD"), getenv("POSTGRES_HOST"),
-            getenv("POSTGRES_PORT"));
-		pthread_key_create(&db_conn_key, close_db_connection_callback);
+        "dbname = %s user = %s password = %s host = %s port = %s",
+        getenv("POSTGRES_DB"), getenv("POSTGRES_USER"),
+        getenv("POSTGRES_PASSWORD"), getenv("POSTGRES_HOST"),
+        getenv("POSTGRES_PORT")
+    );
+	pthread_key_create(&db_conn_key, close_db_connection_callback);
 }
 
 db_conn_t* open_db_connection() {

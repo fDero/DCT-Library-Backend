@@ -8,22 +8,19 @@
 #include "queries.h"
 #include <assert.h>
 
-resultset_t* perform_query(db_conn_t* connection, const char* query_string)
-{
+resultset_t* perform_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = PQexec(connection, query_string);
 	return resultset;
 }
 
-void extract_account(resultset_t* resultset, int row, account_t* account)
-{
+void extract_account(resultset_t* resultset, int row, account_t* account) {
 	account->account_id = atoi(PQgetvalue(resultset, row, 0));
 	alloc_and_strcpy(&(account->name), PQgetvalue(resultset, row, 1));
 	alloc_and_strcpy(&(account->surname), PQgetvalue(resultset, row, 2));
 	alloc_and_strcpy(&(account->email), PQgetvalue(resultset, row, 3));
 }
 
-void extract_book(resultset_t* resultset, int row, book_t* book)
-{
+void extract_book(resultset_t* resultset, int row, book_t* book) {
 	book->book_id = atoi(PQgetvalue(resultset, row, 0));
 	alloc_and_strcpy(&(book->title), PQgetvalue(resultset, row, 1));
 	alloc_and_strcpy(&(book->author), PQgetvalue(resultset, row, 2));
@@ -35,8 +32,7 @@ void extract_book(resultset_t* resultset, int row, book_t* book)
 	book->total_copies = atoi(PQgetvalue(resultset, row, 6));
 }
 
-void extract_loan(resultset_t* resultset, int row, loan_t* loan)
-{
+void extract_loan(resultset_t* resultset, int row, loan_t* loan) {
 	loan->loan_id = atoi(PQgetvalue(resultset, row, 0));
 	timestamp_t* starting_time = string_to_timestamp(PQgetvalue(resultset, row, 1));
 	timestamp_t* ending_time = string_to_timestamp(PQgetvalue(resultset, row, 2));
@@ -48,8 +44,7 @@ void extract_loan(resultset_t* resultset, int row, loan_t* loan)
 	loan->book_id = atoi(PQgetvalue(resultset, row, 4));
 }
 
-account_array_t* perform_account_array_query(db_conn_t* connection, const char* query_string)
-{
+account_array_t* perform_account_array_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
@@ -68,8 +63,7 @@ account_array_t* perform_account_array_query(db_conn_t* connection, const char* 
 	return output_array;
 }
 
-book_array_t* perform_book_array_query(db_conn_t* connection, const char* query_string)
-{
+book_array_t* perform_book_array_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
@@ -88,8 +82,7 @@ book_array_t* perform_book_array_query(db_conn_t* connection, const char* query_
 	return output_array;
 }
 
-loan_array_t* perform_loan_array_query(db_conn_t* connection, const char* query_string)
-{
+loan_array_t* perform_loan_array_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
@@ -108,8 +101,7 @@ loan_array_t* perform_loan_array_query(db_conn_t* connection, const char* query_
 	return output_array;
 }
 
-account_t* perform_account_query(db_conn_t* connection, const char* query_string)
-{
+account_t* perform_account_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
@@ -125,8 +117,7 @@ account_t* perform_account_query(db_conn_t* connection, const char* query_string
 	return output;
 }
 
-book_t* perform_book_query(db_conn_t* connection, const char* query_string)
-{
+book_t* perform_book_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
@@ -142,8 +133,7 @@ book_t* perform_book_query(db_conn_t* connection, const char* query_string)
 	return output;
 }
 
-loan_t* perform_loan_query(db_conn_t* connection, const char* query_string)
-{
+loan_t* perform_loan_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
@@ -159,7 +149,7 @@ loan_t* perform_loan_query(db_conn_t* connection, const char* query_string)
 	return output;
 }
 
-int perform_int_query(db_conn_t* connection, const char* query_string){
+int perform_int_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);
@@ -174,7 +164,7 @@ int perform_int_query(db_conn_t* connection, const char* query_string){
 	return id;
 }
 
-char* perform_string_query(db_conn_t* connection, const char* query_string){
+char* perform_string_query(db_conn_t* connection, const char* query_string) {
 	resultset_t* resultset = perform_query(connection, query_string);
 	int row_count = PQntuples(resultset);
 	int col_count = PQnfields(resultset);

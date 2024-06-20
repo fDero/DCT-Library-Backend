@@ -6,7 +6,7 @@
 TEST(HTTP, valid_request_with_no_headers) {
     char request_str[2048] =
         "GET /somedir/page HTTP/1.1\r\n"
-				"Content-Length: 26\r\n"
+		"Content-Length: 26\r\n"
         "\r\n"
         "my really beutiful payload\0";
 

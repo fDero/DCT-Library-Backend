@@ -7,7 +7,7 @@ typedef struct sockaddr_in sockaddr_in_t;
 typedef struct sockaddr_in6 sockaddr_in6_t;
 typedef struct sockaddr sockaddr_t;
 
-struct client{
+struct client {
 	int socket;
 	sockaddr_t address;
 	socklen_t addrlen;

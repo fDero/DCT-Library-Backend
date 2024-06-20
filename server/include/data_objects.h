@@ -6,16 +6,14 @@
 #include <time.h>
 #include "utils.h"
 
-struct account
-{
+struct account {
     int account_id;
     char* name;
     char* surname;
     char* email;
 };
 
-struct book
-{
+struct book {
     int book_id;
     char* title;
     char* author;
@@ -25,8 +23,7 @@ struct book
     int total_copies;
 };
 
-struct loan
-{
+struct loan {
     int loan_id;
     timestamp_t starting_time;
     timestamp_t ending_time;
@@ -38,26 +35,22 @@ typedef struct account account_t;
 typedef struct book book_t;
 typedef struct loan loan_t;
 
-struct account_array
-{
+struct account_array {
     account_t* storage;
     size_t size;
 };
 
-struct book_array
-{
+struct book_array {
     book_t* storage;
     size_t size;
 };
 
-struct loan_array
-{
+struct loan_array {
     loan_t* storage;
     size_t size;
 };
 
-struct int_array
-{
+struct int_array {
 	int* storage;
 	size_t size;
 };
