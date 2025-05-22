@@ -8,9 +8,9 @@ typedef struct sockaddr_in6 sockaddr_in6_t;
 typedef struct sockaddr sockaddr_t;
 
 struct client {
-	int socket;
-	sockaddr_t address;
-	socklen_t addrlen;
+    int socket;
+    sockaddr_t address;
+    socklen_t addrlen;
 };
 
 typedef struct client client_t;

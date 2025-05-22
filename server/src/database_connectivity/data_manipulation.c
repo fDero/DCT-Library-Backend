@@ -71,7 +71,7 @@ int insert_account(
     const char* email, const char* hashed_password, const char* salt,
     char** error_code
 ){
-       
+
     assert(error_code != NULL);
     *error_code = NULL;
 

@@ -37,7 +37,7 @@ void loan_init(
 }
 
 void account_destroy(account_t *account) {
-	if (account == NULL) return;
+    if (account == NULL) return;
     free(account->name);
     free(account->surname);
     free(account->email);
@@ -45,7 +45,7 @@ void account_destroy(account_t *account) {
 }
 
 void book_destroy(book_t *book) {
-	if (book == NULL) return;
+    if (book == NULL) return;
     free(book->title);
     free(book->author);
     free(book->publisher);
@@ -71,7 +71,7 @@ void loan_array_init(loan_array_t *array, size_t size) {
 }
 
 void account_array_destroy(account_array_t *array) {
-	if (array == NULL) return;
+    if (array == NULL) return;
     for (int i = 0; i < array->size; i++) {
         free(array->storage[i].name);
         free(array->storage[i].surname);
@@ -82,7 +82,7 @@ void account_array_destroy(account_array_t *array) {
 }
 
 void book_array_destroy(book_array_t *array) {
-	if (array == NULL) return;
+    if (array == NULL) return;
     for (int i = 0; i < array->size; i++) {
         free(array->storage[i].title);
         free(array->storage[i].author);
@@ -94,7 +94,7 @@ void book_array_destroy(book_array_t *array) {
 }
 
 void loan_array_destroy(loan_array_t *array) {
-	if (array == NULL) return;
+    if (array == NULL) return;
     free(array->storage);
     free(array);
 }

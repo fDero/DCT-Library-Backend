@@ -73,7 +73,7 @@ bool extract_timestamp_from_json(json_t* json, const char* field_name, timestamp
     if(json_is_string(field)){
         timestamp_t* tempts = string_to_timestamp(json_string_value(field)); 
         *timestamp = *tempts;
-		free(tempts);
+        free(tempts);
     }
     return false;
 }

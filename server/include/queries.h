@@ -43,7 +43,8 @@ book_array_t*    get_books_by_genres(db_conn_t* connection, const char* genres);
 book_array_t*    get_books_by_release_date(db_conn_t* connection, const timestamp_t* release_date);
 book_array_t*    get_books_by_data_match(
                     db_conn_t* connection, const char* ids, const char* title, const char* author, 
-                    const char* publisher, const char* genres, const char* release_date, int limit);
+                    const char* publisher, const char* genres, const char* release_date, int limit
+                );
 
 loan_array_t*    get_loans(db_conn_t* connection, int limit);
 loan_t*          get_loan_by_id(db_conn_t* connection, int id);
@@ -57,7 +58,7 @@ int              insert_account(
                     db_conn_t* connection, const char* name, const char* surname,
                     const char* email, const char* hashed_password, const char* salt,
                     char** error_code
-                    );
+                );
 
 int              validate_account(db_conn_t* connection, const char* email, const char* password);
 char*            get_password_salt(db_conn_t* connection, const char* email);

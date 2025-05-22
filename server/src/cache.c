@@ -13,7 +13,7 @@ int redis_port = 0;
 char* redis_host = NULL;
 
 void cache_connection_init(){
-	redis_port = atoi(getenv("REDISPORT"));
+    redis_port = atoi(getenv("REDISPORT"));
     char *redis_host_str = getenv("REDISHOST");
     redis_host = (char*)malloc(strlen(redis_host_str) + 1);
     strcpy(redis_host, redis_host_str);

@@ -8,7 +8,7 @@
 
 http_response_t* response_post_login(http_request_t* request){
     if (http_request_contains_query(request)){
-	    return response_bad_request(request);
+        return response_bad_request(request);
     }
     const char* content_type = get_header_value(request, "Content-Type");
     const char* accept = get_header_value(request, "Accept");
@@ -24,7 +24,7 @@ http_response_t* response_post_login(http_request_t* request){
     if (
         number_of_json_fields(json) != 2 ||
         !extract_text_from_json(json, "email", &email) ||
-	    !extract_text_from_json(json, "password", &password)
+        !extract_text_from_json(json, "password", &password)
     ){
         free(email);
         free(password);
@@ -58,7 +58,7 @@ http_response_t* response_post_login(http_request_t* request){
 
 http_response_t* response_post_registration(http_request_t* request){
     if (http_request_contains_query(request)){
-	    return response_bad_request(request);
+        return response_bad_request(request);
     }
     const char* content_type = get_header_value(request, "Content-Type");
     const char* accept = get_header_value(request, "Accept");

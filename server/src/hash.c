@@ -41,7 +41,7 @@ char* sha256_hash_string_alnum(const char* string){
         hashed_string[i] = (digest[i] % 78) + 48;
         hashed_string[i] += (hashed_string[i] == '\\');
     }
-	return hashed_string;
+    return hashed_string;
 }
 
 char* sha256_hash_number(long long int num){

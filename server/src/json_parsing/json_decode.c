@@ -54,9 +54,9 @@ int_array_t* int_array_from_json(json_t* json){
     for (int i = 0; i < int_array->size; i++){
         json_t* value = json_array_get(json, i);
         if (!json_is_integer(value)) {
-			int_array_destroy(int_array);
-			return NULL;
-		}
+            int_array_destroy(int_array);
+            return NULL;
+        }
         int_array->storage[i] = json_integer_value(value);
     }
     return int_array;

@@ -21,17 +21,17 @@
 #include "cache.h"
 
 void start_server(const bool debug_mode){
-	log_to_console(GREEN, "Starting server\n");
-	init_env();
-	jwt_init();
-	pthread_key_create(&http_request_key, NULL);
-	setbuf(stdout, NULL);
-	log_to_console(GREEN, "Initiating cache connection\n");
-	cache_connection_init();
-	log_to_console(GREEN, "Initiating Database connection\n");
-	db_connection_init();
-	init_db_global_variables();
-	listen_and_serve(debug_mode);
+    log_to_console(GREEN, "Starting server\n");
+    init_env();
+    jwt_init();
+    pthread_key_create(&http_request_key, NULL);
+    setbuf(stdout, NULL);
+    log_to_console(GREEN, "Initiating cache connection\n");
+    cache_connection_init();
+    log_to_console(GREEN, "Initiating Database connection\n");
+    db_connection_init();
+    init_db_global_variables();
+    listen_and_serve(debug_mode);
 }
 
 int main(int argc, char** argv){
@@ -39,6 +39,6 @@ int main(int argc, char** argv){
         log_to_console(RED, "Invalid arguments\n");
         exit(1);
     }
-	start_server(argc > 1);
-	return 0;
+    start_server(argc > 1);
+    return 0;
 }

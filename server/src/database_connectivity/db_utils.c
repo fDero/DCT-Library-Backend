@@ -12,7 +12,7 @@ void db_connection_init() {
         getenv("POSTGRES_PASSWORD"), getenv("POSTGRES_HOST"),
         getenv("POSTGRES_PORT")
     );
-	pthread_key_create(&db_conn_key, close_db_connection_callback);
+    pthread_key_create(&db_conn_key, close_db_connection_callback);
 }
 
 db_conn_t* open_db_connection() {
@@ -21,7 +21,7 @@ db_conn_t* open_db_connection() {
 }
 
 void close_db_connection(db_conn_t* conn) {
-	PQfinish(conn);
+    PQfinish(conn);
 }
 
 void close_db_connection_callback(void* conn) {

@@ -1,34 +1,34 @@
 #include "json.h"
 
 char* account_to_json_string(account_t* account){
-	return json_to_string_and_free(account_to_json(account));
+    return json_to_string_and_free(account_to_json(account));
 }
 
 char* book_to_json_string(book_t* book){
-	return json_to_string_and_free(book_to_json(book));
+    return json_to_string_and_free(book_to_json(book));
 }
 
 char* loan_to_json_string(loan_t* loan){
-	return json_to_string_and_free(loan_to_json(loan));
+    return json_to_string_and_free(loan_to_json(loan));
 }
 
 char* account_array_to_json_string(account_array_t* account_array){
-	return json_to_string_and_free(account_array_to_json(account_array));
+    return json_to_string_and_free(account_array_to_json(account_array));
 }
 
 char* book_array_to_json_string(book_array_t* book_array){
-	return json_to_string_and_free(book_array_to_json(book_array));
+    return json_to_string_and_free(book_array_to_json(book_array));
 }
 
 char* loan_array_to_json_string(loan_array_t* loan_array){
-	return json_to_string_and_free(loan_array_to_json(loan_array));
+    return json_to_string_and_free(loan_array_to_json(loan_array));
 }
 
 json_t* account_to_json(account_t* account){
     
     json_t *json_object = init_json_object();
     assert (json_object != NULL);
-	
+
     if(account == NULL) {
         return json_object;
     }
@@ -41,10 +41,10 @@ json_t* account_to_json(account_t* account){
 }
 
 json_t* book_to_json(book_t* book){
-    
+
     json_t *json_object = init_json_object();
     assert (json_object != NULL);
-	
+
     if(book == NULL) {
         return json_object;
     }
@@ -60,10 +60,10 @@ json_t* book_to_json(book_t* book){
 }
 
 json_t* loan_to_json(loan_t* loan){
-    
+
     json_t *json_object = init_json_object();
     assert (json_object != NULL);
-	
+
     if(loan == NULL) {
         return json_object;
     }
@@ -77,9 +77,9 @@ json_t* loan_to_json(loan_t* loan){
 }
 
 json_t* account_array_to_json(account_array_t* account_array){
-    
+
     json_t *json_array = init_json_array();
-	
+
     if(account_array == NULL) {
         return json_array;
     }
@@ -94,9 +94,9 @@ json_t* account_array_to_json(account_array_t* account_array){
 }
 
 json_t* book_array_to_json(book_array_t* book_array){
-    
+
     json_t *json_array = init_json_array();
-	
+
     if(book_array == NULL) {
         return json_array;
     }
@@ -106,14 +106,14 @@ json_t* book_array_to_json(book_array_t* book_array){
         json_t *json_book = book_to_json(book);
         add_json_item_to_json_array(json_array, json_book);
     }
-    
+
     return json_array;
 }
 
 json_t* loan_array_to_json(loan_array_t* loan_array){
-    
+
     json_t *json_array = init_json_array();
-	
+
     if(loan_array == NULL) {
         return json_array;
     }

@@ -4,10 +4,10 @@
 
 decoded_jwt_t* authorize(http_request_t* request){
     const char* jwt_str = get_header_value(request, "Authorization");
-	if(jwt_str == NULL || strlen(jwt_str) < 7 || strncmp(jwt_str, "Bearer ", 7) != 0){
-		return NULL;
-	}
-	return authorize_jwt(jwt_str + 7);
+    if(jwt_str == NULL || strlen(jwt_str) < 7 || strncmp(jwt_str, "Bearer ", 7) != 0){
+        return NULL;
+    }
+    return authorize_jwt(jwt_str + 7);
 }
 
 char* generate_token(int account_id, unsigned long exp_time){
@@ -24,65 +24,65 @@ char* generate_token(int account_id, unsigned long exp_time){
 }
 
 http_response_t* basic_response(http_request_t* request){
-	http_response_t* response = (http_response_t*)malloc(sizeof(http_response_t));
-	http_response_init(response);
-	http_response_set_version(response, "HTTP/1.1");
-	http_response_add_header(response, "Server", server);
-	char* now = get_current_time("%a, %d %b %Y %H:%M:%S GMT");
-	http_response_add_header(response, "Date", now);
-	http_response_add_header(response, "Content-Language", "en");
-	http_response_add_header(response, "Connection", "keep-alive");
-	free(now);
-	return response;
+    http_response_t* response = (http_response_t*)malloc(sizeof(http_response_t));
+    http_response_init(response);
+    http_response_set_version(response, "HTTP/1.1");
+    http_response_add_header(response, "Server", server);
+    char* now = get_current_time("%a, %d %b %Y %H:%M:%S GMT");
+    http_response_add_header(response, "Date", now);
+    http_response_add_header(response, "Content-Language", "en");
+    http_response_add_header(response, "Connection", "keep-alive");
+    free(now);
+    return response;
 }
 
 http_response_t* response_bad_request(http_request_t* request){
-	http_response_t* response = basic_response(request);
-	http_response_set_status(response, "400");
-	http_response_set_phrase(response, "Bad Request");
-	return response;
+    http_response_t* response = basic_response(request);
+    http_response_set_status(response, "400");
+    http_response_set_phrase(response, "Bad Request");
+    return response;
 }
 
 http_response_t* response_unauthorized(http_request_t* request){
-	http_response_t* response = basic_response(request);
-	http_response_set_status(response, "401");
-	http_response_set_phrase(response, "Unauthorized");
-	return response;
+    http_response_t* response = basic_response(request);
+    http_response_set_status(response, "401");
+    http_response_set_phrase(response, "Unauthorized");
+    return response;
 }
 
 http_response_t* response_not_found(http_request_t* request){
-	http_response_t* response = basic_response(request);
-	http_response_set_status(response, "404");
-	http_response_set_phrase(response, "Not Found");
-	return response;
+    http_response_t* response = basic_response(request);
+    http_response_set_status(response, "404");
+    http_response_set_phrase(response, "Not Found");
+    return response;
 }
 
 http_response_t* response_method_not_allowed(http_request_t* request){
-	http_response_t* response = basic_response(request);
-	http_response_set_status(response, "405");
-	http_response_set_phrase(response, "Method Not Allowed");
-	return response;
+    http_response_t* response = basic_response(request);
+    http_response_set_status(response, "405");
+    http_response_set_phrase(response, "Method Not Allowed");
+    return response;
 }
 
 http_response_t* response_not_acceptable(http_request_t* request){
-	http_response_t* response = basic_response(request);
-	http_response_set_status(response, "406");
-	http_response_set_phrase(response, "Not Acceptable");
-	return response;
+    http_response_t* response = basic_response(request);
+    http_response_set_status(response, "406");
+    http_response_set_phrase(response, "Not Acceptable");
+    return response;
 }
 
 http_response_t* response_conflict(http_request_t* request){
-	http_response_t* response = basic_response(request);
-	http_response_set_status(response, "409");
-	http_response_set_phrase(response, "Conflict");
-	return response;
+    http_response_t* response = basic_response(request);
+    http_response_set_status(response, "409");
+    http_response_set_phrase(response, "Conflict");
+    return response;
 }
 
 http_response_t* response_unsupported_media_type(http_request_t* request){
-	http_response_t* response = basic_response(request);
-	http_response_set_status(response, "415");
-	http_response_set_phrase(response, "Unsupported Media Type");
-	return response;
+    http_response_t* response = basic_response(request);
+    http_response_set_status(response, "415");
+    http_response_set_phrase(response, "Unsupported Media Type");
+    return response;
 }
 
 http_response_t* response_unprocessable_entity(http_request_t* request){

@@ -6,7 +6,7 @@
 TEST(HTTP, valid_request_with_no_headers) {
     char request_str[2048] =
         "GET /somedir/page HTTP/1.1\r\n"
-		"Content-Length: 26\r\n"
+        "Content-Length: 26\r\n"
         "\r\n"
         "my really beutiful payload\0";
 
@@ -49,9 +49,9 @@ TEST(HTTP, valid_request_HTTP_1_0) {
     char request_str[2048] =
         "POST http://www.somehost.com/somedir/page HTTP/1.0\r\n"
         "Accept-Language: en\r\n"
-		"Content-Length: 26\r\n"
+        "Content-Length: 26\r\n"
         "\r\n"
-		"my really beutiful payload";
+        "my really beutiful payload";
 
     http_request_t* request = http_request_decode(request_str);
     ASSERT_NE(request, (http_request_t*)NULL);
@@ -244,9 +244,9 @@ TEST(HTTP, invalid_request_missing_method3) {
 }
 
 TEST(HTTP, invalid_request_empty) {
-		char request_str[2048] = "\0";
-		http_request_t* request = http_request_decode(request_str);
-		ASSERT_EQ(request, (http_request_t*)NULL);
+        char request_str[2048] = "\0";
+        http_request_t* request = http_request_decode(request_str);
+        ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
 TEST(HTTP, valid_request_no_payload) {

@@ -15,62 +15,62 @@ char* server = NULL;
 const bool COLORED_OUTPUT_ENABLED = true;
 
 void init_env(){
-	char server_env [50];
-	strcpy(server_env, getenv("SERVER"));
-	server = (char*)malloc(sizeof(char) * strlen(server_env) + 1);
-	strcpy(server, server_env);
+    char server_env [50];
+    strcpy(server_env, getenv("SERVER"));
+    server = (char*)malloc(sizeof(char) * strlen(server_env) + 1);
+    strcpy(server, server_env);
 }
 
 void read_file(char* path, char** out_string){
-	int file_length;
-	FILE *file = fopen(path, "rb");
-	if (file == NULL){
+    int file_length;
+    FILE *file = fopen(path, "rb");
+    if (file == NULL){
         *out_string = NULL;
         return;
     }
-	fseek(file, 0, SEEK_END);
-	file_length = ftell(file);
-	fseek(file, 0, SEEK_SET);
-	*out_string = (char*)malloc(file_length + 1);
-	fread(*out_string, 1, file_length, file);
-	(*out_string)[file_length] = '\0';
-	fclose(file);
+    fseek(file, 0, SEEK_END);
+    file_length = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    *out_string = (char*)malloc(file_length + 1);
+    fread(*out_string, 1, file_length, file);
+    (*out_string)[file_length] = '\0';
+    fclose(file);
 }
 
 int log_to_console(const char* color, const char* str, ...) {
     va_list arguments;
     va_start(arguments, str);
-	pthread_mutex_lock(&log_mutex);
-	
-	if (COLORED_OUTPUT_ENABLED && color != NULL) {
-		printf("%s", color);
-		fflush(stdout);
-	}
+    pthread_mutex_lock(&log_mutex);
 
-	char* time_str = get_current_time("%Y-%m-%d %H:%M:%S");
-	printf("%s: ", time_str);
-	free(time_str);
-	fflush(stdout);
-	
+    if (COLORED_OUTPUT_ENABLED && color != NULL) {
+        printf("%s", color);
+        fflush(stdout);
+    }
+
+    char* time_str = get_current_time("%Y-%m-%d %H:%M:%S");
+    printf("%s: ", time_str);
+    free(time_str);
+    fflush(stdout);
+
     int ret = vprintf(str, arguments);
-	fflush(stdout);
+    fflush(stdout);
 
     va_end(arguments);
-	if (COLORED_OUTPUT_ENABLED && color != NULL) {
-		printf("%s", DEFAULT_COLOR);
-		fflush(stdout);
-	}
+    if (COLORED_OUTPUT_ENABLED && color != NULL) {
+        printf("%s", DEFAULT_COLOR);
+        fflush(stdout);
+    }
 
-	pthread_mutex_unlock(&log_mutex);
-	return ret;
+    pthread_mutex_unlock(&log_mutex);
+    return ret;
 }
 
 char* get_current_time(const char* format){
-	time_t now = time(NULL);
-	timestamp_t* now_timestamp = gmtime(&now);
-	char* time_str = (char*)malloc(sizeof(char) * 40);
-	strftime(time_str, 40, format, now_timestamp);
-	return time_str;
+    time_t now = time(NULL);
+    timestamp_t* now_timestamp = gmtime(&now);
+    char* time_str = (char*)malloc(sizeof(char) * 40);
+    strftime(time_str, 40, format, now_timestamp);
+    return time_str;
 }
 
 bool is_blank_char(char c){
@@ -83,7 +83,7 @@ void timestamp_to_string(char* str, size_t size, const timestamp_t* ts) {
 }
 
 timestamp_t* string_to_timestamp(const char* str) {
-	if(str == NULL) return NULL;
+    if(str == NULL) return NULL;
     timestamp_t* timestamp = (timestamp_t*)malloc(sizeof(timestamp_t));
     strptime(str, TIMESTAMP_STRING_FORMAT, timestamp);
     return timestamp;

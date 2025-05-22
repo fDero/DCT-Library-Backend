@@ -51,8 +51,8 @@ struct loan_array {
 };
 
 struct int_array {
-	int* storage;
-	size_t size;
+    int* storage;
+    size_t size;
 };
 
 typedef struct account_array account_array_t;

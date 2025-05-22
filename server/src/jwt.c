@@ -19,7 +19,7 @@ unsigned int JWT_EXP_LONG;
 unsigned int JWT_EXP_DEFAULT;
 
 void jwt_init(){
-    
+
     read_file(getenv("PRIVATE_KEY_FILE"), &JWT_PRIVATE_KEY);
     read_file(getenv("PUBLIC_KEY_FILE"), &JWT_PUBLIC_KEY);
 
@@ -46,13 +46,13 @@ void encoded_jwt_destroy(char* jwt){
 char* jwt_encode(int account_id, const char* session_token, unsigned long exp_time){
 
     char* jwt;
-	size_t jwt_length;
+    size_t jwt_length;
 
-	char account_id_str[20];
-	sprintf(account_id_str, "%d", account_id);
+    char account_id_str[20];
+    sprintf(account_id_str, "%d", account_id);
 
-	char session_token_str[strlen(session_token) + 1];
-	strcpy(session_token_str, session_token);
+    char session_token_str[strlen(session_token) + 1];
+    strcpy(session_token_str, session_token);
     char session_token_name[] = "session-token";
 
     struct l8w8jwt_claim payload_claims[] =
@@ -183,7 +183,7 @@ decoded_jwt_t* jwt_decode(const char* jwt_token){
             exp_flag = true;
             ++recognized_claims_count;
         }
-  }
+    }
 
     assert(session_token_flag && account_id_flag);
     assert(iss_flag && iat_flag && exp_flag);
@@ -192,18 +192,18 @@ decoded_jwt_t* jwt_decode(const char* jwt_token){
 }
 
 void decoded_jwt_destroy(decoded_jwt_t* jwt){
-	if(jwt == NULL){return;}
-	free(jwt->session_token);
-	free(jwt->iss);
-	free(jwt->aud);
-	free(jwt);
+    if(jwt == NULL){return;}
+    free(jwt->session_token);
+    free(jwt->iss);
+    free(jwt->aud);
+    free(jwt);
 }
 
 decoded_jwt_t* authorize_jwt(const char* jwt_str){
     decoded_jwt_t* jwt = jwt_decode(jwt_str);
-	if(jwt == NULL){
-		return NULL;
-	}
+    if(jwt == NULL){
+        return NULL;
+    }
     cache_conn_t* conn = (cache_conn_t*) pthread_getspecific(cache_connection_key);
     char* session_data = get_value_by_key_from_cache(conn, jwt->session_token);
     if (session_data == NULL || jwt->account_id != atoi(session_data)){

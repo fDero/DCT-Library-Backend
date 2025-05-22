@@ -8,12 +8,12 @@
 #include <l8w8jwt/claim.h>
 
 struct decoded_jwt {
- 	int account_id;
- 	char* session_token;
-	char* iss;
-	char* aud;
-	int iat;
- 	int exp;
+    int account_id;
+    char* session_token;
+    char* iss;
+    char* aud;
+    int iat;
+    int exp;
 };
 
 typedef struct decoded_jwt decoded_jwt_t;

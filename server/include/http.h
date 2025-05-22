@@ -22,33 +22,33 @@ extern pthread_key_t http_request_key;
 #define QUERY_PARAMS_MULTIPLICATION_FACTOR 2
 
 struct header_line {
-	char const *name;
-	char const *value;
+    char const *name;
+    char const *value;
 };
 
 struct query_param {
-	char const *name;
-	char const *value;
+    char const *name;
+    char const *value;
 };
 
 typedef struct header_line header_line_t;
 typedef struct query_param query_param_t;
 
 struct http_request {
-	char const *_origin_addr;
-	char *_source;
-	size_t _headers_capacity;
-	size_t _query_params_capacity;
+    char const *_origin_addr;
+    char *_source;
+    size_t _headers_capacity;
+    size_t _query_params_capacity;
 
-	char const *method;
-	char const *host;
-	char const *path;
-	query_param_t *query_params;
-	char *version;
-	header_line_t *headers;
-	char const *payload;
-	size_t headers_num;
-	size_t query_params_num;
+    char const *method;
+    char const *host;
+    char const *path;
+    query_param_t *query_params;
+    char *version;
+    header_line_t *headers;
+    char const *payload;
+    size_t headers_num;
+    size_t query_params_num;
 };
 
 typedef struct http_request http_request_t;
@@ -84,10 +84,10 @@ void http_response_add_header(http_response_t* response, const char* name, const
 void http_response_set_payload(http_response_t* response, const char* payload);
 
 bool http_request_validate_query_params(
-	http_request_t* request,
-	char const ** expected_query_param_names, 
-	int expected_query_param_num, 
-	bool check_type
+    http_request_t* request,
+    char const ** expected_query_param_names, 
+    int expected_query_param_num, 
+    bool check_type
 );
 bool http_request_contains_query(http_request_t* request);
 bool http_request_contains_payload(http_request_t* request);
