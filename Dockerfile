@@ -35,8 +35,8 @@ RUN git clone https://github.com/intel/tinycrypt \
     && make                                      \         
     && cp -r lib/include/tinycrypt /usr/include  \
     && cp lib/libtinycrypt.a /usr/lib            \
-	&& cd /                                      \
-	&& mv tinycrypt /trash
+    && cd /                                      \
+    && mv tinycrypt /trash
 
 RUN wget https://github.com/GlitchedPolygons/l8w8jwt/releases/download/2.3.2/l8w8jwt-2.3.2-linux-x86_64.tar.gz \
 	&& tar -xzf l8w8jwt-2.3.2-linux-x86_64.tar.gz                               \
