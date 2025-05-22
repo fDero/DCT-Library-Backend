@@ -52,10 +52,10 @@ client_t* accept_connection(){
 char* get_client_ip(client_t* client){
     char* ip = (char*)malloc(sizeof(char) * INET6_ADDRSTRLEN);
     ip[0] = '\0';
-    if (client->address.sa_family == AF_INET) {
+    if (client->address.sa_family == AF_INET){
         sockaddr_in_t *addr_in = (sockaddr_in_t*)&client->address;
         inet_ntop(AF_INET, &(addr_in->sin_addr), ip, INET6_ADDRSTRLEN);
-    } else if (client->address.sa_family == AF_INET6) {
+    } else if (client->address.sa_family == AF_INET6){
         sockaddr_in6_t *addr_in6 = (sockaddr_in6_t*)&client->address;
         inet_ntop(AF_INET6, &(addr_in6->sin6_addr), ip, INET6_ADDRSTRLEN);
     }
@@ -64,10 +64,10 @@ char* get_client_ip(client_t* client){
 
 int get_client_port(client_t* client){
     int port = 0;
-    if (client->address.sa_family == AF_INET) {
+    if (client->address.sa_family == AF_INET){
         sockaddr_in_t *addr_in = (sockaddr_in_t*)&client->address;
         port = ntohs(addr_in->sin_port);
-    } else if (client->address.sa_family == AF_INET6) {
+    } else if (client->address.sa_family == AF_INET6){
         sockaddr_in6_t *addr_in6 = (sockaddr_in6_t*)&client->address;
         port = ntohs(addr_in6->sin6_port);
     }

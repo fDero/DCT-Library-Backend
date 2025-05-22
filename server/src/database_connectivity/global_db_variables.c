@@ -8,7 +8,7 @@ size_t global_db_variables_size = 0;
 database_gloabal_variable_t* global_db_variables = NULL;
 
 char* get_error_code(resultset_t* res){
-    if (PQresultStatus(res) == PGRES_COMMAND_OK) {
+    if (PQresultStatus(res) == PGRES_COMMAND_OK){
         return NULL;
     }
     else {

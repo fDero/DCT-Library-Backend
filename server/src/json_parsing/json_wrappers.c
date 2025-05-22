@@ -1,7 +1,7 @@
 #include "json.h"
 
 void json_destroy(json_t* json){
-    if (json != NULL && json->refcount > 0) {
+    if (json != NULL && json->refcount > 0){
         json_decref(json);
     }
 }

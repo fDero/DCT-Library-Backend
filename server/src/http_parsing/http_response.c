@@ -1,6 +1,6 @@
 #include "http.h"
 
-void http_response_init(http_response_t* response) {
+void http_response_init(http_response_t* response){
     response->version = NULL;
     response->status = NULL;
     response->phrase = NULL;
@@ -11,7 +11,7 @@ void http_response_init(http_response_t* response) {
     response->payload = NULL;
 }
 
-char* http_response_encode(http_response_t* response, size_t* size) {
+char* http_response_encode(http_response_t* response, size_t* size){
     size_t buffer_size = 0;
     size_t current_char = 0;
     short version_size = strlen(response->version);

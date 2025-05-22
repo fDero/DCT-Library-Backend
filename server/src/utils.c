@@ -37,12 +37,12 @@ void read_file(char* path, char** out_string){
     fclose(file);
 }
 
-int log_to_console(const char* color, const char* str, ...) {
+int log_to_console(const char* color, const char* str, ...){
     va_list arguments;
     va_start(arguments, str);
     pthread_mutex_lock(&log_mutex);
 
-    if (COLORED_OUTPUT_ENABLED && color != NULL) {
+    if (COLORED_OUTPUT_ENABLED && color != NULL){
         printf("%s", color);
         fflush(stdout);
     }
@@ -56,7 +56,7 @@ int log_to_console(const char* color, const char* str, ...) {
     fflush(stdout);
 
     va_end(arguments);
-    if (COLORED_OUTPUT_ENABLED && color != NULL) {
+    if (COLORED_OUTPUT_ENABLED && color != NULL){
         printf("%s", DEFAULT_COLOR);
         fflush(stdout);
     }
@@ -78,18 +78,18 @@ bool is_blank_char(char c){
     c == ' ' || c == '\t' || c == '\0';
 }
 
-void timestamp_to_string(char* str, size_t size, const timestamp_t* ts) {
+void timestamp_to_string(char* str, size_t size, const timestamp_t* ts){
     strftime(str, size, TIMESTAMP_STRING_FORMAT, ts);
 }
 
-timestamp_t* string_to_timestamp(const char* str) {
+timestamp_t* string_to_timestamp(const char* str){
     if(str == NULL) return NULL;
     timestamp_t* timestamp = (timestamp_t*)malloc(sizeof(timestamp_t));
     strptime(str, TIMESTAMP_STRING_FORMAT, timestamp);
     return timestamp;
 }
 
-bool timestamp_equal(const timestamp_t* ts1, const timestamp_t* ts2) {
+bool timestamp_equal(const timestamp_t* ts1, const timestamp_t* ts2){
     char str1[STRING_TIMESTAMP_MAX_LENGTH];
     char str2[STRING_TIMESTAMP_MAX_LENGTH];
     timestamp_to_string(str1, STRING_TIMESTAMP_MAX_LENGTH, ts1);
@@ -97,7 +97,7 @@ bool timestamp_equal(const timestamp_t* ts1, const timestamp_t* ts2) {
     return !strcmp(str1, str2);
 }
 
-void alloc_and_strcpy(char** destination, const char* source) {
+void alloc_and_strcpy(char** destination, const char* source){
     *destination = (char*)malloc(sizeof(char) * strlen(source) + 1);
     strcpy(*destination, source);
 }
@@ -109,19 +109,19 @@ void alloc_and_arrcopy(char*** dest, char** src, int size){
     }
 }
 
-void advance_to_next_target(char* string, int* current_char_index, char target) {
+void advance_to_next_target(char* string, int* current_char_index, char target){
     char current = string[*current_char_index];
-    while (current != '\0' && current != target) {
+    while (current != '\0' && current != target){
         (*current_char_index) += 1;
         current = string[*current_char_index];
     }
 }
 
-void advance_to_next_targets(char* string, int* current_char_index, const char* targets, int len) {
+void advance_to_next_targets(char* string, int* current_char_index, const char* targets, int len){
     char current = string[*current_char_index];
-    while (current != '\0' && (*current_char_index) < len) {
-        for (int i = 0; i < strlen(targets); i++) {
-            if (current == targets[i]) {
+    while (current != '\0' && (*current_char_index) < len){
+        for (int i = 0; i < strlen(targets); i++){
+            if (current == targets[i]){
                 return;
             }
         }
@@ -138,7 +138,7 @@ void skip_string_terminating_with_target(
     advance_to_next_target(string, current_char_index, target);
     *correct &= (string[*current_char_index] == target);
     *correct &= (*current_char_index < len);
-    if (*correct) {
+    if (*correct){
         string[*current_char_index] = '\0';
     }
     (*current_char_index)++;
@@ -152,7 +152,7 @@ void skip_string_terminating_with_target_safe(
     advance_to_next_targets(string, current_char_index, targets, len);
     *correct &= (string[*current_char_index] == target);
     *correct &= (*current_char_index < len);
-    if (*correct) {
+    if (*correct){
         string[*current_char_index] = '\0';
     }
     (*current_char_index)++;
@@ -165,10 +165,10 @@ void skip_character_safe(
     if (!*correct) return;
     *correct &= (string[*current_char_index] == target);
     (*current_char_index)++;
-    while (*current_char_index < len && string[*current_char_index] == target) {
+    while (*current_char_index < len && string[*current_char_index] == target){
         (*current_char_index)++;
     }
-    for (int i = 0; i < strlen(avoid); i++) {
+    for (int i = 0; i < strlen(avoid); i++){
         *correct &= (string[*current_char_index] != avoid[i]);
     }
     *correct &= (*current_char_index < len);

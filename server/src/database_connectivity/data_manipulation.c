@@ -31,7 +31,7 @@ loan_t* insert_loan(db_conn_t* connection, int input_book_id, int input_account_
         if (sql_status != NULL){
             alloc_and_strcpy(error_code, sql_status);
         }
-        if (resultset != NULL) {
+        if (resultset != NULL){
             PQclear(resultset);
         }
         return NULL;

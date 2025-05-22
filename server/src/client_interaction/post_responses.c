@@ -35,7 +35,7 @@ http_response_t* response_post_login(http_request_t* request){
     char* salt = get_password_salt(connection, email);
     char* hashed_password = sha256_salted_hash_alnum(password, salt);
     int id = validate_account(connection, email, hashed_password);
-    if (id >= 1) {
+    if (id >= 1){
         http_response_t* response = basic_response(request);
         http_response_set_status(response, "200");
 	    http_response_set_phrase(response, "OK");
@@ -99,7 +99,7 @@ http_response_t* response_post_registration(http_request_t* request){
     free(email);
     free(password);
     free(salt);
-    if (account_id > 0) {
+    if (account_id > 0){
         http_response_t* response = basic_response(request);
         http_response_set_status(response, "200");
 	    http_response_set_phrase(response, "OK");
@@ -230,7 +230,7 @@ http_response_t* response_post_loans(http_request_t* request){
     for(int i = 0; i < book_ids->size; i++){
         char* error_code = NULL;
         loan_t* loan = insert_loan(connection, book_ids->storage[i], token->account_id, &error_code);
-        if(loan != NULL) {
+        if(loan != NULL){
             json_t* loan_json = loan_to_json(loan);
             add_json_item_to_json_array(successful_loans, loan_json);
             log_to_console(MAGENTA, "Loan inserted successfully, %d\n", loan->book_id);

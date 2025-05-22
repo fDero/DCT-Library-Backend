@@ -36,7 +36,7 @@ bool http_request_validate_query_params(
     int expected_query_param_num, 
     bool check_type
 ){
-    if (request->query_params_num != expected_query_param_num) {
+    if (request->query_params_num != expected_query_param_num){
         if (request->query_params_num > expected_query_param_num || check_type == HTTP_CHECK_STRICT){
             return false;
         }

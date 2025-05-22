@@ -3,7 +3,7 @@
 
 #include "http.h"
 
-TEST(HTTP, valid_request_with_no_headers) {
+TEST(HTTP, valid_request_with_no_headers){
     char request_str[2048] =
         "GET /somedir/page HTTP/1.1\r\n"
         "Content-Length: 26\r\n"
@@ -21,7 +21,7 @@ TEST(HTTP, valid_request_with_no_headers) {
     http_request_destroy(request);
 }
 
-TEST(HTTP, valid_request_with_two_headers) {
+TEST(HTTP, valid_request_with_two_headers){
     char request_str[2048] =
         "GET /somedir/page HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -45,7 +45,7 @@ TEST(HTTP, valid_request_with_two_headers) {
 }
 
 
-TEST(HTTP, valid_request_HTTP_1_0) {
+TEST(HTTP, valid_request_HTTP_1_0){
     char request_str[2048] =
         "POST http://www.somehost.com/somedir/page HTTP/1.0\r\n"
         "Accept-Language: en\r\n"
@@ -70,7 +70,7 @@ TEST(HTTP, valid_request_HTTP_1_0) {
 
 
 
-TEST(HTTP, valid_request_HTTP_1_0_with_query) {
+TEST(HTTP, valid_request_HTTP_1_0_with_query){
     char request_str[2048] =
         "GET http://www.somehost.com/somedir/page?p=1&q=7 HTTP/1.0\r\n"
         "Lang: eng\r\n"
@@ -98,7 +98,7 @@ TEST(HTTP, valid_request_HTTP_1_0_with_query) {
 
 
 
-TEST(HTTP, valid_request_HTTP_1_1_with_query) {
+TEST(HTTP, valid_request_HTTP_1_1_with_query){
     char request_str[2048] =
         "GET /somedir/page?ppp=123&qqq=789 HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -129,7 +129,7 @@ TEST(HTTP, valid_request_HTTP_1_1_with_query) {
 }
 
 
-TEST(HTTP, invalid_request_missing_version1) {
+TEST(HTTP, invalid_request_missing_version1){
     char request_str[2048] =
         "GET /somedir/page\r\n"
         "Host: www.somehost.com\r\n"
@@ -142,7 +142,7 @@ TEST(HTTP, invalid_request_missing_version1) {
 }
 
 
-TEST(HTTP, invalid_request_missing_version2) {
+TEST(HTTP, invalid_request_missing_version2){
     char request_str[2048] =
         "GET /somedir/page \r\n"
         "Host: www.somehost.com\r\n"
@@ -155,7 +155,7 @@ TEST(HTTP, invalid_request_missing_version2) {
 }
 
 
-TEST(HTTP, invalid_request_missing_version3) {
+TEST(HTTP, invalid_request_missing_version3){
     char request_str[2048] =
         "GET /somedir/page  \r\n"
         "Host: www.somehost.com\r\n"
@@ -168,7 +168,7 @@ TEST(HTTP, invalid_request_missing_version3) {
 }
 
 
-TEST(HTTP, invalid_request_missing_url1) {
+TEST(HTTP, invalid_request_missing_url1){
     char request_str[2048] =
         "GET HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -181,7 +181,7 @@ TEST(HTTP, invalid_request_missing_url1) {
 }
 
 
-TEST(HTTP, invalid_request_missing_url2) {
+TEST(HTTP, invalid_request_missing_url2){
     char request_str[2048] =
         "GET  HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -194,7 +194,7 @@ TEST(HTTP, invalid_request_missing_url2) {
 }
 
 
-TEST(HTTP, invalid_request_missing_url3) {
+TEST(HTTP, invalid_request_missing_url3){
     char request_str[2048] =
         "GET   HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -207,7 +207,7 @@ TEST(HTTP, invalid_request_missing_url3) {
 }
 
 
-TEST(HTTP, invalid_request_missing_method1) {
+TEST(HTTP, invalid_request_missing_method1){
     char request_str[2048] =
         "/url/myurl HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -219,7 +219,7 @@ TEST(HTTP, invalid_request_missing_method1) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_missing_method2) {
+TEST(HTTP, invalid_request_missing_method2){
     char request_str[2048] =
         " /url/myurl HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -231,7 +231,7 @@ TEST(HTTP, invalid_request_missing_method2) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_missing_method3) {
+TEST(HTTP, invalid_request_missing_method3){
     char request_str[2048] =
         "  /url/myurl HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -243,13 +243,13 @@ TEST(HTTP, invalid_request_missing_method3) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_empty) {
+TEST(HTTP, invalid_request_empty){
         char request_str[2048] = "\0";
         http_request_t* request = http_request_decode(request_str);
         ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, valid_request_no_payload) {
+TEST(HTTP, valid_request_no_payload){
     char request_str[2048] =
         "GET /somedir/page HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -272,7 +272,7 @@ TEST(HTTP, valid_request_no_payload) {
     http_request_destroy(request);
 }
 
-TEST(HTTP, invalid_request_no_method) {
+TEST(HTTP, invalid_request_no_method){
     char request_str[2048] =
         "/somedir/page HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -284,7 +284,7 @@ TEST(HTTP, invalid_request_no_method) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_path) {
+TEST(HTTP, invalid_request_no_path){
     char request_str[2048] =
         "GET HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -296,7 +296,7 @@ TEST(HTTP, invalid_request_no_path) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_version) {
+TEST(HTTP, invalid_request_no_version){
     char request_str[2048] =
         "GET /somedir/page\r\n"
         "Host: www.somehost.com\r\n"
@@ -308,7 +308,7 @@ TEST(HTTP, invalid_request_no_version) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_space_after_method) {
+TEST(HTTP, invalid_request_no_space_after_method){
     char request_str[2048] =
         "GET/somedir/page HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -320,7 +320,7 @@ TEST(HTTP, invalid_request_no_space_after_method) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_space_before_http_version) {
+TEST(HTTP, invalid_request_no_space_before_http_version){
     char request_str[2048] =
         "GET /somedir/pageHTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -332,7 +332,7 @@ TEST(HTTP, invalid_request_no_space_before_http_version) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_colon_in_header) {
+TEST(HTTP, invalid_request_no_colon_in_header){
     char request_str[2048] =
         "GET /somedir/page HTTP/1.1\r\n"
         "Host www.somehost.com\r\n"
@@ -344,7 +344,7 @@ TEST(HTTP, invalid_request_no_colon_in_header) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_crlf_before_payload) {
+TEST(HTTP, invalid_request_no_crlf_before_payload){
     char request_str[2048] =
         "GET /somedir/page HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -355,7 +355,7 @@ TEST(HTTP, invalid_request_no_crlf_before_payload) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_weird_query) {
+TEST(HTTP, invalid_request_no_weird_query){
     char request_str[2048] =
         "GET /somedir/page?a&b HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -367,7 +367,7 @@ TEST(HTTP, invalid_request_no_weird_query) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_weird_query2) {
+TEST(HTTP, invalid_request_no_weird_query2){
     char request_str[2048] =
         "GET /somedir/page?a=1&b HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -379,7 +379,7 @@ TEST(HTTP, invalid_request_no_weird_query2) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_weird_query3) {
+TEST(HTTP, invalid_request_no_weird_query3){
     char request_str[2048] =
         "GET /somedir/page?a&b=2 HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -392,7 +392,7 @@ TEST(HTTP, invalid_request_no_weird_query3) {
 }
 
 
-TEST(HTTP, invalid_request_no_weird_query4) {
+TEST(HTTP, invalid_request_no_weird_query4){
     char request_str[2048] =
         "GET /somedir/page?a=&b=2 HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -404,7 +404,7 @@ TEST(HTTP, invalid_request_no_weird_query4) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_weird_query5) {
+TEST(HTTP, invalid_request_no_weird_query5){
     char request_str[2048] =
         "GET /somedir/page?a=1&b= HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -416,7 +416,7 @@ TEST(HTTP, invalid_request_no_weird_query5) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_weird_query6) {
+TEST(HTTP, invalid_request_no_weird_query6){
     char request_str[2048] =
         "GET /somedir/page?=1 HTTP/1.1\r\n"
         "Host: www.somehost.com\r\n"
@@ -428,7 +428,7 @@ TEST(HTTP, invalid_request_no_weird_query6) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_value_for_header) {
+TEST(HTTP, invalid_request_no_value_for_header){
     char request_str[2048] =
         "GET /somedir/page?a=1 HTTP/1.1\r\n"
         "Host: \r\n"
@@ -440,7 +440,7 @@ TEST(HTTP, invalid_request_no_value_for_header) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_value_for_header2) {
+TEST(HTTP, invalid_request_no_value_for_header2){
     char request_str[2048] =
         "GET /somedir/page?a=1 HTTP/1.1\r\n"
         "Host:\r\n"
@@ -452,7 +452,7 @@ TEST(HTTP, invalid_request_no_value_for_header2) {
     ASSERT_EQ(request, (http_request_t*)NULL);
 }
 
-TEST(HTTP, invalid_request_no_value_for_header3) {
+TEST(HTTP, invalid_request_no_value_for_header3){
     char request_str[2048] =
         "GET /somedir/page?=1 HTTP/1.1\r\n"
         "Host\r\n"
